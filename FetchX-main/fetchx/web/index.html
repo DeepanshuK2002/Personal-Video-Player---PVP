@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K1X0BNY3D5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K1X0BNY3D5');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fafafa">
+<meta name="description" content="FetchX — browse supported sites and queue video downloads.">
+<title>FetchX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Design tokens (DESIGN-vercel.md) ─────────────────────────── */
+  :root {
+    color-scheme: light;
+    /* colors */
+    --ink:          #171717;
+    --body:         #4d4d4d;
+    --mute:         #8f8f8f;
+    --faint:        #a1a1a1;
+    --hairline:     #ebebeb;
+    --hairline-soft:#f2f2f2;
+    --canvas:       #fafafa;
+    --card:         #ffffff;
+    --link:         #0070f3;
+    --error:        #ee0000;
+    /* spacing */
+    --sp-xxs: 4px;
+    --sp-xs:  8px;
+    --sp-sm:  12px;
+    --sp-md:  16px;
+    --sp-lg:  24px;
+    --sp-xl:  32px;
+    --sp-2xl: 40px;
+    --sp-3xl: 64px;
+    --sp-4xl: 96px;
+    /* radius */
+    --r-sm:   6px;
+    --r-md:   12px;
+    --r-lg:   16px;
+    --r-full: 9999px;
+  }
+
+  /* ── Reset ──────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body { -webkit-tap-highlight-color: transparent; }
+  a { color: var(--link); text-decoration: none; }
+  button, input { font: inherit; color: inherit; touch-action: manipulation; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+  /* ── Utilities ──────────────────────────────────────────────── */
+  .sr {
+    position: absolute; width: 1px; height: 1px; margin: -1px;
+    padding: 0; border: 0; clip: rect(0 0 0 0);
+    clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+  }
+
+  /* ── Skip link ──────────────────────────────────────────────── */
+  .skip {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--card); border: 1px solid var(--hairline);
+    border-radius: var(--r-sm); padding: var(--sp-xs) var(--sp-sm); z-index: 10;
+  }
+  .skip:focus-visible { left: 16px; top: 8px; }
+
+  /* ── Nav ────────────────────────────────────────────────────── */
+  nav {
+    display: flex; align-items: center; gap: var(--sp-md);
+    padding: var(--sp-sm) var(--sp-lg);
+    background: var(--canvas);
+    border-bottom: 1px solid var(--hairline);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .wordmark {
+    font-weight: 600; font-size: 14px; letter-spacing: -0.28px;
+    color: var(--ink); display: flex; align-items: center; gap: 6px;
+    user-select: none;
+  }
+  .wordmark svg { display: block; flex-shrink: 0; }
+  .nav-spacer { flex: 1; }
+
+  /* ── Icon utility ───────────────────────────────────────────── */
+  /* All buttons that contain an icon use flex so the icon and label
+     sit on the same baseline with no extra vertical offset */
+  .btn-icon-label,
+  .btn-primary-sm,
+  .btn-sm {
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-icon-label svg,
+  .btn-primary-sm svg,
+  .btn-sm svg {
+    display: block; flex-shrink: 0;
+    /* inherit the button's text color so hover/active states work */
+    color: currentColor;
+  }
+
+  /* Badge: app control → 6px radius (rounded.sm) */
+  .job-badge {
+    font-family: 'Geist Mono', ui-monospace, Menlo, monospace;
+    font-size: 12px; font-weight: 500; line-height: 16px;
+    color: var(--mute);
+    background: var(--card); border: 1px solid var(--hairline);
+    border-radius: var(--r-sm);
+    padding: 3px var(--sp-xs);
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .job-badge.has-active { color: var(--ink); border-color: var(--ink); }
+
+  /* ── Main container ─────────────────────────────────────────── */
+  main {
+    max-width: 1200px; margin: 0 auto;
+    padding: var(--sp-2xl) var(--sp-lg) var(--sp-4xl);
+  }
+
+  /* ── Page header ────────────────────────────────────────────── */
+  .page-header { margin-bottom: var(--sp-xl); }
+  /* heading-lg: 32px/600/-1.28px */
+  h1 {
+    font-size: 32px; font-weight: 600;
+    line-height: 40px; letter-spacing: -1.28px;
+    color: var(--ink); text-wrap: balance; margin-bottom: 4px;
+  }
+  .page-sub { font-size: 14px; line-height: 20px; color: var(--body); }
+
+  /* ── Toolbar ────────────────────────────────────────────────── */
+  .toolbar {
+    display: flex; flex-wrap: wrap; gap: var(--sp-xs);
+    align-items: center; margin-bottom: var(--sp-sm);
+  }
+
+  /* Site pills — category-pill: 64px radius, card bg, hairline border */
+  .pills {
+    display: flex; gap: var(--sp-xs); flex-wrap: wrap;
+    border: none; padding: 0; /* reset fieldset defaults */
+  }
+  .pill {
+    background: var(--card); color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: 64px;
+    padding: 0 var(--sp-md);
+    height: 32px; line-height: 32px;
+    font-size: 14px; font-weight: 500;
+    white-space: nowrap;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .pill:hover { background: var(--hairline-soft); }
+  .pill[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* Search row */
+  .search-row {
+    display: flex; gap: var(--sp-xs); align-items: center;
+    flex: 1 1 320px; min-width: 0;
+  }
+
+  /* text-input: card bg, hairline, 6px radius */
+  input[type=search],
+  input[type=text] {
+    flex: 1; min-width: 0;
+    background: var(--card); color: var(--ink);
+    border: 1px solid var(--hairline); border-radius: var(--r-sm);
+    padding: var(--sp-xs) var(--sp-sm);
+    font-size: 14px; line-height: 20px; height: 36px;
+  }
+  input[type=search]::placeholder,
+  input[type=text]::placeholder { color: var(--faint); }
+  input[type=search]:focus-visible,
+  input[type=text]:focus-visible {
+    outline: none; border-color: var(--link);
+    box-shadow: 0 0 0 3px rgba(0,112,243,.12);
+  }
+
+  /* ── Geist Select Component (@vercel/geistcn/components Select) ─── */
+  .geist-select-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+  select,
+  .geist-select {
+    display: inline-flex;
+    align-items: center;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--card);
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-sm);
+    font-family: inherit;
+    font-weight: 400;
+    line-height: 20px;
+    height: 36px;
+    font-size: 14px;
+    padding: 0 34px 0 12px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238f8f8f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 15px 15px;
+    transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    user-select: none;
+  }
+  select:hover,
+  .geist-select:hover {
+    border-color: #a1a1a1;
+    background-color: var(--hairline-soft);
+  }
+  select:focus,
+  select:focus-visible,
+  .geist-select:focus,
+  .geist-select:focus-visible {
+    outline: none;
+    border-color: var(--link);
+    box-shadow: 0 0 0 3px rgba(0,112,243,.12);
+  }
+  select:disabled,
+  .geist-select:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    background-color: var(--hairline-soft);
+  }
+
+  /* Geist Select size variants matching @vercel/geistcn/components */
+  select[size="small"],
+  .geist-select-sm,
+  .geist-select[data-size="small"] {
+    height: 32px;
+    font-size: 13px;
+    padding: 0 30px 0 10px;
+    border-radius: var(--r-sm);
+    background-position: right 8px center;
+    background-size: 13px 13px;
+  }
+  select[size="large"],
+  .geist-select-lg,
+  .geist-select[data-size="large"] {
+    height: 44px;
+    font-size: 16px;
+    padding: 0 40px 0 14px;
+    border-radius: var(--r-md);
+    background-position: right 12px center;
+    background-size: 17px 17px;
+  }
+  select option,
+  .geist-select option {
+    background: var(--card);
+    color: var(--ink);
+    padding: 8px 12px;
+  }
+
+  /* button-primary-sm: ink bg, white text, 6px radius (app context) */
+  .btn-primary-sm {
+    background: var(--ink); color: #fff;
+    border: 1px solid var(--ink); border-radius: var(--r-sm);
+    padding: 0 var(--sp-sm); height: 36px; line-height: 36px;
+    font-size: 14px; font-weight: 500; white-space: nowrap;
+    transition: background-color .15s ease, border-color .15s ease;
+  }
+  .btn-primary-sm:hover:not(:disabled) { background: #383838; border-color: #383838; }
+  .btn-primary-sm:disabled { opacity: .5; cursor: default; }
+
+  /* button-ghost-sm: card bg, hairline border, 6px radius (app context) */
+  .btn-sm {
+    background: var(--card); color: var(--ink);
+    border: 1px solid var(--hairline); border-radius: var(--r-sm);
+    padding: 0 var(--sp-sm); height: 36px; line-height: 36px;
+    font-size: 14px; font-weight: 500; white-space: nowrap;
+    transition: background-color .15s ease, border-color .15s ease;
+  }
+  .btn-sm:hover:not(:disabled) { background: var(--hairline-soft); border-color: #d4d4d4; }
+  .btn-sm:disabled { opacity: .5; cursor: default; }
+
+  /* ── Status line — mono eyebrow style ───────────────────────── */
+  #status {
+    min-height: 16px; margin-bottom: var(--sp-md);
+    font-family: 'Geist Mono', ui-monospace, Menlo, monospace;
+    font-size: 12px; font-weight: 500; line-height: 16px;
+    color: var(--mute);
+  }
+  #status.err { color: var(--error); }
+
+  /* ── Video grid ─────────────────────────────────────────────── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--sp-lg);
+  }
+
+  .vcard {
+    background: var(--card); border: 1px solid var(--hairline);
+    border-radius: var(--r-md); overflow: hidden;
+    display: flex; flex-direction: column;
+    content-visibility: auto; contain-intrinsic-size: 240px 220px;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .vcard:hover {
+    transform: translateY(-2px);
+    border-color: #a1a4a5;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08), 0 12px 28px -4px rgba(0,0,0,.12);
+  }
+
+  .thumbwrap { position: relative; aspect-ratio: 16/9; background: var(--hairline-soft); }
+  .thumbwrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .dur {
+    position: absolute; right: var(--sp-xs); bottom: var(--sp-xs);
+    background: rgba(14, 14, 20, 0.75); color: #f4f4f5;
+    backdrop-filter: blur(8px) saturate(180%);
+    -webkit-backdrop-filter: blur(8px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    border-radius: var(--r-sm); padding: 2px 6px;
+    font-family: 'Geist Mono', ui-monospace, Menlo, monospace;
+    font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+
+  .vbody { padding: var(--sp-sm) var(--sp-md) var(--sp-md); display: flex; flex-direction: column; gap: var(--sp-xs); flex: 1; }
+  .vtitle {
+    font-size: 14px; font-weight: 500; line-height: 20px; color: var(--ink);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .vfoot { margin-top: auto; display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-xs); min-width: 0; }
+
+  .more-row { display: flex; justify-content: center; margin-top: var(--sp-lg); }
+  .empty { color: var(--faint); text-align: center; padding: var(--sp-3xl) 0; }
+
+  /* ── Date Dividers for Watch Later ──────────────────────────── */
+  .date-group {
+    grid-column: 1 / -1;
+    margin-top: var(--sp-lg);
+    margin-bottom: var(--sp-xs);
+  }
+  .date-group:first-child { margin-top: 0; }
+  .date-heading {
+    display: flex; align-items: center; gap: var(--sp-xs);
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    padding-bottom: var(--sp-xs);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .date-heading svg { color: var(--link); flex-shrink: 0; }
+  .date-heading .count {
+    font-family: 'Geist Mono', ui-monospace, Menlo, monospace;
+    font-size: 11px; font-weight: 500; color: var(--mute);
+    margin-left: 4px;
+  }
+
+  /* ── Dynamic Announcement Banner ────────────────────────────── */
+  .announcement-banner {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--sp-sm);
+    background: var(--elevated); border: 1px solid var(--link);
+    border-radius: var(--r-md); padding: 10px 14px; margin-bottom: var(--sp-md);
+  }
+  .announcement-banner .ann-left {
+    display: flex; align-items: center; gap: 10px; flex: 1 1 auto; min-width: 0; flex-wrap: wrap;
+  }
+  .announcement-banner .ann-badge {
+    font-family: 'Geist Mono', ui-monospace, Menlo, monospace;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    border-radius: 4px; padding: 2px 6px; border: 1px solid transparent;
+  }
+  .announcement-banner .ann-title {
+    font-weight: 600; font-size: 13px; color: var(--ink);
+  }
+  .announcement-banner .ann-msg {
+    font-size: 12px; color: var(--body);
+  }
+  .announcement-banner .ann-actions {
+    display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  }
+  .announcement-banner .ann-btn {
+    font-size: 12px; font-weight: 600; text-decoration: none;
+    color: #fff; border-radius: 6px; padding: 4px 10px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .announcement-banner .ann-btn:hover { opacity: 0.9; }
+  .announcement-banner .ann-close {
+    background: none; border: none; font-size: 14px; color: var(--mute);
+    cursor: pointer; padding: 4px 6px; border-radius: 4px; line-height: 1;
+  }
+  .announcement-banner .ann-close:hover { color: var(--error); }
+
+  /* ── Jobs panel (floating elevated card) ────────────────────── */
+  .jobs {
+    position: fixed; right: var(--sp-md); bottom: var(--sp-md);
+    width: 320px; max-height: 50vh; overflow: auto; overscroll-behavior: contain;
+    background: var(--card); border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+    box-shadow: 0 2px 2px rgba(0,0,0,.06), 0 8px 24px -6px rgba(0,0,0,.12);
+    padding: var(--sp-sm);
+  }
+  /* Mono eyebrow heading */
+  .jobs-heading {
+    font-family: 'Geist Mono', ui-monospace, Menlo, monospace;
+    font-size: 12px; font-weight: 500; line-height: 16px;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--mute); margin-bottom: var(--sp-xs);
+  }
+
+  .job { padding: var(--sp-xs) 0; border-top: 1px solid var(--hairline); }
+  .job:first-of-type { border-top: none; }
+  .jname { font-size: 13px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .bar { height: 3px; background: var(--hairline); border-radius: var(--r-full); margin: 6px 0 4px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--link); transform-origin: left center; transform: scaleX(0); transition: transform .3s ease; }
+  .jmeta {
+    display: flex; justify-content: space-between; gap: var(--sp-xs);
+    font-family: 'Geist Mono', ui-monospace, Menlo, monospace;
+    font-size: 12px; color: var(--mute); font-variant-numeric: tabular-nums;
+  }
+  .err { color: var(--error); }
+
+  /* ── Reduced motion ─────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+    .bar i { transition: none !important; }
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    main { padding: var(--sp-lg) var(--sp-md) var(--sp-3xl); }
+    h1 { font-size: 24px; line-height: 32px; letter-spacing: -0.96px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .search-row { flex: 1 1 auto; }
+    .jobs { width: calc(100vw - 32px); }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ── Navigation ────────────────────────────────────────────────── -->
+<nav aria-label="Site header">
+  <!-- Vercel triangle wordmark (matches desktop app) -->
+  <div class="wordmark" translate="no">
+    <!-- Vercel ▲ triangle: official SVG outline -->
+    <svg aria-hidden="true" width="18" height="16" viewBox="0 0 76 65" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M37.5274 0L75.0548 65H0L37.5274 0Z"/>
+    </svg>
+    FetchX
+  </div>
+  <div class="nav-spacer"></div>
+  <!-- Active-jobs badge with download tray icon -->
+  <div class="job-badge" id="jobBadge" aria-live="polite" style="display:inline-flex;align-items:center;gap:5px;">
+    <!-- Heroicon: arrow-down-tray (outline) -->
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+    </svg>
+    <span id="jobBadgeText">0&#160;active</span>
+  </div>
+</nav>
+
+<!-- ── Main content ──────────────────────────────────────────────── -->
+<main id="main">
+  <div class="page-header">
+    <h1>Browse &amp; download</h1>
+    <p class="page-sub">Search supported sites, then queue downloads to your server&rsquo;s folder.</p>
+  </div>
+
+  <div id="announcementBanner" class="announcement-banner" style="display:none;" role="region" aria-label="Announcement"></div>
+
+  <form class="toolbar" id="searchForm" role="search">
+    <!-- Site pills: category-pill style (64px radius) -->
+    <fieldset class="pills" id="sitePills" aria-label="Site">
+      <legend class="sr">Site</legend>
+    </fieldset>
+
+    <!-- Search row: input + app buttons (6px radius, icon+label flex) -->
+    <div class="search-row">
+      <label class="sr" for="q">Search videos</label>
+      <input type="search" id="q" name="q"
+             autocomplete="off" autocapitalize="off"
+             spellcheck="false" enterkeyhint="search"
+             placeholder="Search videos&hellip;">
+      <!-- Search button: magnifying glass icon + label -->
+      <button class="btn-primary-sm" type="submit" id="go">
+        <!-- Heroicon: magnifying-glass (outline) -->
+        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <span class="btn-label">Search</span>
+      </button>
+      <!-- Home button: house outline icon + label -->
+      <button class="btn-sm" type="button" id="home">
+        <!-- Heroicon: home (outline) — matches desktop app strokes exactly -->
+        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2.25 12 12 2.25 21.75 12"/>
+          <path d="M4.5 9.75V20.25a.75.75 0 0 0 .75.75h4.5v-4.5h4.5V21h4.5a.75.75 0 0 0 .75-.75V9.75"/>
+        </svg>
+        Home
+      </button>
+      <!-- Refresh button: arrow-path outline icon + label -->
+      <button class="btn-sm" type="button" id="refresh" title="Refresh">
+        <!-- Heroicon: arrow-path (outline) -->
+        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+        </svg>
+        Refresh
+      </button>
+    </div>
+  </form>
+
+  <!-- Status: mono eyebrow style -->
+  <p id="status" aria-live="polite"></p>
+
+  <section aria-label="Videos" aria-busy="false">
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty">Pick a site to start browsing.</div>
+    <div class="more-row">
+      <button class="btn-sm" type="button" id="more" hidden>
+        <!-- Heroicon: chevron-down (outline) -->
+        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+        Load more
+      </button>
+    </div>
+  </section>
+</main>
+
+<!-- ── Downloads panel ───────────────────────────────────────────── -->
+<aside class="jobs" id="jobsPanel" hidden aria-label="Downloads">
+  <div class="jobs-heading">Downloads</div>
+  <div id="jobList" aria-live="polite"></div>
+</aside>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+
+const state = { site: 'MissAV', q: '', page: 1 };
+let sites = [];
+let lastCount = 0;
+let watchLaterList = [];
+
+const nfFixed = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 1, maximumFractionDigits: 1});
+
+async function jget(u){
+  const r = await fetch(u);
+  if(!r.ok) throw new Error((await r.json()).detail || r.status);
+  return r.json();
+}
+async function jpost(u, b){
+  const r = await fetch(u, {method:'POST',
+    headers:{'Content-Type':'application/json'}, body:JSON.stringify(b)});
+  if(!r.ok) throw new Error((await r.json()).detail || r.status);
+  return r.json();
+}
+async function jdel(u){
+  const r = await fetch(u, {method:'DELETE'});
+  if(!r.ok) throw new Error((await r.json()).detail || r.status);
+  return r.json();
+}
+
+async function loadWatchLater(){
+  try {
+    const data = await jget('/api/watch_later');
+    watchLaterList = data.videos || [];
+  } catch(e) {
+    try {
+      watchLaterList = JSON.parse(localStorage.getItem('fetchx_watch_later') || '[]');
+    } catch(err) {
+      watchLaterList = [];
+    }
+  }
+}
+
+async function toggleWatchLater(v, btn){
+  const isSaved = watchLaterList.some(item => item.url === v.url);
+  const lbl = btn.querySelector('.btn-label');
+  btn.disabled = true;
+  try {
+    if(isSaved){
+      try {
+        await jdel(`/api/watch_later?url=${encodeURIComponent(v.url)}`);
+      } catch(e){}
+      watchLaterList = watchLaterList.filter(item => item.url !== v.url);
+      localStorage.setItem('fetchx_watch_later', JSON.stringify(watchLaterList));
+      btn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"/>
+      </svg><span class="btn-label">Save</span>`;
+      btn.setAttribute('aria-label', `Save to Watch Later: ${v.title || v.url}`);
+      setStatus(`Removed \u201c${(v.title || v.url).slice(0,50)}\u201d from Watch Later.`);
+    } else {
+      const entry = {
+        url: v.url,
+        title: v.title || v.url,
+        thumbnail: v.thumbnail || '',
+        duration: v.duration || '',
+        site_name: state.site || '',
+        saved_at: Math.floor(Date.now() / 1000),
+        saved_date: new Date().toISOString().slice(0, 10),
+      };
+      try {
+        await jpost('/api/watch_later', entry);
+      } catch(e){}
+      watchLaterList.unshift(entry);
+      localStorage.setItem('fetchx_watch_later', JSON.stringify(watchLaterList));
+      btn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
+           stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"/>
+      </svg><span class="btn-label">Saved</span>`;
+      btn.setAttribute('aria-label', `Remove from Watch Later: ${v.title || v.url}`);
+      setStatus(`Saved \u201c${(v.title || v.url).slice(0,50)}\u201d to Watch Later.`);
+    }
+    if(state.site === 'Watch Later'){
+      render(watchLaterList);
+    }
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function formatHumanDate(dateStr){
+  const today = new Date().toISOString().slice(0,10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  if(dateStr === today) return 'Today';
+  if(dateStr === yesterday) return 'Yesterday';
+  if(!dateStr) return 'Earlier';
+  try {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  } catch(e) {
+    return dateStr;
+  }
+}
+
+function setStatus(msg, isError){
+  const el = $('status');
+  el.textContent = msg || '';
+  el.classList.toggle('err', Boolean(isError));
+  $('empty').style.display = 'none';
+  if(!msg && !lastCount) $('empty').style.display = '';
+}
+
+function card(v){
+  const d = document.createElement('article');
+  d.className = 'vcard';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'thumbwrap';
+  if(v.thumbnail){
+    const img = document.createElement('img');
+    img.loading = 'lazy'; img.decoding = 'async';
+    img.width = 400; img.height = 225; img.alt = '';
+    img.src = v.thumbnail;
+    wrap.appendChild(img);
+  }
+  if(v.duration){
+    const dur = document.createElement('span');
+    dur.className = 'dur';
+    dur.textContent = v.duration;
+    wrap.appendChild(dur);
+  }
+
+  const body = document.createElement('div');
+  body.className = 'vbody';
+  const title = document.createElement('div');
+  title.className = 'vtitle';
+  title.textContent = v.title || '(untitled)';
+  const foot = document.createElement('div');
+  foot.className = 'vfoot';
+
+  // Save / Watch Later Bookmark Button
+  const isSaved = watchLaterList.some(item => item.url === v.url);
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'btn-sm';
+  saveBtn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="${isSaved ? 'currentColor' : 'none'}"
+       stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"/>
+  </svg><span class="btn-label">${isSaved ? 'Saved' : 'Save'}</span>`;
+  saveBtn.setAttribute('aria-label', `${isSaved ? 'Remove from' : 'Save to'} Watch Later: ${v.title || v.url}`);
+  saveBtn.addEventListener('click', async () => {
+    await toggleWatchLater(v, saveBtn);
+  });
+  foot.appendChild(saveBtn);
+
+  // Download Button
+  const dlBtn = document.createElement('button');
+  dlBtn.type = 'button';
+  dlBtn.className = 'btn-sm';
+  // Heroicon: arrow-down-tray (outline)
+  dlBtn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+  </svg><span class="btn-label">Download</span>`;
+  dlBtn.setAttribute('aria-label', `Download: ${v.title || v.url}`);
+  dlBtn.addEventListener('click', async () => {
+    const lbl = dlBtn.querySelector('.btn-label');
+    dlBtn.disabled = true;
+    lbl.textContent = 'Queueing\u2026';
+    try{
+      await jpost('/api/downloads', {url:v.url});
+      lbl.textContent = 'Queued';
+      setStatus(`Queued \u201c${(v.title || v.url).slice(0,60)}\u201d for download.`);
+      pollJobs();
+    }catch(e){
+      dlBtn.disabled = false;
+      lbl.textContent = 'Download';
+      setStatus(`Could not queue \u2014 ${e.message}. Check the URL and try again.`, true);
+    }
+  });
+  foot.appendChild(dlBtn);
+  body.append(title, foot);
+  d.append(wrap, body);
+  return d;
+}
+
+function render(videos){
+  lastCount = videos.length;
+  const grid = $('grid');
+  grid.replaceChildren();
+  $('more').hidden = !(videos.length && !state.q && state.site !== 'Watch Later');
+
+  if(videos.length){
+    const frag = document.createDocumentFragment();
+
+    if(state.site === 'Watch Later'){
+      // Group videos by saved_date
+      const groups = {};
+      videos.forEach(v => {
+        const dateKey = v.saved_date || (v.saved_at ? new Date(v.saved_at * 1000).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10));
+        if(!groups[dateKey]) groups[dateKey] = [];
+        groups[dateKey].push(v);
+      });
+      const sortedDates = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+      sortedDates.forEach(dateKey => {
+        const vids = groups[dateKey];
+        const dateGroup = document.createElement('div');
+        dateGroup.className = 'date-group';
+        const dateHead = document.createElement('div');
+        dateHead.className = 'date-heading';
+        dateHead.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg><span>${formatHumanDate(dateKey)}</span><span class="count">\u00b7 ${vids.length} ${vids.length === 1 ? 'video' : 'videos'}</span>`;
+        dateGroup.appendChild(dateHead);
+        frag.appendChild(dateGroup);
+        vids.forEach(v => frag.appendChild(card(v)));
+      });
+      grid.appendChild(frag);
+      setStatus(`${videos.length}\u00A0videos\u00A0\u00b7 Watch Later`);
+    } else {
+      videos.forEach(v => frag.appendChild(card(v)));
+      grid.appendChild(frag);
+      setStatus(`${videos.length}\u00A0videos\u00A0\u00b7 ${state.site}`);
+    }
+
+    $('empty').style.display = 'none';
+    $('main').querySelector('[aria-busy]').setAttribute('aria-busy','false');
+  }else{
+    setStatus('');
+    $('main').querySelector('[aria-busy]').setAttribute('aria-busy','false');
+    $('empty').textContent = state.site === 'Watch Later' ? 'Your Watch Later list is empty \u2014 click Save on any video to add it.' : 'No videos found \u2014 try another site or keyword.';
+    $('empty').style.display = '';
+  }
+}
+
+async function load(){
+  const section = $('main').querySelector('[aria-busy]');
+  section.setAttribute('aria-busy','true');
+  $('go').disabled = true;
+  const goLabel = $('go').querySelector('.btn-label') || $('go');
+  goLabel.textContent = 'Searching\u2026';
+  setStatus(state.q ? 'Searching\u2026' : 'Loading\u2026');
+  try{
+    let data;
+    if(state.site === 'Watch Later'){
+      await loadWatchLater();
+      data = { videos: state.q ? watchLaterList.filter(v => (v.title || '').toLowerCase().includes(state.q.toLowerCase())) : watchLaterList };
+    }else if(state.q){
+      data = await jget(`/api/search?site=${encodeURIComponent(state.site)}&q=${encodeURIComponent(state.q)}`);
+    }else{
+      data = await jget(`/api/browse?site=${encodeURIComponent(state.site)}&page=${state.page}`);
+    }
+    render(data.videos);
+  }catch(e){
+    lastCount = 0;
+    $('grid').replaceChildren();
+    $('more').hidden = true;
+    setStatus(`Browse failed \u2014 ${e.message}. Try again or pick another site.`, true);
+  }finally{
+    $('go').disabled = false;
+    goLabel.textContent = 'Search';
+  }
+}
+
+function syncUrl(push){
+  const p = new URLSearchParams();
+  p.set('site', state.site);
+  if(state.q) p.set('q', state.q);
+  if(state.page > 1) p.set('page', String(state.page));
+  const qs = p.toString();
+  const url = location.pathname + (qs ? '?' + qs : '');
+  (push ? history.pushState : history.replaceState).call(history, {}, '', url);
+}
+
+function readUrl(){
+  const p = new URLSearchParams(location.search);
+  const s = p.get('site');
+  if(s === 'Watch Later' || sites.some(x => x.key === s)) state.site = s;
+  state.q = p.get('q') || '';
+  state.page = Math.max(1, parseInt(p.get('page'), 10) || 1);
+  $('q').value = state.q;
+  [...$('sitePills').children].forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.site === state.site)));
+}
+
+function buildPills(list){
+  sites = list;
+  const box = $('sitePills');
+  box.replaceChildren();
+
+  // Watch Later Pill with Bookmark Icon
+  const wlPill = document.createElement('button');
+  wlPill.type = 'button';
+  wlPill.className = 'pill';
+  wlPill.dataset.site = 'Watch Later';
+  wlPill.setAttribute('aria-pressed', String(state.site === 'Watch Later'));
+  wlPill.style.display = 'inline-flex';
+  wlPill.style.alignItems = 'center';
+  wlPill.style.gap = '5px';
+  wlPill.innerHTML = `<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"
+       stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"/>
+  </svg>Watch Later`;
+  wlPill.addEventListener('click', () => {
+    state.site = 'Watch Later';
+    state.q = ''; state.page = 1;
+    $('q').value = '';
+    [...box.children].forEach(x => x.setAttribute('aria-pressed','false'));
+    wlPill.setAttribute('aria-pressed','true');
+    syncUrl(true); load();
+  });
+  box.appendChild(wlPill);
+
+  list.forEach(s => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pill';
+    b.dataset.site = s.key;
+    b.setAttribute('aria-pressed', String(s.key === state.site));
+    b.textContent = s.key;
+    if(!s.search){
+      b.title = 'Browse only';
+      const sr = document.createElement('span');
+      sr.className = 'sr';
+      sr.textContent = ' (browse only)';
+      b.appendChild(sr);
+    }
+    b.addEventListener('click', () => {
+      state.site = s.key;
+      state.q = ''; state.page = 1;
+      $('q').value = '';
+      [...box.children].forEach(x => x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      syncUrl(true); load();
+    });
+    box.appendChild(b);
+  });
+}
+
+const DEFAULT_SITES = [{key:'MissAV'},{key:'JableTV'},{key:'SupJav'},
+                       {key:'Hanime1'},{key:'HanimeTV'},{key:'TnaFlix'}];
+
+async function initSites(){
+  try{
+    const {sites: list} = await jget('/api/sites');
+    buildPills(list && list.length ? list : DEFAULT_SITES);
+  }catch(e){
+    buildPills(DEFAULT_SITES);
+  }
+}
+
+window.addEventListener('popstate', () => { readUrl(); load(); });
+
+function fmtSpeed(bytesPerSec){
+  return `${nfFixed.format(bytesPerSec / 1048576)}\u00A0MB/s`;
+}
+
+function jobNode(j){
+  const d = document.createElement('div');
+  d.className = 'job';
+  const name = document.createElement('div');
+  name.className = 'jname';
+  name.textContent = j.name || j.url;
+
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  const fill = document.createElement('i');
+  const pct = Math.max(0, j.progress);
+  fill.style.transform = `scaleX(${pct / 100})`;
+  if(j.status === 'downloading' && j.progress >= 0){
+    bar.setAttribute('role','progressbar');
+    bar.setAttribute('aria-valuemin','0');
+    bar.setAttribute('aria-valuemax','100');
+    bar.setAttribute('aria-valuenow', String(pct));
+    bar.setAttribute('aria-label', `Downloading ${j.name || j.url}`);
+  }
+  bar.appendChild(fill);
+
+  const meta = document.createElement('div');
+  meta.className = 'jmeta';
+  const st = document.createElement('span');
+  st.textContent = j.status;
+  const info = document.createElement('span');
+  if(j.status === 'error'){
+    info.className = 'err';
+    info.textContent = j.error || 'failed \u2014 try queuing again';
+  }else if(j.status === 'downloading' && j.speed > 0){
+    info.textContent = fmtSpeed(j.speed);
+  }else if(j.status === 'done'){
+    info.textContent = 'saved';
+  }
+  meta.append(st, info);
+  d.append(name, bar, meta);
+  return d;
+}
+
+async function pollJobs(){
+  try{
+    const {jobs} = await jget('/api/downloads');
+    const active = jobs.filter(j => ['queued','downloading'].includes(j.status));
+    const badge = $('jobBadge');
+    // Update only the text span — don't overwrite the SVG icon
+    const badgeText = $('jobBadgeText');
+    if(badgeText) badgeText.textContent = `${active.length}\u00A0active`;
+    badge.classList.toggle('has-active', active.length > 0);
+    $('jobsPanel').hidden = !jobs.length;
+    const list = $('jobList');
+    list.replaceChildren(...jobs.slice(0,12).map(jobNode));
+  }catch(e){}
+}
+
+$('searchForm').addEventListener('submit', e => {
+  e.preventDefault();
+  state.q = $('q').value.trim();
+  state.page = 1; syncUrl(true); load();
+});
+$('home').addEventListener('click', () => {
+  state.q = ''; state.page = 1;
+  $('q').value = ''; syncUrl(true); load();
+});
+$('refresh').addEventListener('click', () => {
+  load(); pollJobs();
+});
+$('more').addEventListener('click', () => {
+  state.page += 1; syncUrl(false); load();
+});
+
+async function loadAnnouncements(){
+  try {
+    const res = await fetch('/api/announcements');
+    if(!res.ok) return;
+    const data = await res.json();
+    const items = data.announcements || [];
+    const dismissed = JSON.parse(localStorage.getItem('dismissed_announcements') || '[]');
+    const banner = items.find(it => it.enabled !== false && it.type === 'banner' && !dismissed.includes(it.id));
+    const container = $('announcementBanner');
+    if(!container) return;
+    if(!banner){
+      container.style.display = 'none';
+      return;
+    }
+    const accent = banner.accent_color || '#0070f3';
+    container.style.borderColor = accent;
+    container.style.display = 'flex';
+    container.innerHTML = `
+      <div class="ann-left">
+        <span class="ann-badge" style="color:${accent}; border-color:${accent}; background:${accent}18">${escapeHtml(banner.badge || 'NOTICE')}</span>
+        <strong class="ann-title">${escapeHtml(banner.title || '')}</strong>
+        <span class="ann-msg">${escapeHtml(banner.message || banner.description || '')}</span>
+      </div>
+      <div class="ann-actions">
+        ${banner.link_url ? `<a class="ann-btn" href="${escapeHtml(banner.link_url)}" target="_blank" rel="noopener noreferrer" style="background:${accent}">${escapeHtml(banner.link_text || 'Learn More ↗')}</a>` : ''}
+        ${banner.dismissible !== false ? `<button class="ann-close" type="button" aria-label="Close announcement" onclick="dismissAnnouncement('${escapeHtml(banner.id)}')">✕</button>` : ''}
+      </div>
+    `;
+  } catch(e) {}
+}
+
+function dismissAnnouncement(id){
+  const dismissed = JSON.parse(localStorage.getItem('dismissed_announcements') || '[]');
+  if(!dismissed.includes(id)) dismissed.push(id);
+  localStorage.setItem('dismissed_announcements', JSON.stringify(dismissed));
+  const container = $('announcementBanner');
+  if(container) container.style.display = 'none';
+}
+
+(async () => {
+  await loadWatchLater();
+  await initSites();
+  loadAnnouncements();
+  readUrl(); load(); pollJobs();
+})();
+setInterval(pollJobs, 2000);
+</script>
+</body>
+</html>

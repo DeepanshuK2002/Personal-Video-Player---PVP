@@ -1,0 +1,11 @@
+
+include ':baselineprofile'
+// include ':nativeprocessor'
+// include ':ui-camera'
+//  include ':widgets-release'
+// include ':android-metadata-generator'
+
+// project(':widgets-release').projectDir = new File("/Volumes/dev/nativescript/NativeScript/packages/ui-mobile-base/android/widgets")
+// project(':ui-camera').projectDir = new File("/Volumes/dev/nativescript/ui-cameraview/src-native/android/ui-camera")
+// project(':nativeprocessor').projectDir = new File("/Volumes/dev/nativescript/OSS-DocumentScanner/plugin-nativeprocessor/src-native/android/nativeprocessor")
+// project(':android-metadata-generator').projectDir = new File("/home/mguillon/dev/nativescript/android-runtime/test-app/build-tools/android-metadata-generator")

@@ -1,0 +1,6 @@
+include ':nativeprocessor'
+include ':ui-camera'
+include ':widgets-release'
+include ':app'
+project(':ui-camera').projectDir = new File("/Volumes/dev/nativescript/ui-cameraview/src-native/android/ui-camera")
+project(':widgets-release').projectDir = new File("/Volumes/dev/nativescript/NativeScript/packages/ui-mobile-base/android/widgets")
