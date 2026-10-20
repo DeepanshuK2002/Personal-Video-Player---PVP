@@ -58,11 +58,15 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .ccbtn:hover{background:rgba(255,255,255,0.1)}
 .ccbtn.active{background:rgba(116,192,252,0.2)}
 .ccbtn svg{width:20px;height:20px;fill:none}
+.ccbtn.active .ccb{fill:rgb(116,192,252);stroke:rgb(116,192,252)}
 
 /* Settings menu - click to toggle */
 .brandmark-wrap{position:relative}
-#settingsmenu{display:none;position:absolute;bottom:44px;left:0;background:#222;padding:8px;border-radius:8px;min-width:240px;max-width:300px;z-index:20;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+#settingsmenu{display:none;position:absolute;bottom:44px;left:0;background:#222;padding:8px;border-radius:8px;min-width:240px;max-width:300px;max-height:calc(100vh - 96px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#555 transparent;z-index:20;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
 #settingsmenu.show{display:block}
+#settingsmenu::-webkit-scrollbar{width:8px}
+#settingsmenu::-webkit-scrollbar-thumb{background:#555;border-radius:4px}
+#settingsmenu::-webkit-scrollbar-track{background:transparent}
 .settings-section{padding:8px 0;border-bottom:1px solid #333}
 .settings-section:last-child{border-bottom:none}
 .settings-section h4{font-size:11px;text-transform:uppercase;color:#888;margin:0 0 8px;padding:0 4px;letter-spacing:0.5px}
@@ -207,9 +211,9 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 /* Palette button in section headers */
 .section-head{display:flex;justify-content:space-between;align-items:center}
 .section-head span{white-space:nowrap}
-.palette-btn{background:transparent;border:none;cursor:pointer;padding:3px;border-radius:4px;display:flex;line-height:0}
-.palette-btn:hover{background:#333}
-.palette-btn svg{width:15px;height:15px;fill:none;stroke:#8ec9f5;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.settings-section button.palette-btn{background:transparent;border:none;cursor:pointer;padding:3px;border-radius:4px;display:flex;line-height:0;width:auto;min-width:0;gap:0;margin-left:auto;margin-right:-3px}
+.settings-section button.palette-btn:hover{background:#333}
+.settings-section button.palette-btn svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* Custom subtitle overlay (fully stylable) */
 #suboverlay{position:absolute;left:0;right:0;bottom:64px;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;z-index:14;padding:0 60px;opacity:0;transition:opacity .15s;font-size:18px}
@@ -368,7 +372,7 @@ const PAUSE='<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/
 const FOLDER='<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
 const VOLUME='<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
 const MUTE='<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
-const CC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.17a3 3 0 1 0 0 5.66"/><path d="M17 9.17a3 3 0 1 0 0 5.66"/><rect x="2" y="5" width="20" height="14" rx="2"/></svg>';
+const CC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect class="ccb" x="2" y="5" width="20" height="14" rx="2"/><path class="ccg" d="M10 9.17a3 3 0 1 0 0 5.66"/><path class="ccg" d="M17 9.17a3 3 0 1 0 0 5.66"/></svg>';
 const FS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>';
 const FS_EXIT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
 let speed=1,showRemaining=false,timer=null,volTimer=null,spdTimer=null,isMuted=false,prevVol=1,hudReady=false;
