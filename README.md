@@ -2,23 +2,40 @@
 
 <div align="center">
   <img src="assets/logo.svg" alt="PVP Logo" width="128" height="128">
-  <h3>A lightweight, modern video player built with Rust</h3>
+  <h3>The World's Most Lightweight Video Player — Built in Rust</h3>
+  <p><b>Only ~3.6 MB.</b> No bloat. No Electron. Just pure Rust performance.</p>
 </div>
+
+---
+
+## Why PVP?
+
+| | PVP | Typical Players |
+|---|---|---|
+| **Size** | **~3.6 MB** | 80–200+ MB |
+| **Engine** | Rust + WebView2 | Electron / Chromium |
+| **Startup** | Instant | Slow |
+| **RAM Usage** | Minimal | Heavy |
+
+PVP is a single `.exe` built entirely in Rust using [Tao](https://github.com/tauri-apps/tao) (windowing) and [Wry](https://github.com/tauri-apps/wry) (WebView2 bindings). There are no external dependencies to install — just download and play.
 
 ---
 
 ## Features
 
-- **Lightweight & Fast** - Built with Rust using Tao and Wry (WebView2)
+- **Ultralightweight (~3.6 MB)** - World's most lightweight video player, built in Rust
 - **Modern UI** - Clean, minimal interface with auto-hiding controls
-- **Drag & Drop** - Simply drop video files to play
-- **Keyboard Shortcuts** - Full keyboard control support
+- **Custom Titlebar** - Native-feel window controls with PVP+ branding
+- **Folder Playlists** - Open a folder and play all videos in sequence with sort (time/name/duration, asc/desc)
+- **Drag & Drop** - Drop videos, folders, or subtitle files
+- **Subtitle Support** - SRT/VTT with style editor (font, size, color, background)
 - **Playback Speed Control** - 0.5x to 2x speed options
 - **Volume Boost** - Up to 200% volume
 - **Fullscreen Support** - Native fullscreen toggle
 - **Progress Bar** - Click to seek, shows current/total time
 - **File Association** - Open videos directly from command line or file explorer
 - **stdin Support** - Pipe video data directly: `cat video.mp4 | pvp`
+- **Live Captions** - *(Coming Soon)*
 
 ## Keyboard Shortcuts
 
@@ -30,6 +47,7 @@
 | `↑/↓` | Volume Up/Down |
 | `M` | Mute/Unmute |
 | `[ / ]` | Decrease/Increase Speed |
+| `C` | Toggle Live Captions |
 | `Click Video` | Play/Pause |
 | `Right-click (double)` | Toggle Fullscreen |
 | `Scroll Wheel` | Volume Control |
@@ -57,6 +75,7 @@ personal-video-player.exe "path\to\video.mp4"
 
 # Drag and drop a video file onto the window
 # Or use the folder button in the controls
+# Or drag a whole folder for a playlist
 ```
 
 ## Supported Formats
@@ -92,5 +111,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ---
 
 <div align="center">
-  <sub>Built with ❤️ using Rust</sub>
+  <sub>Built with ❤️ using Rust — ~3.6 MB of pure performance</sub>
 </div>
