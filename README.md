@@ -19,6 +19,8 @@
 
 PVP is a single `.exe` built entirely in Rust using [Tao](https://github.com/tauri-apps/tao) (windowing) and [Wry](https://github.com/tauri-apps/wry) (WebView2 bindings). There are no external dependencies to install — just download and play.
 
+> **Make it yours.** This player was built exactly the way I needed it: lightweight, minimal, and focused on the features I actually use every day — not the dozens of options I'd never touch in a typical player. That's the point. Fork it, strip out what you don't need, add what you do, and shape it into *your* ideal player. The code is simple, the structure is clean, and everything is embedded in one place. If you've ever wanted a video player that does exactly what *you* want — nothing more, nothing less — start here.
+
 ---
 
 ## Features
