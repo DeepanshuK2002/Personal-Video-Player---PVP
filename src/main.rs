@@ -31,8 +31,8 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 #tl{flex:1;height:6px;background:rgba(128,128,128,0.35);border-radius:3px;cursor:pointer;position:relative}
 #fill{height:100%;background:rgb(116,192,252);border-radius:3px;width:0}
 .volwrap{position:relative;display:flex;align-items:center;gap:4px}
-.vol{display:none;position:absolute;bottom:30px;left:50%;transform:translateX(-50%);writing-mode:vertical-lr;direction:rtl;width:6px;height:90px;appearance:none;-webkit-appearance:none;background:rgba(128,128,128,0.35);border-radius:3px;cursor:pointer;z-index:15}
-.volwrap:hover .vol{display:block}
+.vol{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);writing-mode:vertical-lr;direction:rtl;width:6px;height:100px;appearance:none;-webkit-appearance:none;background:rgba(128,128,128,0.35);border-radius:3px;cursor:pointer;z-index:15;opacity:0;transition:opacity 0.2s;pointer-events:none}
+.volwrap:hover .vol{opacity:1;pointer-events:auto}
 .vol::-webkit-slider-runnable-track{width:6px;height:100%;background:rgba(128,128,128,0.35);border-radius:3px}
 .vol::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:rgb(116,192,252);margin-left:-4px;border:none}
 .vol::-moz-range-track{width:6px;height:100%;background:rgba(128,128,128,0.35);border-radius:3px}
@@ -46,7 +46,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .brandmark .logo-icon{width:22px;height:22px;fill:rgb(116, 192, 252);filter:drop-shadow(0 1px 2px rgba(0,0,0,.8));transition:opacity 0.2s}
 .brandmark:hover .logo-icon{opacity:0}
 .brandmark:hover .settings-icon{opacity:1}
-.brandmark .settings-icon{position:absolute;left:0;top:0;width:20px;height:20px;opacity:0;transition:opacity 0.2s;fill:#fff;pointer-events:none}
+.brandmark .settings-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;opacity:0;transition:opacity 0.2s;stroke:#fff;fill:none;pointer-events:none}
 .spdind{position:fixed;top:12px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:21;white-space:nowrap}
 .spdind.show{opacity:1}
 .volind{position:fixed;top:12px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:20}
@@ -127,21 +127,22 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
     transform:translateY(50%) translateY(20px);
 }
 .live-caption-line{
-    background:var(--caption-bg, rgba(0,0,0,0.75));
-    color:var(--caption-color, #fff);
-    font-family:var(--caption-font, system-ui, sans-serif);
-    font-size:var(--caption-size, 20px);
-    line-height:var(--caption-line-height, 1.4);
-    padding:8px 16px;
-    border-radius:8px;
-    margin:4px 0;
-    max-width:90%;
+    background:rgba(18, 18, 18, 0.85);
+    color:rgb(116, 192, 252);
+    font-family:system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.3;
+    padding:6px 12px;
+    border-radius:6px;
+    margin:3px 0;
+    max-width:85%;
     margin-left:auto;
     margin-right:auto;
     text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,0.5);
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
     animation:captionFadeIn 0.2s ease-out;
     word-wrap:break-word;
+    border:1px solid rgba(116, 192, 252, 0.3);
 }
 .live-caption-line.partial{
     opacity:0.7;
@@ -209,7 +210,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
     <div class="brandmark-wrap">
       <div class="brandmark">
         <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="rgb(116, 192, 252)" d="M128 128C92.7 128 64 156.7 64 192L64 448C64 483.3 92.7 512 128 512L384 512C419.3 512 448 483.3 448 448L448 192C448 156.7 419.3 128 384 128L128 128zM496 400L569.5 458.8C573.7 462.2 578.9 464 584.3 464C597.4 464 608 453.4 608 440.3L608 199.7C608 186.6 597.4 176 578.9 176 573.7 177.8 569.5 181.2L496 240L496 400z"/></svg>
-        <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.14 15a2.34 2.34 0 0 1 1.86-1.86a2.34 2.34 0 0 0 0-3.31a2.34 2.34 0 0 1-1.86-1.86a2.34 2.34 0 0 0-3.31 0a2.34 2.34 0 0 1-1.86 1.86a2.34 2.34 0 0 0 0 3.31a2.34 2.34 0 0 1 1.86 1.86a2.34 2.34 0 0 0 3.31 0"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <div id="settingsmenu">
         <div class="settings-section">
@@ -247,20 +248,6 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
               <option value="ko-KR">Korean</option>
               <option value="zh-CN">Chinese (Simplified)</option>
             </select>
-          </div>
-          <div class="setting-row">
-            <label>Font Size</label>
-            <input type="range" id="live-captions-font-size" min="12" max="32" value="20">
-            <span id="live-captions-font-size-value">20px</span>
-          </div>
-          <div class="setting-row">
-            <label>Font Color</label>
-            <input type="color" id="live-captions-font-color" value="#FFFFFF">
-          </div>
-          <div class="setting-row">
-            <label>Background</label>
-            <input type="color" id="live-captions-bg-color" value="#000000">
-            <input type="range" id="live-captions-bg-opacity" min="0" max="100" value="75" style="flex:1">
           </div>
           <div class="setting-row">
             <label>Position</label>
@@ -318,21 +305,24 @@ const fsbtn=document.getElementById("fsbtn");
 const brandmark=document.querySelector(".brandmark");
 const PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 const PAUSE='<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-const CLOCK='<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>';
 const FOLDER='<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
 const VOLUME='<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
 const MUTE='<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
 const CC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.17a3 3 0 1 0 0 5.66"/><path d="M17 9.17a3 3 0 1 0 0 5.66"/><rect x="2" y="5" width="20" height="14" rx="2"/></svg>';
-const FS='<svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>';
-const FS_EXIT='<svg viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>';
+const FS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>';
+const FS_EXIT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
 let speed=1,showRemaining=false,timer=null,volTimer=null,spdTimer=null,isMuted=false,prevVol=1,hudReady=false;
 let currentSubtitleTrack=null,currentAudioTrack=null,subtitleOffset=0,externalSubtitles=[],externalAudioTracks=[];
+// Live Captions config
+let liveCaptionsPosition='bottom';
+let liveCaptionsMaxLines=3;
+let liveCaptionsLanguage='en-US';
 function fmt(s){if(!isFinite(s))return "00:00:00";s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");}
 function upd(){if(v.duration){fill.style.width=(v.currentTime/v.duration*100)+"%";cur.textContent=fmt(v.currentTime);end.textContent=showRemaining?"-"+fmt(v.duration-v.currentTime):fmt(v.duration);}}
 function toggle(){v.paused?v.play():v.pause();}
 function showCtl(){ctl.classList.remove("hide");clearTimeout(timer);if(!v.paused)timer=setTimeout(()=>ctl.classList.add("hide"),3000);}
 function setVideoName(n){if(n){const b=n.split(/[\\\\/]/).pop();document.title="PVP | "+(b||n);}}
-play.innerHTML=PLAY;document.getElementById("open").innerHTML=FOLDER;document.getElementById("volbtn").innerHTML=VOLUME;fsbtn.innerHTML=FS;ccbtn.innerHTML=CC;document.getElementById("speedbtn").innerHTML=CLOCK;
+play.innerHTML=PLAY;document.getElementById("open").innerHTML=FOLDER;document.getElementById("volbtn").innerHTML=VOLUME;fsbtn.innerHTML=FS;ccbtn.innerHTML=CC;
 play.onclick=toggle;v.onclick=toggle;v.onplay=()=>{play.innerHTML=PAUSE;ensureAudio();if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume();};v.onpause=()=>play.innerHTML=PLAY;v.ontimeupdate=upd;
 tl.onclick=e=>{const r=tl.getBoundingClientRect();if(v.duration)v.currentTime=(e.clientX-r.left)/r.width*v.duration;};
 end.onclick=()=>{showRemaining=!showRemaining;if(v.duration)upd();}
@@ -792,16 +782,10 @@ v.addEventListener('loadstart',()=>{
   subtitleOffset=0;
 });
 
-// Live Captions Functions
-function updateLiveCaptionsStyle(){
-  liveCaptionsOverlay.style.setProperty('--caption-font', liveCaptionsConfig.fontFamily || 'system-ui, sans-serif');
-  liveCaptionsOverlay.style.setProperty('--caption-size', liveCaptionsConfig.fontSize + 'px');
-  liveCaptionsOverlay.style.setProperty('--caption-color', liveCaptionsConfig.fontColor);
-  liveCaptionsOverlay.style.setProperty('--caption-bg', liveCaptionsConfig.backgroundColor + Math.round(liveCaptionsConfig.backgroundOpacity * 255).toString(16).padStart(2,'0'));
-  liveCaptionsOverlay.style.setProperty('--caption-line-height', liveCaptionsConfig.lineHeight);
-  liveCaptionsOverlay.classList.remove('top', 'center', 'bottom');
-  liveCaptionsOverlay.classList.add(liveCaptionsConfig.position);
-}
+// Live Captions - simple config (using fixed brand colors)
+let liveCaptionsPosition='bottom';
+let liveCaptionsMaxLines=3;
+let liveCaptionsLanguage='en-US';
 
 function addLiveCaption(text, isFinal){
   const line=document.createElement('div');
@@ -809,10 +793,10 @@ function addLiveCaption(text, isFinal){
   line.textContent=text;
   liveCaptionsOverlay.appendChild(line);
   captionHistory.push({text, isFinal, time:Date.now()});
-  while(liveCaptionsOverlay.children.length > liveCaptionsConfig.maxLines){
+  while(liveCaptionsOverlay.children.length > liveCaptionsMaxLines){
     liveCaptionsOverlay.removeChild(liveCaptionsOverlay.firstChild);
   }
-  while(captionHistory.length > liveCaptionsConfig.maxLines * 2){
+  while(captionHistory.length > liveCaptionsMaxLines * 2){
     captionHistory.shift();
   }
 }
@@ -856,7 +840,9 @@ function startLiveCaptions(){
     audioSource.connect(audioProcessor);
     audioProcessor.connect(audioContext.destination);
   }
-  updateLiveCaptionsStyle();
+  // Apply position class
+  liveCaptionsOverlay.classList.remove('top', 'center', 'bottom');
+  liveCaptionsOverlay.classList.add(liveCaptionsPosition);
 }
 
 function stopLiveCaptions(){
@@ -893,42 +879,21 @@ ccbtn.onclick=e=>{e.stopPropagation();toggleLiveCaptions();};
 
 // Live Captions Settings Event Listeners
 document.getElementById('live-captions-lang')?.addEventListener('change', e=>{
-  liveCaptionsConfig.language=e.target.value;
+  liveCaptionsLanguage=e.target.value;
   if(liveCaptionsEnabled){stopLiveCaptions();startLiveCaptions();}
-  if(window.chrome&&window.chrome.webview){
-    window.chrome.webview.postMessage(JSON.stringify({type:'live-captions-config',config:liveCaptionsConfig}));
-  }
-});
-
-document.getElementById('live-captions-font-size')?.addEventListener('input', e=>{
-  liveCaptionsConfig.fontSize=parseInt(e.target.value);
-  document.getElementById('live-captions-font-size-value').textContent=liveCaptionsConfig.fontSize+'px';
-  updateLiveCaptionsStyle();
-});
-
-document.getElementById('live-captions-font-color')?.addEventListener('input', e=>{
-  liveCaptionsConfig.fontColor=e.target.value;
-  updateLiveCaptionsStyle();
-});
-
-document.getElementById('live-captions-bg-color')?.addEventListener('input', e=>{
-  liveCaptionsConfig.backgroundColor=e.target.value;
-  updateLiveCaptionsStyle();
-});
-
-document.getElementById('live-captions-bg-opacity')?.addEventListener('input', e=>{
-  liveCaptionsConfig.backgroundOpacity=parseInt(e.target.value)/100;
-  updateLiveCaptionsStyle();
 });
 
 document.getElementById('live-captions-position')?.addEventListener('change', e=>{
-  liveCaptionsConfig.position=e.target.value;
-  updateLiveCaptionsStyle();
+  liveCaptionsPosition=e.target.value;
+  if(liveCaptionsEnabled){
+    liveCaptionsOverlay.classList.remove('top', 'center', 'bottom');
+    liveCaptionsOverlay.classList.add(liveCaptionsPosition);
+  }
 });
 
 document.getElementById('live-captions-max-lines')?.addEventListener('input', e=>{
-  liveCaptionsConfig.maxLines=parseInt(e.target.value);
-  document.getElementById('live-captions-max-lines-value').textContent=liveCaptionsConfig.maxLines;
+  liveCaptionsMaxLines=parseInt(e.target.value);
+  document.getElementById('live-captions-max-lines-value').textContent=liveCaptionsMaxLines;
 });
 
 document.getElementById("f").onchange=e=>{const f=e.target.files[0];if(f){v.src=URL.createObjectURL(f);v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});setVideoName(f.name);}};
