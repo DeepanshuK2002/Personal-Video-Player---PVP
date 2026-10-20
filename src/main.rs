@@ -200,10 +200,48 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
     border-radius:4px;
     cursor:pointer;
 }
+/* Settings icon stays visible while menu is open */
+.brandmark:has(~ #settingsmenu.show) .settings-icon{opacity:1}
+.brandmark:has(~ #settingsmenu.show) .logo-icon{opacity:0}
+
+/* Palette button in section headers */
+.section-head{display:flex;justify-content:space-between;align-items:center}
+.section-head span{white-space:nowrap}
+.palette-btn{background:transparent;border:none;cursor:pointer;padding:3px;border-radius:4px;display:flex;line-height:0}
+.palette-btn:hover{background:#333}
+.palette-btn svg{width:15px;height:15px;fill:none;stroke:#8ec9f5;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Custom subtitle overlay (fully stylable) */
+#suboverlay{position:absolute;left:0;right:0;bottom:64px;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;z-index:14;padding:0 60px;opacity:0;transition:opacity .15s;font-size:18px}
+#suboverlay.show{opacity:1}
+.sub-line{background:var(--sub-bg,rgba(0,0,0,.7));color:inherit;font-weight:inherit;font-size:inherit;font-family:inherit;line-height:1.35;padding:.15em .55em;border-radius:4px;max-width:88%;text-align:center;white-space:pre-wrap;word-wrap:break-word}
+
+/* Subtitle style popup */
+.style-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:29;display:none}
+.style-backdrop.show{display:block}
+.style-popup{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:350px;max-width:92vw;max-height:86vh;overflow-y:auto;background:#222;border:1px solid #383838;border-radius:10px;z-index:30;display:none;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+.style-popup.show{display:block}
+.style-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #333;font-size:13px;font-weight:600;letter-spacing:.3px}
+.style-head button{background:transparent;border:none;color:#aaa;font-size:16px;cursor:pointer;padding:2px 6px;line-height:1}
+.style-head button:hover{color:#fff}
+.style-body{padding:8px 14px}
+.style-row{display:flex;align-items:center;gap:8px;margin:9px 0}
+.style-row label{width:105px;font-size:12px;color:#ccc;flex-shrink:0}
+.style-row select{flex:1;min-width:0;background:#333;border:none;color:#fff;padding:5px 6px;border-radius:4px;font-size:12px}
+.style-row input[type=range]{flex:1;min-width:0;accent-color:rgb(116,192,252)}
+.style-row input[type=color]{width:44px;height:26px;border:1px solid #444;border-radius:4px;background:#333;cursor:pointer;padding:1px}
+.style-row span{width:38px;font-size:11px;color:#999;text-align:right;flex-shrink:0}
+.style-foot{display:flex;gap:8px;padding:10px 14px;border-top:1px solid #333}
+.style-foot button{flex:1;padding:7px;border:none;border-radius:5px;font-size:13px;cursor:pointer}
+#st-reset{background:#333;color:#fff}
+#st-reset:hover{background:#444}
+#st-done{background:rgb(116,192,252);color:#000;font-weight:600}
+#st-done:hover{filter:brightness(1.1)}
 
 </style></head><body>
 <video id="v"></video>
 <div class="live-captions-overlay hidden" id="live-captions-overlay"></div>
+<div id="suboverlay"></div>
 <input type="file" id="f" accept="video/*" style="display:none">
 <input type="file" id="subtitle-file" accept=".srt,.vtt,.ass,.ssa" style="display:none" multiple>
 <input type="file" id="audio-file" accept="audio/*" style="display:none" multiple>
@@ -220,7 +258,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
           <div class="speed-options" id="speedmenu"></div>
         </div>
         <div class="settings-section">
-          <h4>Subtitles</h4>
+          <h4 class="section-head"><span>Subtitles</span><button class="palette-btn" id="pal-sub" title="Subtitle style"><svg viewBox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/></svg></button></h4>
           <div id="subtitle-menu"></div>
           <button class="external-track-btn" id="load-subtitle-btn">
             <svg class="menu-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
@@ -236,7 +274,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
           </button>
         </div>
         <div class="settings-section live-captions-settings">
-          <h4>Live Captions</h4>
+          <h4 class="section-head"><span>Live Captions</span><button class="palette-btn" id="pal-cap" title="Text style"><svg viewBox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/></svg></button></h4>
           <div class="setting-row">
             <label>Language</label>
             <select id="live-captions-lang">
@@ -284,6 +322,23 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
   </div>
 </div>
 <div class="dnd" id="dnd">Drop video here</div>
+<div class="style-backdrop" id="stylebackdrop"></div>
+<div class="style-popup" id="stylepopup">
+  <div class="style-head"><span>Subtitle Style</span><button id="styleclose" title="Close">&#10005;</button></div>
+  <div class="style-body">
+    <div class="style-row"><label>Font family</label><select id="st-family"></select></div>
+    <div class="style-row"><label>Weight</label><select id="st-weight"><option value="400">Normal</option><option value="500">Medium</option><option value="600">Semibold</option><option value="700">Bold</option></select></div>
+    <div class="style-row"><label>Size</label><input type="range" id="st-size" min="10" max="48" step="1"><span id="st-size-v"></span></div>
+    <div class="style-row"><label>Text color</label><input type="color" id="st-color"></div>
+    <div class="style-row"><label>Background</label><input type="color" id="st-bg"></div>
+    <div class="style-row"><label>Bg opacity</label><input type="range" id="st-bgop" min="0" max="100" step="1"><span id="st-bgop-v"></span></div>
+    <div class="style-row"><label>Shadow</label><input type="range" id="st-shadow" min="0" max="8" step="1"><span id="st-shadow-v"></span></div>
+    <div class="style-row"><label>Shadow color</label><input type="color" id="st-shcolor"></div>
+    <div class="style-row"><label>Outline</label><input type="range" id="st-outline" min="0" max="3" step="1"><span id="st-outline-v"></span></div>
+    <div class="style-row"><label>Outline color</label><input type="color" id="st-olcolor"></div>
+  </div>
+  <div class="style-foot"><button id="st-reset">Reset</button><button id="st-done">Done</button></div>
+</div>
 <script>
 const v=document.getElementById("v");
 const play=document.getElementById("play");
@@ -305,6 +360,9 @@ const dnd=document.getElementById("dnd");
 const spdind=document.getElementById("spdind");
 const fsbtn=document.getElementById("fsbtn");
 const brandmark=document.querySelector(".brandmark");
+const suboverlay=document.getElementById("suboverlay");
+const stylepopup=document.getElementById("stylepopup");
+const stylebackdrop=document.getElementById("stylebackdrop");
 const PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 const PAUSE='<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
 const FOLDER='<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
@@ -322,7 +380,7 @@ let liveCaptionsLanguage='en-US';
 let liveCaptionsEnabled=false;
 let captionHistory=[];
 function fmt(s){if(!isFinite(s))return "00:00:00";s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");}
-function upd(){if(v.duration){fill.style.width=(v.currentTime/v.duration*100)+"%";cur.textContent=fmt(v.currentTime);end.textContent=showRemaining?"-"+fmt(v.duration-v.currentTime):fmt(v.duration);}}
+function upd(){if(v.duration){fill.style.width=(v.currentTime/v.duration*100)+"%";cur.textContent=fmt(v.currentTime);end.textContent=showRemaining?"-"+fmt(v.duration-v.currentTime):fmt(v.duration);}renderSubOverlay();}
 function toggle(){v.paused?v.play():v.pause();}
 function showCtl(){ctl.classList.remove("hide");clearTimeout(timer);if(!v.paused)timer=setTimeout(()=>ctl.classList.add("hide"),3000);}
 function setVideoName(n){if(n){const b=n.split(/[\\\\/]/).pop();document.title="PVP | "+(b||n);}}
@@ -379,7 +437,7 @@ function renderSubtitleMenu(){
     for(let i=0;i<v.textTracks.length;i++){
       const track=v.textTracks[i];
       const item=document.createElement('div');
-      item.className='track-item'+(track.mode==='showing'?' active':'');
+      item.className='track-item'+(currentSubtitleTrack===track?' active':'');
       item.innerHTML=`<span class="track-lang">${track.language||'Und'}</span><span class="track-label">${track.label||'Track '+(i+1)}</span>${track.default?'<span class="track-default">Default</span>':''}`;
       item.onclick=()=>{selectSubtitleTrack(i);settingsmenu.classList.remove("show");};
       subtitleMenu.appendChild(item);
@@ -445,7 +503,7 @@ function renderExternalSubtitles(){
   }
   if(currentSubtitleTrack&&externalSubtitles.includes(currentSubtitleTrack)){
     const track=v.addTextTrack('subtitles',currentSubtitleTrack.name,'External:'+currentSubtitleTrack.lang);
-    track.mode='showing';
+    track.mode='hidden';
     currentSubtitleTrack.cues.forEach(cue=>{
       track.addCue(new VTTCue(cue.start+subtitleOffset,cue.end+subtitleOffset,cue.text));
     });
@@ -454,17 +512,19 @@ function renderExternalSubtitles(){
 
 function selectSubtitleTrack(index){
   for(let i=0;i<v.textTracks.length;i++){
-    v.textTracks[i].mode=i===index?'showing':'hidden';
+    v.textTracks[i].mode='hidden';
   }
   currentSubtitleTrack=v.textTracks[index]||null;
   subtitleOffset=0;
   renderSubtitleMenu();
+  renderSubOverlay();
 }
 
 function selectExternalSubtitle(sub){
   currentSubtitleTrack=sub;
   renderExternalSubtitles();
   renderSubtitleMenu();
+  renderSubOverlay();
 }
 
 function loadExternalSubtitle(file){
@@ -562,7 +622,9 @@ v.addEventListener('loadstart',()=>{
   currentSubtitleTrack=null;
   currentAudioTrack=null;
   subtitleOffset=0;
+  renderSubOverlay();
 });
+v.addEventListener('seeked',()=>renderSubOverlay());
 
 function addLiveCaption(text, isFinal){
   const line=document.createElement('div');
@@ -664,6 +726,143 @@ document.getElementById('live-captions-max-lines')?.addEventListener('input', e=
   liveCaptionsMaxLines=parseInt(e.target.value);
   document.getElementById('live-captions-max-lines-value').textContent=liveCaptionsMaxLines;
 });
+
+// ===== Subtitle style editor =====
+const SUBSTYLE_DEFAULT={family:'Segoe UI',weight:'600',size:18,color:'#ffffff',bg:'#000000',bgOpacity:70,shadow:2,shadowColor:'#000000',outline:1,outlineColor:'#000000'};
+let subStyle=Object.assign({},SUBSTYLE_DEFAULT);
+try{const saved=JSON.parse(localStorage.getItem('pvp-substyle')||'null');if(saved)Object.assign(subStyle,saved);}catch(e){}
+let styleOpen=false;
+function saveSubStyle(){try{localStorage.setItem('pvp-substyle',JSON.stringify(subStyle));}catch(e){}}
+function hexToRgba(hex,a){
+  hex=(hex||'#000000').replace('#','');
+  if(hex.length===3)hex=hex.replace(/./g,c=>c+c);
+  const n=parseInt(hex,16);
+  return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';
+}
+function cssFamily(f){return /^[a-z-]+$/i.test(f)?f:'"'+f+'"';}
+function applySubStyle(){
+  const s=subStyle,st=suboverlay.style;
+  st.fontFamily=cssFamily(s.family);
+  st.fontWeight=s.weight;
+  st.fontSize=s.size+'px';
+  st.color=s.color;
+  st.setProperty('--sub-bg',hexToRgba(s.bg,s.bgOpacity/100));
+  const sh=[];
+  if(s.shadow>0)sh.push('0 '+s.shadow+'px '+(s.shadow*2)+'px '+hexToRgba(s.shadowColor,.9));
+  if(s.outline>0){const o=s.outline;
+    sh.push(o+'px 0 0 '+s.outlineColor,-o+'px 0 0 '+s.outlineColor,'0 '+o+'px 0 '+s.outlineColor,'0 -'+o+'px 0 '+s.outlineColor,o+'px '+o+'px 0 '+s.outlineColor,-o+'px '+o+'px 0 '+s.outlineColor,o+'px -'+o+'px 0 '+s.outlineColor,-o+'px -'+o+'px 0 '+s.outlineColor);}
+  st.textShadow=sh.length?sh.join(','):'none';
+}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderSubOverlay(){
+  if(!suboverlay)return;
+  if(styleOpen){
+    suboverlay.innerHTML='<div class="sub-line">Sample subtitle &mdash; The quick brown fox jumps over the lazy dog</div>';
+    suboverlay.classList.add('show');
+    return;
+  }
+  if(!currentSubtitleTrack){suboverlay.innerHTML='';suboverlay.classList.remove('show');return;}
+  const lines=[];
+  if(externalSubtitles.includes(currentSubtitleTrack)){
+    const sub=currentSubtitleTrack,t=v.currentTime-subtitleOffset;
+    sub.cues.forEach(c=>{if(t>=c.start&&t<c.end)lines.push(c.text);});
+  }else if(currentSubtitleTrack.activeCues){
+    for(let i=0;i<currentSubtitleTrack.activeCues.length;i++)lines.push(currentSubtitleTrack.activeCues[i].text);
+  }
+  if(!lines.length){suboverlay.innerHTML='';suboverlay.classList.remove('show');return;}
+  suboverlay.innerHTML=lines.map(t=>'<div class="sub-line">'+escHtml(t)+'</div>').join('');
+  suboverlay.classList.add('show');
+}
+const FONT_LIST=['Segoe UI','Arial','Arial Black','Calibri','Cambria','Candara','Comic Sans MS','Consolas','Constantia','Courier New','Franklin Gothic Medium','Georgia','Impact','Leelawadee UI','Malgun Gothic','Microsoft JhengHei','Microsoft YaHei','Palatino Linotype','Rockwell','Segoe Print','Segoe Script','SimSun','Tahoma','Times New Roman','Trebuchet MS','Verdana','system-ui','sans-serif','serif','monospace'];
+function fillFamilySelect(){
+  const sel=document.getElementById('st-family');
+  sel.innerHTML='';
+  FONT_LIST.forEach(f=>{const o=document.createElement('option');o.value=f;o.textContent=f;sel.appendChild(o);});
+}
+function mergeSystemFonts(names){
+  const sel=document.getElementById('st-family');
+  const have=new Set(Array.from(sel.options).map(o=>o.value));
+  const frag=document.createDocumentFragment();
+  names.forEach(n=>{if(!have.has(n)){const o=document.createElement('option');o.value=n;o.textContent=n;frag.appendChild(o);}});
+  sel.appendChild(frag);
+}
+function ensureFamilyOption(){
+  const sel=document.getElementById('st-family');
+  if(!Array.from(sel.options).some(o=>o.value===subStyle.family)){
+    const o=document.createElement('option');o.value=subStyle.family;o.textContent=subStyle.family;sel.appendChild(o);
+  }
+  sel.value=subStyle.family;
+}
+async function loadSystemFonts(){
+  try{
+    if(window.queryLocalFonts){
+      const fonts=await window.queryLocalFonts();
+      const names=[...new Set(fonts.map(f=>f.family))].sort((a,b)=>a.localeCompare(b));
+      mergeSystemFonts(names);
+      ensureFamilyOption();
+    }
+  }catch(e){/* permission denied or unsupported: keep curated list */}
+}
+function syncStyleControls(){
+  ensureFamilyOption();
+  document.getElementById('st-weight').value=subStyle.weight;
+  document.getElementById('st-size').value=subStyle.size;
+  document.getElementById('st-size-v').textContent=subStyle.size+'px';
+  document.getElementById('st-color').value=subStyle.color;
+  document.getElementById('st-bg').value=subStyle.bg;
+  document.getElementById('st-bgop').value=subStyle.bgOpacity;
+  document.getElementById('st-bgop-v').textContent=subStyle.bgOpacity+'%';
+  document.getElementById('st-shadow').value=subStyle.shadow;
+  document.getElementById('st-shadow-v').textContent=subStyle.shadow;
+  document.getElementById('st-shcolor').value=subStyle.shadowColor;
+  document.getElementById('st-outline').value=subStyle.outline;
+  document.getElementById('st-outline-v').textContent=subStyle.outline;
+  document.getElementById('st-olcolor').value=subStyle.outlineColor;
+}
+function openStylePopup(){
+  styleOpen=true;
+  settingsmenu.classList.remove('show');
+  stylepopup.classList.add('show');
+  stylebackdrop.classList.add('show');
+  syncStyleControls();
+  renderSubOverlay();
+  loadSystemFonts();
+}
+function closeStylePopup(){
+  styleOpen=false;
+  stylepopup.classList.remove('show');
+  stylebackdrop.classList.remove('show');
+  renderSubOverlay();
+}
+function bindStyleCtl(id,key,parse,spanId,suffix){
+  const el=document.getElementById(id);
+  el.addEventListener('input',()=>{
+    subStyle[key]=parse(el.value);
+    if(spanId)document.getElementById(spanId).textContent=subStyle[key]+(suffix||'');
+    applySubStyle();saveSubStyle();
+  });
+}
+fillFamilySelect();
+bindStyleCtl('st-family','family',v=>v);
+bindStyleCtl('st-weight','weight',v=>v);
+bindStyleCtl('st-size','size',v=>parseInt(v),'st-size-v','px');
+bindStyleCtl('st-color','color',v=>v);
+bindStyleCtl('st-bg','bg',v=>v);
+bindStyleCtl('st-bgop','bgOpacity',v=>parseInt(v),'st-bgop-v','%');
+bindStyleCtl('st-shadow','shadow',v=>parseInt(v),'st-shadow-v','');
+bindStyleCtl('st-shcolor','shadowColor',v=>v);
+bindStyleCtl('st-outline','outline',v=>parseInt(v),'st-outline-v','');
+bindStyleCtl('st-olcolor','outlineColor',v=>v);
+document.querySelectorAll('.palette-btn').forEach(b=>b.onclick=e=>{e.stopPropagation();openStylePopup();});
+stylebackdrop.onclick=closeStylePopup;
+document.getElementById('styleclose').onclick=closeStylePopup;
+document.getElementById('st-done').onclick=closeStylePopup;
+document.getElementById('st-reset').onclick=()=>{
+  subStyle=Object.assign({},SUBSTYLE_DEFAULT);
+  syncStyleControls();applySubStyle();saveSubStyle();renderSubOverlay();
+};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&styleOpen)closeStylePopup();});
+applySubStyle();
 
 document.getElementById("f").onchange=e=>{const f=e.target.files[0];if(f){v.src=URL.createObjectURL(f);v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});setVideoName(f.name);}};
 ["mousemove","mousedown","wheel"].forEach(ev=>document.addEventListener(ev,showCtl));document.addEventListener("keydown",e=>{showCtl();if(e.code==="Space"){e.preventDefault();toggle();}else if(e.code==="KeyF"){e.preventDefault();if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");isFs=!isFs;fsbtn.innerHTML=isFs?FS_EXIT:FS;}else if(e.code==="ArrowUp"){e.preventDefault();applyVolume(Math.min(2,+vol.value+0.1));}else if(e.code==="ArrowDown"){e.preventDefault();applyVolume(Math.max(0,+vol.value-0.1));}else if(e.code==="ArrowLeft"){e.preventDefault();if(v.duration)v.currentTime=Math.max(0,v.currentTime-10);upd();}else if(e.code==="ArrowRight"){e.preventDefault();if(v.duration)v.currentTime=Math.min(v.duration,v.currentTime+10);upd();}else if(e.code==="KeyM"){e.preventDefault();setMute(!isMuted);}else if(e.code==="KeyC"){e.preventDefault();toggleLiveCaptions();}else if(e.code==="BracketLeft"){e.preventDefault();let i=SPEEDS.indexOf(speed);if(i>0)applySpeed(SPEEDS[i-1]);}else if(e.code==="BracketRight"){e.preventDefault();let i=SPEEDS.indexOf(speed);if(i<SPEEDS.length-1)applySpeed(SPEEDS[i+1]);}});
