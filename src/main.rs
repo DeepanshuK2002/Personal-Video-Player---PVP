@@ -4,7 +4,7 @@ use std::sync::{Arc, Mutex};
 use tao::event::{Event, WindowEvent};
 use tao::event_loop::{ControlFlow, EventLoop};
 use tao::window::WindowBuilder;
-use std::io::{self, Read, IsTerminal};
+use std::io::{self, Read, Write, IsTerminal};
 use wry::WebViewBuilder;
 #[cfg(windows)]
 use wry::WebViewBuilderExtWindows;
@@ -18,17 +18,13 @@ const HTML: &str = r####"<!DOCTYPE html>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#fff;font-family:system-ui,sans-serif;height:100vh;overflow:hidden;position:relative}
 #v{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+body:not(.fs) #v{top:32px}
 .controls{position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,0.85));transition:opacity 0.3s;opacity:1;z-index:10}
 .controls.hide{opacity:0;pointer-events:none}
 .row{display:flex;align-items:center;gap:10px}
 button,label{background:transparent;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;padding:4px}
 button svg, label svg{width:20px;height:20px;fill:#fff}
 #fsbtn svg{fill:none}
-.brandmark{display:flex;align-items:center;justify-content:center;opacity:.85;margin-right:2px;position:relative}
-.brandmark svg.logo-icon{width:22px;height:22px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8));transition:opacity 0.2s}
-.brandmark:hover .logo-icon{opacity:0}
-.brandmark:hover .settings-icon{opacity:1}
-.brandmark .settings-icon{position:absolute;left:0;top:0;opacity:0;transition:opacity 0.2s;pointer-events:none}
 #tl{flex:1;height:6px;background:rgba(128,128,128,0.35);border-radius:3px;cursor:pointer;position:relative}
 #fill{height:100%;background:rgb(116,192,252);border-radius:3px;width:0}
 .volwrap{position:relative;display:flex;align-items:center;gap:4px}
@@ -49,9 +45,9 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .brandmark:hover .logo-icon{opacity:0}
 .brandmark:hover .settings-icon{opacity:1}
 .brandmark .settings-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;opacity:0;transition:opacity 0.2s;stroke:#fff;fill:none;pointer-events:none}
-.spdind{position:fixed;top:12px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:21;white-space:nowrap}
+.spdind{position:fixed;top:44px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:21;white-space:nowrap}
 .spdind.show{opacity:1}
-.volind{position:fixed;top:12px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:20}
+.volind{position:fixed;top:44px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:20}
 
 /* CC button */
 .ccbtn{background:transparent;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;padding:4px;border-radius:4px;transition:background 0.15s}
@@ -91,7 +87,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .subtitle-sync input[type="number"]:focus{outline:none;border-color:rgb(116,192,252)}
 .subtitle-sync .sync-btns{display:flex;gap:6px;margin-top:8px}
 .subtitle-sync .sync-btns button{flex:1;padding:6px;background:#333;border:none;border-radius:3px;color:#fff;font-size:12px;cursor:pointer}
-.subtitle-sync .sync-btns button:hover{background:rgb(116,192,252);color:#000}
+.subtitle-sync .sync-btns button:hover{background:rgba(116,192,252,0.18);color:rgb(116,192,252)}
 .subtitle-sync .sync-btns button:disabled{opacity:0.5;cursor:not-allowed}
 .track-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:4px;cursor:pointer;transition:background 0.15s}
 .track-item:hover{background:#333}
@@ -100,7 +96,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .track-item .track-label{color:#aaa;font-size:12px}
 .track-item .track-default{color:rgb(116,192,252);font-size:11px;margin-left:auto}
 .external-track-btn{width:100%;text-align:left;padding:8px 12px;font-size:13px;background:#333;color:#fff;border:none;border-radius:4px;cursor:pointer;margin-top:8px;display:flex;align-items:center;gap:8px}
-.external-track-btn:hover{background:rgb(116,192,252);color:#000}
+.external-track-btn:hover{background:rgba(116,192,252,0.18);color:rgb(116,192,252)}
 .external-track-btn svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2}
 .no-tracks{padding:12px;color:#888;font-size:13px;text-align:center}
 .menu-icon{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;flex-shrink:0}
@@ -211,9 +207,9 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 /* Palette button in section headers */
 .section-head{display:flex;justify-content:space-between;align-items:center}
 .section-head span{white-space:nowrap}
-.settings-section button.palette-btn{background:transparent;border:none;cursor:pointer;padding:3px;border-radius:4px;display:flex;line-height:0;width:auto;min-width:0;gap:0;margin-left:auto;margin-right:-3px}
-.settings-section button.palette-btn:hover{background:#333}
-.settings-section button.palette-btn svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.settings-section button.palette-btn,.cc-row .palette-btn{background:transparent;border:none;cursor:pointer;padding:3px;border-radius:4px;display:flex;line-height:0;width:auto;min-width:0;gap:0;margin-left:auto;margin-right:-3px;flex-shrink:0}
+.settings-section button.palette-btn:hover,.cc-row .palette-btn:hover{background:#333}
+.settings-section button.palette-btn svg,.cc-row .palette-btn svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* Custom subtitle overlay (fully stylable) */
 #suboverlay{position:absolute;left:0;right:0;bottom:64px;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;z-index:14;padding:0 60px;opacity:0;transition:opacity .15s;font-size:18px}
@@ -242,32 +238,123 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 #st-done{background:rgb(116,192,252);color:#000;font-weight:600}
 #st-done:hover{filter:brightness(1.1)}
 
+/* Custom titlebar */
+#titlebar{position:fixed;top:0;left:0;right:0;height:32px;display:flex;align-items:center;justify-content:space-between;background:#171717;border-bottom:1px solid #0d0d0d;-webkit-app-region:drag;z-index:60;user-select:none}
+body.fs #titlebar{display:none}
+body:not(.fs) #v{top:32px}
+body:not(.fs) .dnd{top:32px}
+#tb-title{font-size:11px;font-weight:600;letter-spacing:.8px;color:#8ab4d8;padding-left:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
+#tb-btns{display:flex;height:100%;-webkit-app-region:no-drag;flex-shrink:0}
+#tb-btns button{width:44px;height:100%;background:transparent;border:none;color:#bbb;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+#tb-btns button:hover{background:#2c2c2c;color:#fff}
+#tb-btns button:active{background:#3a3a3a}
+#tb-close:hover{background:#e81123!important;color:#fff!important}
+#tb-btns svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#tb-update,#tb-playlist{color:rgb(116,192,252)}
+#tb-update svg,#tb-playlist svg{stroke:rgb(116,192,252);width:16px;height:16px}
+#tb-update:hover,#tb-playlist:hover{background:rgba(116,192,252,.15);color:rgb(116,192,252)}
+[hidden]{display:none!important}
+
+/* Floating menus: open, subtitle (cc), playlist */
+.openmenu,.cc-menu,.pl-menu{position:fixed;background:#222;border:1px solid #383838;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.6);z-index:56}
+.openmenu{width:196px;padding:5px}
+.om-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:5px;cursor:pointer;font-size:13px;color:#eee}
+.om-item:hover{background:rgba(116,192,252,.15);color:rgb(116,192,252)}
+.om-item svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;flex-shrink:0}
+.cc-menu{width:276px;padding:7px}
+.cc-row{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:5px;cursor:pointer;font-size:13px;color:#eee}
+.cc-row:hover{background:rgba(116,192,252,.15);color:rgb(116,192,252)}
+.cc-row>svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;flex-shrink:0}
+.cc-row>span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-sublist{margin:2px 0 6px;padding:4px;background:#1b1b1b;border-radius:6px}
+.cc-sublist .track-item{padding:7px 10px;font-size:12.5px}
+.cc-sublist .external-track-btn{background:#2b2b2b;font-size:12.5px}
+.cc-live-state{font-size:10px;letter-spacing:.5px;color:#888;padding:2px 7px;border:1px solid #444;border-radius:9px;flex-shrink:0}
+.cc-live-state.on{color:#000;background:rgb(116,192,252);border-color:rgb(116,192,252);font-weight:600}
+.pl-menu{top:36px;right:6px;width:300px;max-height:62vh;overflow-y:auto;padding:8px;scrollbar-width:thin;scrollbar-color:#555 transparent}
+.pl-menu::-webkit-scrollbar{width:8px}
+.pl-menu::-webkit-scrollbar-thumb{background:#555;border-radius:4px}
+.pl-menu::-webkit-scrollbar-track{background:transparent}
+.pl-head{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 8px;border-bottom:1px solid #333;margin-bottom:6px}
+.pl-head span{font-size:11px;text-transform:uppercase;color:#888;letter-spacing:.5px}
+.pl-head button{background:transparent;border:none;padding:3px;border-radius:4px;display:flex;cursor:pointer;color:#ccc}
+.pl-head button:hover{background:#333}
+.pl-head button.on{color:rgb(116,192,252);background:rgba(116,192,252,.15)}
+.pl-head button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pl-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:5px;font-size:12.5px;color:#ddd;cursor:pointer;user-select:none;border:2px solid transparent}
+.pl-item:hover{background:#2c2c2c}
+.pl-item.cur{color:rgb(116,192,252);background:rgba(116,192,252,.12)}
+.pl-item.drag-over{border-top-color:rgb(116,192,252)}
+.pl-item .pl-grip{color:#666;cursor:grab;font-size:13px;line-height:1;flex-shrink:0;letter-spacing:-2px}
+.pl-item .pl-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-item .pl-idx{color:#666;font-size:11px;width:18px;text-align:right;flex-shrink:0}
+.pl-empty{color:#777;font-size:12.5px;text-align:center;padding:14px}
+
+/* Version row in settings */
+#ver-row{display:flex;align-items:center;justify-content:space-between;padding:3px 4px 8px;gap:6px}
+#ver-text{font-size:11.5px;color:#8ab4d8;letter-spacing:.4px;font-weight:600}
+button.upd-icon{background:transparent;border:none;padding:3px;border-radius:4px;display:flex;cursor:pointer;color:rgb(116,192,252)}
+button.upd-icon:hover{background:rgba(116,192,252,.18)}
+button.upd-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Update popup */
+.upd-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:57;display:none}
+.upd-backdrop.show{display:block}
+.upd-popup{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);width:360px;max-width:92vw;background:#222;border:1px solid #383838;border-radius:10px;z-index:58;display:none;box-shadow:0 10px 36px rgba(0,0,0,.65)}
+.upd-popup.show{display:block}
+.upd-head{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #333;font-size:13.5px;font-weight:600}
+.upd-head .upd-ic{color:rgb(116,192,252);display:flex;align-items:center;gap:8px}
+.upd-head .upd-ic svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.upd-head button{background:transparent;border:none;color:#aaa;font-size:16px;cursor:pointer;padding:2px 6px;line-height:1}
+.upd-head button:hover{color:#fff}
+.upd-body{padding:13px 15px;font-size:12.5px;color:#bbb}
+.upd-vers{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#eee;margin-bottom:8px}
+.upd-vers .to{color:rgb(116,192,252)}
+.upd-vers svg{width:15px;height:15px;stroke:#888;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.upd-notes{max-height:150px;overflow-y:auto;background:#1a1a1a;border-radius:6px;padding:9px 11px;white-space:pre-wrap;color:#aaa;line-height:1.45;scrollbar-width:thin;scrollbar-color:#555 transparent}
+.upd-notes::-webkit-scrollbar{width:8px}
+.upd-notes::-webkit-scrollbar-thumb{background:#555;border-radius:4px}
+.upd-bar{height:6px;background:#333;border-radius:3px;margin-top:11px;overflow:hidden}
+.upd-bar-fill{height:100%;width:0%;background:rgb(116,192,252);border-radius:3px;transition:width .15s}
+.upd-status{margin-top:10px;font-size:12px;color:#8ab4d8;min-height:15px}
+.upd-foot{display:flex;gap:8px;padding:11px 14px;border-top:1px solid #333}
+.upd-foot button{flex:1;padding:8px;border:none;border-radius:6px;font-size:13px;cursor:pointer}
+#upd-later{background:#333;color:#fff}
+#upd-later:hover{background:#444}
+#upd-install{background:rgb(116,192,252);color:#000;font-weight:600}
+#upd-install:hover{filter:brightness(1.08)}
+#upd-install:disabled,#upd-later:disabled{opacity:.5;cursor:default}
+
 </style></head><body>
+<div id="titlebar">
+  <span id="tb-title">PVP+</span>
+  <div id="tb-btns">
+    <button id="tb-playlist" title="Playlist" hidden><svg viewBox="0 0 24 24"><path d="M12 12H3"/><path d="M16 6H3"/><path d="M12 18H3"/><path d="m16 12 5 3-5 3v-6Z"/></svg></button>
+    <button id="tb-update" title="Update available" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg></button>
+    <button id="tb-min" title="Minimize"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+    <button id="tb-max" title="Maximize"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1"/></svg></button>
+    <button id="tb-close" title="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg></button>
+  </div>
+</div>
 <video id="v"></video>
 <div class="live-captions-overlay hidden" id="live-captions-overlay"></div>
 <div id="suboverlay"></div>
 <input type="file" id="f" accept="video/*" style="display:none">
+<input type="file" id="folder-input" webkitdirectory multiple style="display:none">
 <input type="file" id="subtitle-file" accept=".srt,.vtt,.ass,.ssa" style="display:none" multiple>
 <input type="file" id="audio-file" accept="audio/*" style="display:none" multiple>
 <div class="controls" id="ctl">
   <div class="row">
     <div class="brandmark-wrap">
       <div class="brandmark">
-        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="rgb(116, 192, 252)" d="M128 128C92.7 128 64 156.7 64 192L64 448C64 483.3 92.7 512 128 512L384 512C419.3 512 448 483.3 448 448L448 192C448 156.7 419.3 128 384 128L128 128zM496 400L569.5 458.8C573.7 462.2 578.9 464 584.3 464C597.4 464 608 453.4 608 440.3L608 199.7C608 186.6 597.4 176 578.9 176 573.7 177.8 569.5 181.2L496 240L496 400z"/></svg>
+        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="rgb(116, 192, 252)" d="M0 128C0 92.7 28.7 64 64 64l256 0c35.3 0 64 28.7 64 64l0 256c0 35.3-28.7 64-64 64L64 448c-35.3 0-64-28.7-64-64L0 128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2l0 256c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1l0-17.1 0-128 0-17.1 14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"/></svg>
         <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <div id="settingsmenu">
+        <div id="ver-row"><span id="ver-text">PVP+ v0.4.0</span><button class="upd-icon" id="ver-upd" title="Update available" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg></button></div>
         <div class="settings-section">
           <h4>Playback Speed</h4>
           <div class="speed-options" id="speedmenu"></div>
-        </div>
-        <div class="settings-section">
-          <h4 class="section-head"><span>Subtitles</span><button class="palette-btn" id="pal-sub" title="Subtitle style"><svg viewBox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/></svg></button></h4>
-          <div id="subtitle-menu"></div>
-          <button class="external-track-btn" id="load-subtitle-btn">
-            <svg class="menu-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-            Load subtitle file
-          </button>
         </div>
         <div class="settings-section">
           <h4>Audio Tracks</h4>
@@ -320,8 +407,8 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 <div class="volind" id="volind">100%</div>
 <div class="spdind" id="spdind">1x</div>
     </div>
-    <button class="ccbtn" id="ccbtn" title="Subtitles (CC)"></button>
-    <label for="f" id="open"></label>
+    <button class="ccbtn" id="ccbtn" title="Subtitles"></button>
+    <button id="open" title="Open"></button>
     <button id="fsbtn"></button>
   </div>
 </div>
@@ -342,6 +429,36 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
     <div class="style-row"><label>Outline color</label><input type="color" id="st-olcolor"></div>
   </div>
   <div class="style-foot"><button id="st-reset">Reset</button><button id="st-done">Done</button></div>
+</div>
+<div class="openmenu" id="openmenu" hidden>
+  <div class="om-item" id="om-video"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m10 11.5 5 3-5 3v-6z"/></svg><span>Add video</span></div>
+  <div class="om-item" id="om-playlist"><svg viewBox="0 0 24 24"><path d="M11 12H3"/><path d="M16 6H3"/><path d="M11 18H3"/><path d="M18 9v6"/><path d="M21 12H6"/></svg><span>Add playlist</span></div>
+</div>
+<div class="cc-menu" id="ccmenu" hidden>
+  <div class="cc-row" id="cc-local"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span>Local subtitle</span><button class="palette-btn" id="pal-sub" title="Subtitle style"><svg viewBox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/></svg></button></div>
+  <div class="cc-sublist" id="cc-sublist" hidden>
+    <div id="subtitle-menu"></div>
+    <button class="external-track-btn" id="load-subtitle-btn">
+      <svg class="menu-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      Add subtitle file
+    </button>
+  </div>
+  <div class="cc-row" id="cc-live"><svg viewBox="0 0 24 24"><path d="M12 6v12"/><path d="m17 8-10 8"/><path d="m7 8 10 8"/></svg><span>Live subtitle</span><span class="cc-live-state" id="cc-live-state">OFF</span></div>
+</div>
+<div class="pl-menu" id="plmenu" hidden>
+  <div class="pl-head"><span>Playlist</span><button id="autoplay-btn" title="Autoplay next"><svg viewBox="0 0 24 24"><path d="M16 12H3"/><path d="M16 6H3"/><path d="M10 18H3"/><path d="m16 12 5 3-5 3v-6Z"/></svg></button></div>
+  <div id="pllist"></div>
+</div>
+<div class="upd-backdrop" id="updbackdrop"></div>
+<div class="upd-popup" id="updpopup">
+  <div class="upd-head"><span class="upd-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg>Update Available</span><button id="updclose" title="Close">&#10005;</button></div>
+  <div class="upd-body">
+    <div class="upd-vers"><span id="upd-from">v0.4.0</span><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg><span class="to" id="upd-to">v0.5.0</span></div>
+    <div class="upd-notes" id="upd-notes"></div>
+    <div class="upd-bar" id="updbar" hidden><div class="upd-bar-fill" id="upd-bar-fill"></div></div>
+    <div class="upd-status" id="updstatus"></div>
+  </div>
+  <div class="upd-foot"><button id="upd-later">Later</button><button id="upd-install">Install</button></div>
 </div>
 <script>
 const v=document.getElementById("v");
@@ -367,6 +484,12 @@ const brandmark=document.querySelector(".brandmark");
 const suboverlay=document.getElementById("suboverlay");
 const stylepopup=document.getElementById("stylepopup");
 const stylebackdrop=document.getElementById("stylebackdrop");
+const liveCaptionsOverlay=document.getElementById("live-captions-overlay");
+const openmenu=document.getElementById("openmenu");
+const ccmenu=document.getElementById("ccmenu");
+const plmenu=document.getElementById("plmenu");
+const tbTitle=document.getElementById("tb-title");
+let audioProcessor=null;
 const PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 const PAUSE='<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
 const FOLDER='<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
@@ -387,7 +510,7 @@ function fmt(s){if(!isFinite(s))return "00:00:00";s=Math.max(0,Math.floor(s));co
 function upd(){if(v.duration){fill.style.width=(v.currentTime/v.duration*100)+"%";cur.textContent=fmt(v.currentTime);end.textContent=showRemaining?"-"+fmt(v.duration-v.currentTime):fmt(v.duration);}renderSubOverlay();}
 function toggle(){v.paused?v.play():v.pause();}
 function showCtl(){ctl.classList.remove("hide");clearTimeout(timer);if(!v.paused)timer=setTimeout(()=>ctl.classList.add("hide"),3000);}
-function setVideoName(n){if(n){const b=n.split(/[\\\\/]/).pop();document.title="PVP | "+(b||n);}}
+function setVideoName(n){if(n){const b=n.split(/[\\\\/]/).pop();document.title="PVP | "+(b||n);const t=document.getElementById("tb-title");if(t)t.textContent=(b||"PVP+");}}
 play.innerHTML=PLAY;document.getElementById("open").innerHTML=FOLDER;document.getElementById("volbtn").innerHTML=VOLUME;fsbtn.innerHTML=FS;ccbtn.innerHTML=CC;
 play.onclick=toggle;v.onclick=toggle;v.onplay=()=>{play.innerHTML=PAUSE;ensureAudio();if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume();};v.onpause=()=>play.innerHTML=PLAY;v.ontimeupdate=upd;
 tl.onclick=e=>{const r=tl.getBoundingClientRect();if(v.duration)v.currentTime=(e.clientX-r.left)/r.width*v.duration;};
@@ -412,17 +535,78 @@ vol.oninput=()=>applyVolume(+vol.value);
 function setMute(m){isMuted=m;if(m){prevVol=+vol.value||prevVol;applyVolume(0);document.getElementById("volbtn").innerHTML=MUTE;}else{applyVolume(prevVol||1);document.getElementById("volbtn").innerHTML=VOLUME;}}
 document.getElementById("volbtn").onclick=e=>{e.stopPropagation();setMute(!isMuted);}
 
-let isFs=false;fsbtn.onclick=e=>{e.stopPropagation();if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");isFs=!isFs;fsbtn.innerHTML=isFs?FS_EXIT:FS;};
+let isFs=false;
+function setFs(on){isFs=on;fsbtn.innerHTML=on?FS_EXIT:FS;document.body.classList.toggle("fs",on);}
+fsbtn.onclick=e=>{e.stopPropagation();if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");setFs(!isFs);};
 document.addEventListener("fullscreenchange",()=>{fsbtn.innerHTML=document.fullscreenElement?FS_EXIT:FS;});
 
+// ===== Custom titlebar window controls =====
+function postMsg(o){if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage(typeof o==="string"?o:JSON.stringify(o));}
+document.getElementById("tb-min").onclick=e=>{e.stopPropagation();postMsg({type:"win-min"});};
+document.getElementById("tb-max").onclick=e=>{e.stopPropagation();postMsg({type:"win-max"});};
+document.getElementById("tb-close").onclick=e=>{e.stopPropagation();postMsg({type:"win-close"});};
+tbTitle.ondblclick=e=>{e.stopPropagation();postMsg({type:"win-max"});};
+// Manual window edge resize (native borders are gone)
+let reEdge=null,reX=0,reY=0,reMoved=false,suppressNextClick=false;
+const EDGE_CUR={"left":"ew-resize","right":"ew-resize","top":"ns-resize","bottom":"ns-resize","top-left":"nwse-resize","bottom-right":"nwse-resize","top-right":"nesw-resize","bottom-left":"nesw-resize"};
+const MENU_SEL=".pl-menu,.cc-menu,.openmenu,.upd-popup,.upd-backdrop,#settingsmenu,.style-popup,.style-backdrop,#suboverlay,#titlebar";
+function edgeAt(x,y){const W=innerWidth,H=innerHeight,T=6;let e=null;
+ if(x<=T)e="left";else if(x>=W-T)e="right";
+ if(y<=T)e=e?(e==="left"?"top-left":"top-right"):"top";
+ else if(y>=H-T)e=e?(e==="left"?"bottom-left":"bottom-right"):"bottom";
+ return e;}
+document.addEventListener("mousedown",e=>{
+ if(isFs||e.button!==0)return;
+ if(e.target.closest&&e.target.closest(MENU_SEL))return;
+ const edge=edgeAt(e.clientX,e.clientY);
+ if(edge){reEdge=edge;reX=e.clientX;reY=e.clientY;reMoved=false;e.preventDefault();}
+});
+document.addEventListener("mousemove",e=>{
+ if(reEdge){const dx=e.clientX-reX,dy=e.clientY-reY;reX=e.clientX;reY=e.clientY;
+  if(dx||dy){reMoved=true;postMsg({type:"win-resize",edge:reEdge,dx:dx,dy:dy});}
+  return;}
+ if(isFs||document.fullscreenElement){document.body.style.cursor="";return;}
+ if(e.target.closest&&e.target.closest(MENU_SEL)){document.body.style.cursor="";return;}
+ document.body.style.cursor=EDGE_CUR[edgeAt(e.clientX,e.clientY)]||"";
+});
+document.addEventListener("mouseup",()=>{
+ if(reEdge&&reMoved)suppressNextClick=true;
+ reEdge=null;
+});
+document.addEventListener("click",e=>{if(suppressNextClick){suppressNextClick=false;e.stopPropagation();e.preventDefault();}},true);
+
+// ===== Floating menus =====
+function closeAllMenus(){openmenu.hidden=true;ccmenu.hidden=true;plmenu.hidden=true;}
+function positionMenu(m,a){m.hidden=false;const r=a.getBoundingClientRect(),mr=m.getBoundingClientRect();
+ let left=r.left+r.width/2-mr.width/2;
+ left=Math.max(6,Math.min(left,innerWidth-mr.width-6));
+ m.style.left=left+"px";
+ m.style.top="auto";
+ m.style.bottom=(innerHeight-r.top+8)+"px";}
+document.getElementById("open").onclick=e=>{e.stopPropagation();const show=openmenu.hidden;closeAllMenus();
+ if(show){positionMenu(openmenu,document.getElementById("open"));openmenu.hidden=false;}};
+document.getElementById("om-video").onclick=e=>{e.stopPropagation();openmenu.hidden=true;document.getElementById("f").click();};
+document.getElementById("om-playlist").onclick=e=>{e.stopPropagation();openmenu.hidden=true;document.getElementById("folder-input").click();};
+ccbtn.onclick=e=>{e.stopPropagation();const show=ccmenu.hidden;closeAllMenus();
+ if(show){renderSubtitleMenu();ccmenu.hidden=false;positionMenu(ccmenu,ccbtn);updateCcActive();}};
+document.getElementById("cc-local").onclick=e=>{e.stopPropagation();
+ const sl=document.getElementById("cc-sublist");
+ if(sl.hidden){renderSubtitleMenu();sl.hidden=false;}else{sl.hidden=true;}};
+document.getElementById("cc-live").onclick=e=>{e.stopPropagation();toggleLiveCaptions();ccmenu.hidden=true;};
+function updateCcActive(){ccbtn.classList.toggle("active",!!(liveCaptionsEnabled||!!currentSubtitleTrack));}
+const tbPlaylist=document.getElementById("tb-playlist");
+tbPlaylist.onclick=e=>{e.stopPropagation();const show=plmenu.hidden;closeAllMenus();
+ if(show){renderPlList();plmenu.hidden=false;}};
+
 // Settings menu - click to toggle
-brandmark.onclick=e=>{e.stopPropagation();settingsmenu.classList.toggle("show");};
+brandmark.onclick=e=>{e.stopPropagation();closeAllMenus();settingsmenu.classList.toggle("show");};
 
 // Close menus when clicking outside
 document.addEventListener("click",e=>{
   if(!settingsmenu.contains(e.target)&&!brandmark.contains(e.target)){
     settingsmenu.classList.remove("show");
   }
+  closeAllMenus();
 });
 
 // Subtitle handling
@@ -435,6 +619,17 @@ function fmtTime(s){const h=Math.floor(s/3600).toString().padStart(2,'0');const 
 function renderSubtitleMenu(){
   subtitleMenu.innerHTML='';
   let hasTracks=false;
+  // Subtitles detected in the loaded playlist folder (associated with current video)
+  playlist.forEach(it=>{
+    if(it.subFile&&!externalSubtitles.some(s=>s.name===it.subFile.name)){
+      hasTracks=true;
+      const item=document.createElement('div');
+      item.className='track-item';
+      item.innerHTML=`<span class="track-lang">Sub</span><span class="track-label">${escHtml(it.subFile.name)}</span><span class="track-default">Detected</span>`;
+      item.onclick=()=>{loadExternalSubtitle(it.subFile);};
+      subtitleMenu.appendChild(item);
+    }
+  });
   // Internal text tracks
   if(v.textTracks&&v.textTracks.length>0){
     hasTracks=true;
@@ -443,7 +638,7 @@ function renderSubtitleMenu(){
       const item=document.createElement('div');
       item.className='track-item'+(currentSubtitleTrack===track?' active':'');
       item.innerHTML=`<span class="track-lang">${track.language||'Und'}</span><span class="track-label">${track.label||'Track '+(i+1)}</span>${track.default?'<span class="track-default">Default</span>':''}`;
-      item.onclick=()=>{selectSubtitleTrack(i);settingsmenu.classList.remove("show");};
+      item.onclick=()=>{selectSubtitleTrack(i);ccmenu.hidden=true;};
       subtitleMenu.appendChild(item);
     }
   }
@@ -452,8 +647,8 @@ function renderSubtitleMenu(){
     hasTracks=true;
     const item=document.createElement('div');
     item.className='track-item'+(currentSubtitleTrack===sub?' active':'');
-    item.innerHTML=`<span class="track-lang">${sub.lang||'Ext'}</span><span class="track-label">${sub.name||'External '+ (idx+1)}</span><span class="track-default">External</span>`;
-    item.onclick=()=>{selectExternalSubtitle(sub);settingsmenu.classList.remove("show");};
+    item.innerHTML=`<span class="track-lang">${sub.lang||'Ext'}</span><span class="track-label">${escHtml(sub.name||'External '+ (idx+1))}</span><span class="track-default">External</span>`;
+    item.onclick=()=>{selectExternalSubtitle(sub);ccmenu.hidden=true;};
     subtitleMenu.appendChild(item);
   });
   if(!hasTracks){
@@ -463,8 +658,7 @@ function renderSubtitleMenu(){
   if(currentSubtitleTrack&&externalSubtitles.includes(currentSubtitleTrack)){
     addSubtitleSyncControls();
   }
-  // Update CC button state
-  ccbtn.classList.toggle('active', !!currentSubtitleTrack);
+  updateCcActive();
 }
 
 function addSubtitleSyncControls(){
@@ -651,7 +845,10 @@ function clearLiveCaptions(){
 
 function toggleLiveCaptions(){
   liveCaptionsEnabled=!liveCaptionsEnabled;
-  ccbtn.classList.toggle('active', liveCaptionsEnabled);
+  updateCcActive();
+  const st=document.getElementById('cc-live-state');
+  st.textContent=liveCaptionsEnabled?'ON':'OFF';
+  st.classList.toggle('on',liveCaptionsEnabled);
   if(liveCaptionsEnabled){
     liveCaptionsOverlay.classList.remove('hidden');
     startLiveCaptions();
@@ -709,8 +906,6 @@ function onLiveCaptionsResult(result){
     addLiveCaption(result.text, result.isFinal);
   }
 }
-
-ccbtn.onclick=e=>{e.stopPropagation();toggleLiveCaptions();};
 
 // Live Captions Settings Event Listeners
 document.getElementById('live-captions-lang')?.addEventListener('change', e=>{
@@ -826,6 +1021,7 @@ function syncStyleControls(){
 function openStylePopup(){
   styleOpen=true;
   settingsmenu.classList.remove('show');
+  closeAllMenus();
   stylepopup.classList.add('show');
   stylebackdrop.classList.add('show');
   syncStyleControls();
@@ -865,20 +1061,247 @@ document.getElementById('st-reset').onclick=()=>{
   subStyle=Object.assign({},SUBSTYLE_DEFAULT);
   syncStyleControls();applySubStyle();saveSubStyle();renderSubOverlay();
 };
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&styleOpen)closeStylePopup();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(styleOpen){closeStylePopup();}else{closeUpdatePopup();closeAllMenus();}}});
 applySubStyle();
 
-document.getElementById("f").onchange=e=>{const f=e.target.files[0];if(f){v.src=URL.createObjectURL(f);v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});setVideoName(f.name);}};
-["mousemove","mousedown","wheel"].forEach(ev=>document.addEventListener(ev,showCtl));document.addEventListener("keydown",e=>{showCtl();if(e.code==="Space"){e.preventDefault();toggle();}else if(e.code==="KeyF"){e.preventDefault();if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");isFs=!isFs;fsbtn.innerHTML=isFs?FS_EXIT:FS;}else if(e.code==="ArrowUp"){e.preventDefault();applyVolume(Math.min(2,+vol.value+0.1));}else if(e.code==="ArrowDown"){e.preventDefault();applyVolume(Math.max(0,+vol.value-0.1));}else if(e.code==="ArrowLeft"){e.preventDefault();if(v.duration)v.currentTime=Math.max(0,v.currentTime-10);upd();}else if(e.code==="ArrowRight"){e.preventDefault();if(v.duration)v.currentTime=Math.min(v.duration,v.currentTime+10);upd();}else if(e.code==="KeyM"){e.preventDefault();setMute(!isMuted);}else if(e.code==="KeyC"){e.preventDefault();toggleLiveCaptions();}else if(e.code==="BracketLeft"){e.preventDefault();let i=SPEEDS.indexOf(speed);if(i>0)applySpeed(SPEEDS[i-1]);}else if(e.code==="BracketRight"){e.preventDefault();let i=SPEEDS.indexOf(speed);if(i<SPEEDS.length-1)applySpeed(SPEEDS[i+1]);}});
+// ===== Playlist (folder) support =====
+const VIDEO_EXT=['mp4','mkv','webm','mov','avi','m4v','ts','flv','wmv','ogv','mpg','mpeg','3gp','m2ts'];
+const SUB_EXT=['srt','vtt'];
+const playlist=[];
+let plIdx=-1,dragFrom=-1;
+let autoplay=localStorage.getItem('pvp-autoplay')!=='0';
+const autoplayBtn=document.getElementById('autoplay-btn');
+function syncAutoplay(){autoplayBtn.classList.toggle('on',autoplay);}
+autoplayBtn.onclick=e=>{e.stopPropagation();autoplay=!autoplay;try{localStorage.setItem('pvp-autoplay',autoplay?'1':'0');}catch(err){}syncAutoplay();};
+function isVideoFile(f){const ext=(f.name.split('.').pop()||'').toLowerCase();return (f.type&&f.type.startsWith('video/'))||VIDEO_EXT.includes(ext);}
+function playStandalone(file){
+  playlist.length=0;plIdx=-1;
+  tbPlaylist.hidden=true;plmenu.hidden=true;
+  v.src=URL.createObjectURL(file);
+  v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});
+  setVideoName(file.name);
+}
+function playPl(i){
+  if(!playlist[i])return;
+  plIdx=i;
+  const it=playlist[i];
+  const onMeta=()=>{
+    if(it.subFile&&!externalSubtitles.some(s=>s.name===it.subFile.name)){loadExternalSubtitle(it.subFile);}
+    else if(it.subFile){const s=externalSubtitles.find(s=>s.name===it.subFile.name);if(s&&currentSubtitleTrack!==s)selectExternalSubtitle(s);}
+  };
+  v.addEventListener('loadedmetadata',onMeta,{once:true});
+  v.src=it.url;
+  v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});
+  setVideoName(it.name);
+  renderPlList();
+}
+function buildPlaylist(files){
+  const vids=Array.from(files).filter(isVideoFile).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}));
+  if(!vids.length)return;
+  const subs=Array.from(files).filter(f=>SUB_EXT.includes((f.name.split('.').pop()||'').toLowerCase()));
+  playlist.length=0;
+  vids.forEach(f=>{
+    const base=f.name.replace(/\.[^.]+$/,'').toLowerCase();
+    const sub=subs.find(s=>s.name.replace(/\.[^.]+$/,'').toLowerCase()===base)||null;
+    playlist.push({name:f.name,file:f,url:URL.createObjectURL(f),subFile:sub});
+  });
+  const rel=vids[0].webkitRelativePath||vids[0].name;
+  const folder=rel.split('/')[0]||'Playlist';
+  tbPlaylist.hidden=false;
+  renderPlList();
+  playPl(0);
+  setVideoName(folder);
+}
+function renderPlList(){
+  const pllist=document.getElementById('pllist');
+  pllist.innerHTML='';
+  if(!playlist.length){pllist.innerHTML='<div class="pl-empty">No playlist loaded</div>';return;}
+  playlist.forEach((it,i)=>{
+    const d=document.createElement('div');
+    d.className='pl-item'+(i===plIdx?' cur':'');
+    d.draggable=true;
+    d.innerHTML='<span class="pl-grip">&#8942;&#8942;</span><span class="pl-name">'+escHtml(it.name)+'</span><span class="pl-idx">'+(i+1)+'</span>';
+    d.onclick=()=>{playPl(i);plmenu.hidden=true;};
+    d.addEventListener('dragstart',e=>{dragFrom=i;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',String(i));}catch(err){}});
+    d.addEventListener('dragover',e=>{e.preventDefault();d.classList.add('drag-over');});
+    d.addEventListener('dragleave',()=>{d.classList.remove('drag-over');});
+    d.addEventListener('drop',e=>{e.preventDefault();d.classList.remove('drag-over');movePl(dragFrom,i);});
+    pllist.appendChild(d);
+  });
+}
+function movePl(from,to){
+  if(from<0||from===to||from<0||from>=playlist.length||to>=playlist.length)return;
+  const cur=playlist[plIdx];
+  const item=playlist.splice(from,1)[0];
+  playlist.splice(to,0,item);
+  plIdx=playlist.indexOf(cur);
+  dragFrom=-1;
+  renderPlList();
+}
+document.getElementById('folder-input').onchange=e=>{
+  if(e.target.files&&e.target.files.length)buildPlaylist(e.target.files);
+  e.target.value='';
+};
+v.addEventListener('ended',()=>{
+  if(playlist.length&&autoplay&&plIdx+1<playlist.length){playPl(plIdx+1);}
+});
+
+document.getElementById("f").onchange=e=>{const f=e.target.files[0];if(f)playStandalone(f);e.target.value='';};
+["mousemove","mousedown","wheel"].forEach(ev=>document.addEventListener(ev,showCtl));document.addEventListener("keydown",e=>{showCtl();if(e.code==="Space"){e.preventDefault();toggle();}else if(e.code==="KeyF"){e.preventDefault();if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");setFs(!isFs);}else if(e.code==="ArrowUp"){e.preventDefault();applyVolume(Math.min(2,+vol.value+0.1));}else if(e.code==="ArrowDown"){e.preventDefault();applyVolume(Math.max(0,+vol.value-0.1));}else if(e.code==="ArrowLeft"){e.preventDefault();if(v.duration)v.currentTime=Math.max(0,v.currentTime-10);upd();}else if(e.code==="ArrowRight"){e.preventDefault();if(v.duration)v.currentTime=Math.min(v.duration,v.currentTime+10);upd();}else if(e.code==="KeyM"){e.preventDefault();setMute(!isMuted);}else if(e.code==="KeyC"){e.preventDefault();toggleLiveCaptions();}else if(e.code==="BracketLeft"){e.preventDefault();let i=SPEEDS.indexOf(speed);if(i>0)applySpeed(SPEEDS[i-1]);}else if(e.code==="BracketRight"){e.preventDefault();let i=SPEEDS.indexOf(speed);if(i<SPEEDS.length-1)applySpeed(SPEEDS[i+1]);}});
 showCtl();
 ["dragenter","dragover"].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault();dnd.classList.add("show");}));
 ["dragleave","drop"].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault();dnd.classList.remove("show");}));
-document.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f&&f.type.startsWith("video/")){v.src=URL.createObjectURL(f);v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});setVideoName(f.name);}});
+document.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f&&isVideoFile(f)){playStandalone(f);}});
 document.addEventListener("wheel",e=>{e.preventDefault();applyVolume(Math.max(0,Math.min(2,+vol.value+(e.deltaY<0?0.05:-0.05))));showCtl();});
-showCtl();applyVolume(1);applySpeed(1);hudReady=true;renderSubtitleMenu();renderAudioMenu();
-let rc=0;document.addEventListener("contextmenu",e=>{e.preventDefault();const n=Date.now();if(n-rc<400){if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");isFs=!isFs;fsbtn.innerHTML=isFs?FS_EXIT:FS;rc=0;}else{rc=n;setTimeout(()=>rc=0,400);}});
+// ===== Update system (GitHub releases) =====
+const REPO='DeepanshuK2002/Personal-Video-Player---PVP';
+const BAKED_VERSION='0.0.0';
+function verTuple(s){return String(s).replace(/^v/i,'').split('.').map(n=>{const x=parseInt(n,10);return isNaN(x)?0:x;});}
+function verGt(a,b){const x=verTuple(a),y=verTuple(b);for(let i=0;i<3;i++){const p=x[i]||0,q=y[i]||0;if(p>q)return true;if(p<q)return false;}return false;}
+let installedVer=BAKED_VERSION;
+try{const s=localStorage.getItem('pvp-updated-to');if(s&&verGt(s,installedVer))installedVer=s;}catch(e){}
+document.getElementById('ver-text').textContent='PVP+ v'+installedVer;
+document.getElementById('upd-from').textContent='v'+installedVer;
+let updateInfo=null,downloading=false,installing=false;
+function setUpdateUI(on){document.getElementById('tb-update').hidden=!on;document.getElementById('ver-upd').hidden=!on;}
+async function checkUpdate(){
+  try{
+    const r=await fetch('https://api.github.com/repos/'+REPO+'/releases/latest',{headers:{'Accept':'application/vnd.github+json'}});
+    if(!r.ok)return;
+    const j=await r.json();
+    const tag=(j.tag_name||'').trim();
+    if(!tag||!verGt(tag,installedVer))return;
+    const assets=j.assets||[];
+    const asset=assets.find(a=>/\.exe$/i.test(a.name||''))||assets[0];
+    if(!asset||!asset.browser_download_url)return;
+    updateInfo={tag:tag,url:asset.browser_download_url,size:asset.size||0,notes:(j.body||'').slice(0,1500)};
+    setUpdateUI(true);
+  }catch(e){}
+}
+const updPopup=document.getElementById('updpopup'),updBackdrop=document.getElementById('updbackdrop');
+function resetUpdateProgress(){
+  downloading=false;installing=false;
+  document.getElementById('updbar').hidden=true;
+  document.getElementById('upd-bar-fill').style.width='0%';
+  document.getElementById('updstatus').textContent='';
+  const ib=document.getElementById('upd-install'),lb=document.getElementById('upd-later'),cb=document.getElementById('updclose');
+  ib.disabled=lb.disabled=cb.disabled=false;
+  ib.textContent='Install';
+}
+function openUpdatePopup(){
+  if(!updateInfo||installing)return;
+  closeAllMenus();settingsmenu.classList.remove('show');
+  document.getElementById('upd-to').textContent=updateInfo.tag;
+  document.getElementById('upd-notes').textContent=updateInfo.notes||'No release notes.';
+  if(!downloading)resetUpdateProgress();
+  updPopup.classList.add('show');updBackdrop.classList.add('show');
+}
+function closeUpdatePopup(){
+  if(downloading||installing)return;
+  updPopup.classList.remove('show');updBackdrop.classList.remove('show');
+}
+function updB64(u8){
+  let s='';const CH=0x8000;
+  for(let i=0;i<u8.length;i+=CH){s+=String.fromCharCode.apply(null,u8.subarray(i,i+CH));}
+  return btoa(s);
+}
+function updReport(total,loaded){
+  const f=document.getElementById('upd-bar-fill');
+  const ib=document.getElementById('upd-install');
+  if(total>0){const p=Math.min(100,Math.floor(loaded/total*100));f.style.width=p+'%';ib.textContent='Downloading… '+p+'%';}
+  else{f.style.width='50%';ib.textContent='Downloading…';}
+}
+async function startInstall(){
+  if(!updateInfo||downloading||installing)return;
+  downloading=true;
+  const ib=document.getElementById('upd-install'),lb=document.getElementById('upd-later'),cb=document.getElementById('updclose'),status=document.getElementById('updstatus');
+  ib.disabled=lb.disabled=cb.disabled=true;
+  ib.textContent='Downloading…';
+  document.getElementById('updbar').hidden=false;
+  status.textContent='';
+  try{
+    const resp=await fetch(updateInfo.url,{cache:'no-store'});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const total=parseInt(resp.headers.get('content-length')||'',10)||updateInfo.size||0;
+    const reader=resp.body.getReader();
+    let pending=new Uint8Array(0),loaded=0,idx=0;
+    const BINSZ=256*1024;
+    while(true){
+      const rd=await reader.read();
+      if(rd.done)break;
+      const np=new Uint8Array(pending.length+rd.value.length);
+      np.set(pending);np.set(rd.value,pending.length);pending=np;
+      while(pending.length>=BINSZ){
+        postMsg({type:'update-chunk',i:idx++,data:updB64(pending.subarray(0,BINSZ))});
+        loaded+=BINSZ;pending=pending.slice(BINSZ);updReport(total,loaded);
+      }
+    }
+    if(pending.length){postMsg({type:'update-chunk',i:idx++,data:updB64(pending)});loaded+=pending.length;}
+    updReport(total,loaded);
+    downloading=false;
+    status.textContent='Verifying…';
+    postMsg({type:'update-final',bytes:loaded,tag:updateInfo.tag});
+  }catch(err){
+    downloading=false;
+    status.textContent='Download failed: '+((err&&err.message)||'network error');
+    ib.disabled=lb.disabled=cb.disabled=false;
+    ib.textContent='Retry';
+  }
+}
+// Called from Rust after the downloaded file is verified
+function pvpInstallReady(ok){
+  const status=document.getElementById('updstatus'),ib=document.getElementById('upd-install'),lb=document.getElementById('upd-later'),cb=document.getElementById('updclose');
+  if(!ok){
+    downloading=false;
+    status.textContent='Update package could not be verified — please retry.';
+    ib.disabled=lb.disabled=cb.disabled=false;
+    ib.textContent='Retry';
+    postMsg({type:'update-cancel'});
+    return;
+  }
+  try{localStorage.setItem('pvp-updated-to',updateInfo.tag);}catch(e){}
+  installing=true;
+  status.textContent='Installing '+updateInfo.tag+' — the app will restart…';
+  ib.textContent='Installing…';
+  postMsg({type:'update-run',tag:updateInfo.tag});
+}
+function pvpInstallLaunching(){
+  document.getElementById('updstatus').textContent='Restarting…';
+  setTimeout(()=>postMsg({type:'quit'}),500);
+}
+function pvpUpdateRejected(){
+  downloading=false;installing=false;
+  document.getElementById('updstatus').textContent='Update rejected (not newer than this build).';
+  const ib=document.getElementById('upd-install'),lb=document.getElementById('upd-later'),cb=document.getElementById('updclose');
+  ib.disabled=lb.disabled=cb.disabled=false;
+}
+document.getElementById('tb-update').onclick=e=>{e.stopPropagation();openUpdatePopup();};
+document.getElementById('ver-upd').onclick=e=>{e.stopPropagation();openUpdatePopup();};
+document.getElementById('updclose').onclick=()=>{closeUpdatePopup();};
+document.getElementById('upd-later').onclick=()=>{closeUpdatePopup();};
+document.getElementById('upd-install').onclick=()=>{startInstall();};
+updBackdrop.onclick=()=>{closeUpdatePopup();};
+
+showCtl();applyVolume(1);applySpeed(1);hudReady=true;renderSubtitleMenu();renderAudioMenu();syncAutoplay();updateCcActive();setTimeout(checkUpdate,1200);
+let rc=0;document.addEventListener("contextmenu",e=>{e.preventDefault();const n=Date.now();if(n-rc<400){if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");setFs(!isFs);rc=0;}else{rc=n;setTimeout(()=>rc=0,400);}});
 const p=new URLSearchParams(location.search);if(p.get("src")){try{let s=p.get("src");if(/^[a-zA-Z]:[\\\\/]/.test(s))s="file:///"+s.replace(/\\\\/g,"/").replace(/ /g,"%20");v.src=s;v.play();setVideoName(p.get("src"));}catch(e){}}
 </script></body></html>"####;
+
+enum UserEvent {
+    Js(String),
+}
+
+fn parse_ver(s: &str) -> (u64, u64, u64) {
+    let t = s.trim().trim_start_matches('v');
+    let mut it = t.split('.');
+    let mut next = || -> u64 {
+        it.next()
+            .and_then(|x| x.split('-').next())
+            .and_then(|x| x.parse::<u64>().ok())
+            .unwrap_or(0)
+    };
+    (next(), next(), next())
+}
 
 fn main() {
     let src = env::args().nth(1);
@@ -951,14 +1374,22 @@ fn main() {
         resvg::render(&tree, ts, &mut pixmap.as_mut());
         tao::window::Icon::from_rgba(pixmap.data().to_vec(), w, h).ok()
     })();
-    let event_loop = EventLoop::new();
+    let event_loop = tao::event_loop::EventLoopBuilder::<UserEvent>::with_user_event().build();
+    let proxy = event_loop.create_proxy();
+    let proxy_ipc = proxy.clone();
     let window = Arc::new(WindowBuilder::new()
         .with_title("PVP")
+        .with_decorations(false)
         .with_inner_size(tao::dpi::LogicalSize::new(960.0, 540.0))
+        .with_min_inner_size(tao::dpi::LogicalSize::new(600.0, 360.0))
         .with_window_icon(icon)
         .build(&event_loop)
         .unwrap());
     let mut html = HTML.to_string();
+    html = html.replace(
+        "const BAKED_VERSION='0.0.0';",
+        &format!("const BAKED_VERSION='{}';", env!("CARGO_PKG_VERSION")),
+    );
     let mut s = String::new();
     let stdin_piped = !io::stdin().is_terminal();
     if stdin_piped && io::stdin().lock().read_to_string(&mut s).is_ok() && !s.is_empty() {
@@ -984,8 +1415,13 @@ fn main() {
     // Create live captions manager
     let live_captions_manager = Arc::new(Mutex::new(LiveCaptionsManager::new()));
     let live_captions_manager_ipc = live_captions_manager.clone();
-    
-    let _webview = WebViewBuilder::new_with_web_context(&mut web_context)
+
+    // State for the downloaded update file (written chunk by chunk from JS)
+    let update_file: Arc<Mutex<Option<std::fs::File>>> = Arc::new(Mutex::new(None));
+    let uf = update_file.clone();
+    let px = proxy_ipc.clone();
+
+    let webview = WebViewBuilder::new_with_web_context(&mut web_context)
         .with_html(html)
         .with_devtools(true)
         .with_ipc_handler(move |req| {
@@ -1007,6 +1443,135 @@ fn main() {
                 if let Ok(msg) = serde_json::from_str::<serde_json::Value>(body) {
                     if let Some(msg_type) = msg.get("type").and_then(|v| v.as_str()) {
                         match msg_type {
+                            "win-min" => {
+                                w2.set_minimized(true);
+                            }
+                            "win-max" => {
+                                if w2.is_maximized() {
+                                    w2.set_maximized(false);
+                                } else {
+                                    w2.set_maximized(true);
+                                }
+                            }
+                            "win-close" => {
+                                std::process::exit(0);
+                            }
+                            "win-resize" => {
+                                if !w2.is_maximized() {
+                                    let edge = msg.get("edge").and_then(|v| v.as_str()).unwrap_or("");
+                                    let dx = msg.get("dx").and_then(|v| v.as_f64()).unwrap_or(0.0);
+                                    let dy = msg.get("dy").and_then(|v| v.as_f64()).unwrap_or(0.0);
+                                    let scale = w2.scale_factor();
+                                    let (dxp, dyp) = (dx * scale, dy * scale);
+                                    let min_w = 600.0 * scale;
+                                    let min_h = 360.0 * scale;
+                                    let pos_ok = w2.outer_position().is_ok();
+                                    let (mut x, mut y) = match w2.outer_position() {
+                                        Ok(op) => (op.x as f64, op.y as f64),
+                                        Err(_) => (0.0, 0.0),
+                                    };
+                                    let os = w2.outer_size();
+                                    let (mut w, mut h) = (os.width as f64, os.height as f64);
+                                    let is_left = edge == "left" || edge.ends_with("left");
+                                    let is_right = edge == "right" || edge.ends_with("right");
+                                    let is_top = edge == "top" || edge.starts_with("top-");
+                                    let is_bottom = edge == "bottom" || edge.starts_with("bottom-");
+                                    if is_left { x += dxp; w -= dxp; }
+                                    if is_right { w += dxp; }
+                                    if is_top { y += dyp; h -= dyp; }
+                                    if is_bottom { h += dyp; }
+                                    if w < min_w {
+                                        if is_left { x -= min_w - w; }
+                                        w = min_w;
+                                    }
+                                    if h < min_h {
+                                        if is_top { y -= min_h - h; }
+                                        h = min_h;
+                                    }
+                                    if pos_ok && (is_left || is_top) {
+                                        let _ = w2.set_outer_position(tao::dpi::PhysicalPosition::new(x as i32, y as i32));
+                                    }
+                                    let _ = w2.set_inner_size(tao::dpi::PhysicalSize::new(w as u32, h as u32));
+                                }
+                            }
+                            "update-chunk" => {
+                                use base64::Engine as _;
+                                if let Some(data) = msg.get("data").and_then(|v| v.as_str()) {
+                                    if let Ok(bytes) = base64::engine::general_purpose::STANDARD.decode(data) {
+                                        let mut guard = uf.lock().unwrap();
+                                        if guard.is_none() {
+                                            let p = std::env::temp_dir().join("pvp-update.exe");
+                                            let _ = std::fs::remove_file(&p);
+                                            match std::fs::File::create(&p) {
+                                                Ok(f) => *guard = Some(f),
+                                                Err(_) => {}
+                                            }
+                                        }
+                                        if let Some(f) = guard.as_mut() {
+                                            let _ = f.write_all(&bytes);
+                                        }
+                                    }
+                                }
+                            }
+                            "update-final" => {
+                                let bytes = msg.get("bytes").and_then(|v| v.as_u64()).unwrap_or(0);
+                                let tag = msg.get("tag").and_then(|v| v.as_str()).unwrap_or("").to_string();
+                                let mut guard = uf.lock().unwrap();
+                                let mut size_ok = false;
+                                if let Some(f) = guard.as_mut() {
+                                    let _ = f.flush();
+                                    if let Ok(md) = f.metadata() {
+                                        size_ok = bytes > 0 && md.len() == bytes;
+                                    }
+                                }
+                                *guard = None;
+                                let newer = parse_ver(&tag) > parse_ver(env!("CARGO_PKG_VERSION"));
+                                let ok = size_ok && newer;
+                                if !ok {
+                                    let _ = std::fs::remove_file(std::env::temp_dir().join("pvp-update.exe"));
+                                }
+                                let _ = px.send_event(UserEvent::Js(format!(
+                                    "pvpInstallReady({})",
+                                    if ok { "true" } else { "false" }
+                                )));
+                            }
+                            "update-cancel" => {
+                                let mut guard = uf.lock().unwrap();
+                                *guard = None;
+                                let _ = std::fs::remove_file(std::env::temp_dir().join("pvp-update.exe"));
+                            }
+                            "update-run" => {
+                                let tag = msg.get("tag").and_then(|v| v.as_str()).unwrap_or("");
+                                let mut launched = false;
+                                if parse_ver(tag) > parse_ver(env!("CARGO_PKG_VERSION")) {
+                                    let src = std::env::temp_dir().join("pvp-update.exe");
+                                    if let Ok(dst) = std::env::current_exe() {
+                                        if src.exists() {
+                                            let src_s = src.to_string_lossy().replace('\'', "''");
+                                            let dst_s = dst.to_string_lossy().replace('\'', "''");
+                                            let ps = format!(
+                                                "$src='{src}';$dst='{dst}';for($i=0;$i -lt 60;$i++){{try{{Copy-Item -LiteralPath $src -Destination $dst -Force -ErrorAction Stop;break}}catch{{Start-Sleep -Milliseconds 500}}}};Start-Process -FilePath $dst",
+                                                src = src_s,
+                                                dst = dst_s
+                                            );
+                                            use std::os::windows::process::CommandExt;
+                                            let spawned = std::process::Command::new("powershell.exe")
+                                                .args(["-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-Command", &ps])
+                                                .creation_flags(0x08000000)
+                                                .spawn();
+                                            launched = spawned.is_ok();
+                                        }
+                                    }
+                                }
+                                if launched {
+                                    let _ = px.send_event(UserEvent::Js("pvpInstallLaunching()".into()));
+                                } else {
+                                    let _ = px.send_event(UserEvent::Js("pvpUpdateRejected()".into()));
+                                }
+                            }
+                            "quit" => {
+                                std::process::exit(0);
+                            }
                             "live-captions-toggle" => {
                                 let mut manager = live_captions_manager_ipc.lock().unwrap();
                                 let new_state = !manager.is_active();
@@ -1033,8 +1598,14 @@ fn main() {
     
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
-        if let Event::WindowEvent { event: WindowEvent::CloseRequested, .. } = event {
-            *control_flow = ControlFlow::Exit;
+        match event {
+            Event::UserEvent(UserEvent::Js(code)) => {
+                let _ = webview.evaluate_script(&code);
+            }
+            Event::WindowEvent { event: WindowEvent::CloseRequested, .. } => {
+                *control_flow = ControlFlow::Exit;
+            }
+            _ => {}
         }
     });
 }
