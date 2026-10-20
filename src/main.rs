@@ -23,6 +23,7 @@ body{background:#000;color:#fff;font-family:system-ui,sans-serif;height:100vh;ov
 .row{display:flex;align-items:center;gap:10px}
 button,label{background:transparent;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;padding:4px}
 button svg, label svg{width:20px;height:20px;fill:#fff}
+#fsbtn svg{fill:none}
 .brandmark{display:flex;align-items:center;justify-content:center;opacity:.85;margin-right:2px;position:relative}
 .brandmark svg.logo-icon{width:22px;height:22px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8));transition:opacity 0.2s}
 .brandmark:hover .logo-icon{opacity:0}
@@ -33,6 +34,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .volwrap{position:relative;display:flex;align-items:center;gap:4px}
 .vol{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);writing-mode:vertical-lr;direction:rtl;width:6px;height:100px;appearance:none;-webkit-appearance:none;background:rgba(128,128,128,0.35);border-radius:3px;cursor:pointer;z-index:15;opacity:0;transition:opacity 0.2s;pointer-events:none}
 .volwrap:hover .vol{opacity:1;pointer-events:auto}
+.volwrap::after{content:"";position:absolute;left:-8px;right:-8px;bottom:28px;height:106px}
 .vol::-webkit-slider-runnable-track{width:6px;height:100%;background:rgba(128,128,128,0.35);border-radius:3px}
 .vol::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:rgb(116,192,252);margin-left:-4px;border:none}
 .vol::-moz-range-track{width:6px;height:100%;background:rgba(128,128,128,0.35);border-radius:3px}
@@ -55,7 +57,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .ccbtn{background:transparent;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;padding:4px;border-radius:4px;transition:background 0.15s}
 .ccbtn:hover{background:rgba(255,255,255,0.1)}
 .ccbtn.active{background:rgba(116,192,252,0.2)}
-.ccbtn svg{width:20px;height:20px;fill:#fff}
+.ccbtn svg{width:20px;height:20px;fill:none}
 
 /* Settings menu - click to toggle */
 .brandmark-wrap{position:relative}
@@ -210,7 +212,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
     <div class="brandmark-wrap">
       <div class="brandmark">
         <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="rgb(116, 192, 252)" d="M128 128C92.7 128 64 156.7 64 192L64 448C64 483.3 92.7 512 128 512L384 512C419.3 512 448 483.3 448 448L448 192C448 156.7 419.3 128 384 128L128 128zM496 400L569.5 458.8C573.7 462.2 578.9 464 584.3 464C597.4 464 608 453.4 608 440.3L608 199.7C608 186.6 597.4 176 578.9 176 573.7 177.8 569.5 181.2L496 240L496 400z"/></svg>
-        <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.14 15a2.34 2.34 0 0 1 1.86-1.86a2.34 2.34 0 0 0 0-3.31a2.34 2.34 0 0 1-1.86-1.86a2.34 2.34 0 0 0-3.31 0a2.34 2.34 0 0 1-1.86 1.86a2.34 2.34 0 0 0 0 3.31a2.34 2.34 0 0 1 1.86 1.86a2.34 2.34 0 0 0 3.31 0"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <div id="settingsmenu">
         <div class="settings-section">
@@ -317,6 +319,8 @@ let currentSubtitleTrack=null,currentAudioTrack=null,subtitleOffset=0,externalSu
 let liveCaptionsPosition='bottom';
 let liveCaptionsMaxLines=3;
 let liveCaptionsLanguage='en-US';
+let liveCaptionsEnabled=false;
+let captionHistory=[];
 function fmt(s){if(!isFinite(s))return "00:00:00";s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");}
 function upd(){if(v.duration){fill.style.width=(v.currentTime/v.duration*100)+"%";cur.textContent=fmt(v.currentTime);end.textContent=showRemaining?"-"+fmt(v.duration-v.currentTime):fmt(v.duration);}}
 function toggle(){v.paused?v.play():v.pause();}
@@ -349,230 +353,8 @@ document.getElementById("volbtn").onclick=e=>{e.stopPropagation();setMute(!isMut
 let isFs=false;fsbtn.onclick=e=>{e.stopPropagation();if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");isFs=!isFs;fsbtn.innerHTML=isFs?FS_EXIT:FS;};
 document.addEventListener("fullscreenchange",()=>{fsbtn.innerHTML=document.fullscreenElement?FS_EXIT:FS;});
 
-// Subtitle handling
-function parseSRT(content){const tracks=[];const blocks=content.trim().split(/\n\s*\n/);blocks.forEach((block,i)=>{const lines=block.trim().split('\n');if(lines.length>=3){const timeMatch=lines[1].match(/(\d{2}:\d{2}:\d{2},\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2},\d{3})/);if(timeMatch){const start=parseTime(timeMatch[1]);const end=parseTime(timeMatch[2]);const text=lines.slice(2).join('\n');tracks.push({index:i,start,end,text});}}});return tracks;}
-function parseVTT(content){const tracks=[];const lines=content.split('\n');let i=0;while(i<lines.length){const line=lines[i].trim();const timeMatch=line.match(/(\d{2}:\d{2}:\d{2}\.\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d{3})/);if(timeMatch){const start=parseTime(timeMatch[1].replace('.',','));const end=parseTime(timeMatch[2].replace('.',','));i++;let text='';while(i<lines.length&&lines[i].trim()){text+=lines[i]+'\n';i++;}tracks.push({index:tracks.length,start,end,text:text.trim()});}i++;}return tracks;}
-function parseTime(t){const parts=t.split(/[:,]/);return(+parts[0])*3600+(+parts[1])*60+(+parts[2])+(+parts[3])/1000;}
-function formatSRT(tracks){return tracks.map((t,i)=>`${i+1}\n${fmtTime(t.start)} --> ${fmtTime(t.end)}\n${t.text}\n`).join('\n');}
-function fmtTime(s){const h=Math.floor(s/3600).toString().padStart(2,'0');const m=Math.floor((s%3600)/60).toString().padStart(2,'0');const sec=Math.floor(s%60).toString().padStart(2,'0');const ms=Math.floor((s%1)*1000).toString().padStart(3,'0');return `${h}:${m}:${sec},${ms}`;}
-
-function renderSubtitleMenu(){
-  subtitleMenu.innerHTML='';
-  let hasTracks=false;
-  // Internal text tracks
-  if(v.textTracks&&v.textTracks.length>0){
-    hasTracks=true;
-    for(let i=0;i<v.textTracks.length;i++){
-      const track=v.textTracks[i];
-      const item=document.createElement('div');
-      item.className='track-item'+(track.mode==='showing'?' active':'');
-      item.innerHTML=`<span class="track-lang">${track.language||'Und'}</span><span class="track-label">${track.label||'Track '+(i+1)}</span>${track.default?'<span class="track-default">Default</span>':''}`;
-      item.onclick=()=>selectSubtitleTrack(i);
-      subtitleMenu.appendChild(item);
-    }
-  }
-  // External subtitles
-  externalSubtitles.forEach((sub,idx)=>{
-    hasTracks=true;
-    const item=document.createElement('div');
-    item.className='track-item'+(currentSubtitleTrack===sub?' active':'');
-    item.innerHTML=`<span class="track-lang">${sub.lang||'Ext'}</span><span class="track-label">${sub.name||'External '+ (idx+1)}</span><span class="track-default">External</span>`;
-    item.onclick=()=>selectExternalSubtitle(sub);
-    subtitleMenu.appendChild(item);
-  });
-  if(!hasTracks){
-    subtitleMenu.innerHTML='<div class="no-tracks">No subtitle tracks available</div>';
-  }
-  // Add sync controls if external subtitle selected
-  if(currentSubtitleTrack&&externalSubtitles.includes(currentSubtitleTrack)){
-    addSubtitleSyncControls();
-  }
-}
-
-function addSubtitleSyncControls(){
-  const existing=document.querySelector('.subtitle-sync');
-  if(existing)existing.remove();
-  const syncDiv=document.createElement('div');
-  syncDiv.className='subtitle-sync show';
-  syncDiv.innerHTML=`
-    <label>Sync offset: <input type="number" id="subtitle-offset" value="${subtitleOffset}" step="0.1" min="-60" max="60"> seconds</label>
-    <div class="sync-btns">
-      <button id="sync-subtitle-btn">Apply Sync</button>
-      <button id="reset-subtitle-btn">Reset</button>
-    </div>
-  `;
-  subtitleMenu.appendChild(syncDiv);
-  document.getElementById('sync-subtitle-btn').onclick=()=>{
-    subtitleOffset=parseFloat(document.getElementById('subtitle-offset').value)||0;
-    applySubtitleSync();
-  };
-  document.getElementById('reset-subtitle-btn').onclick=()=>{
-    subtitleOffset=0;
-    document.getElementById('subtitle-offset').value=0;
-    applySubtitleSync();
-  };
-}
-
-function applySubtitleSync(){
-  if(currentSubtitleTrack&&externalSubtitles.includes(currentSubtitleTrack)){
-    currentSubtitleTrack.offset=subtitleOffset;
-    // Re-render cues with offset
-    renderExternalSubtitles();
-  }
-}
-
-function renderExternalSubtitles(){
-  // Remove existing external track
-  for(let i=v.textTracks.length-1;i>=0;i--){
-    const track=v.textTracks[i];
-    if(track.kind==='subtitles'&&track.label&&track.label.startsWith('External:')){
-      v.removeTextTrack(track);
-    }
-  }
-  if(currentSubtitleTrack&&externalSubtitles.includes(currentSubtitleTrack)){
-    const track=v.addTextTrack('subtitles',currentSubtitleTrack.name,'External:'+currentSubtitleTrack.lang);
-    track.mode='showing';
-    currentSubtitleTrack.cues.forEach(cue=>{
-      track.addCue(new VTTCue(cue.start+subtitleOffset,cue.end+subtitleOffset,cue.text));
-    });
-  }
-}
-
-function selectSubtitleTrack(index){
-  for(let i=0;i<v.textTracks.length;i++){
-    v.textTracks[i].mode=i===index?'showing':'hidden';
-  }
-  currentSubtitleTrack=v.textTracks[index]||null;
-  subtitleOffset=0;
-  renderSubtitleMenu();
-}
-
-function selectExternalSubtitle(sub){
-  currentSubtitleTrack=sub;
-  renderExternalSubtitles();
-  renderSubtitleMenu();
-}
-
-function loadExternalSubtitle(file){
-  const reader=new FileReader();
-  reader.onload=e=>{
-    let tracks=[];
-    const ext=file.name.split('.').pop().toLowerCase();
-    if(ext==='srt')tracks=parseSRT(e.target.result);
-    else if(ext==='vtt')tracks=parseVTT(e.target.result);
-    else{alert('Unsupported subtitle format');return;}
-    const sub={name:file.name,lang:file.name.split('.').slice(0,-1).join('.').split(/[-_]/).pop()||'Ext',cues:tracks,offset:0};
-    externalSubtitles.push(sub);
-    selectExternalSubtitle(sub);
-  };
-  reader.readAsText(file);
-}
-
-loadSubtitleBtn.onclick=()=>subtitleFileInput.click();
-subtitleFileInput.onchange=e=>{
-  Array.from(e.target.files).forEach(loadExternalSubtitle);
-  e.target.value='';
-};
-
-// Audio track handling
-function renderAudioMenu(){
-  audioMenu.innerHTML='';
-  let hasTracks=false;
-  if(v.audioTracks&&v.audioTracks.length>0){
-    hasTracks=true;
-    for(let i=0;i<v.audioTracks.length;i++){
-      const track=v.audioTracks[i];
-      const item=document.createElement('div');
-      item.className='track-item'+(track.enabled?' active':'');
-      item.innerHTML=`<span class="track-lang">${track.language||'Und'}</span><span class="track-label">${track.label||'Track '+(i+1)}</span>${track.kind==='main'?'<span class="track-default">Main</span>':''}`;
-      item.onclick=()=>selectAudioTrack(i);
-      audioMenu.appendChild(item);
-    }
-  }
-  externalAudioTracks.forEach((aud,idx)=>{
-    hasTracks=true;
-    const item=document.createElement('div');
-    item.className='track-item'+(currentAudioTrack===aud?' active':'');
-    item.innerHTML=`<span class="track-lang">${aud.lang||'Ext'}</span><span class="track-label">${aud.name||'External '+ (idx+1)}</span><span class="track-default">External</span>`;
-    item.onclick=()=>selectExternalAudio(aud);
-    audioMenu.appendChild(item);
-  });
-  if(!hasTracks){
-    audioMenu.innerHTML='<div class="no-tracks">No audio tracks available</div>';
-  }
-}
-
-function selectAudioTrack(index){
-  if(v.audioTracks){
-    for(let i=0;i<v.audioTracks.length;i++){
-      v.audioTracks[i].enabled=i===index;
-    }
-    currentAudioTrack=v.audioTracks[index]||null;
-  }
-  renderAudioMenu();
-}
-
-function selectExternalAudio(aud){
-  // For external audio, we'd need to swap the video source or use audio context
-  // This is a placeholder for the UI - actual implementation would require more complex handling
-  currentAudioTrack=aud;
-  alert('External audio track selection: '+aud.name+'\n(Full implementation requires video reloading with new audio)');
-  renderAudioMenu();
-}
-
-function loadExternalAudio(file){
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const aud={name:file.name,lang:file.name.split('.').slice(0,-1).join('.').split(/[-_]/).pop()||'Ext',blob:e.target.result,url:URL.createObjectURL(file)};
-    externalAudioTracks.push(aud);
-    selectExternalAudio(aud);
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-loadAudioBtn.onclick=()=>audioFileInput.click();
-audioFileInput.onchange=e=>{
-  Array.from(e.target.files).forEach(loadExternalAudio);
-  e.target.value='';
-};
-
-// Initialize menus when video metadata loads
-v.addEventListener('loadedmetadata',()=>{
-  renderSubtitleMenu();
-  renderAudioMenu();
-});
-
-// Also update when text tracks change
-v.addEventListener('loadstart',()=>{
-  externalSubtitles=[];
-  externalAudioTracks=[];
-  currentSubtitleTrack=null;
-  currentAudioTrack=null;
-  subtitleOffset=0;
-});
-
 // Settings menu - click to toggle
 brandmark.onclick=e=>{e.stopPropagation();settingsmenu.classList.toggle("show");};
-
-// CC button - toggle subtitles
-ccbtn.onclick=e=>{e.stopPropagation();if(currentSubtitleTrack){// Turn off subtitles
-    for(let i=0;i<v.textTracks.length;i++)v.textTracks[i].mode='hidden';
-    currentSubtitleTrack=null;
-    subtitleOffset=0;
-    ccbtn.classList.remove('active');
-  }else{
-    // Turn on first available subtitle track
-    if(v.textTracks&&v.textTracks.length>0){
-      v.textTracks[0].mode='showing';
-      currentSubtitleTrack=v.textTracks[0];
-      ccbtn.classList.add('active');
-    }else if(externalSubtitles.length>0){
-      selectExternalSubtitle(externalSubtitles[0]);
-      ccbtn.classList.add('active');
-    }
-  }
-  renderSubtitleMenu();
-};
 
 // Close menus when clicking outside
 document.addEventListener("click",e=>{
@@ -782,11 +564,6 @@ v.addEventListener('loadstart',()=>{
   subtitleOffset=0;
 });
 
-// Live Captions - simple config (using fixed brand colors)
-let liveCaptionsPosition='bottom';
-let liveCaptionsMaxLines=3;
-let liveCaptionsLanguage='en-US';
-
 function addLiveCaption(text, isFinal){
   const line=document.createElement('div');
   line.className='live-caption-line' + (isFinal ? ' final' : ' partial');
@@ -819,17 +596,13 @@ function toggleLiveCaptions(){
 }
 
 function startLiveCaptions(){
-  if(!audioContext){
-    audioContext=new (window.AudioContext||window.webkitAudioContext)();
-  }
-  if(audioContext.state==='suspended'){
-    audioContext.resume();
-  }
-  if(!audioSource){
-    audioSource=audioContext.createMediaElementSource(v);
+  ensureAudio();
+  if(!audioCtx||!sourceNode)return;
+  if(audioCtx.state==='suspended'){
+    audioCtx.resume();
   }
   if(!audioProcessor){
-    audioProcessor=audioContext.createScriptProcessor(4096, 1, 1);
+    audioProcessor=audioCtx.createScriptProcessor(4096, 1, 1);
     audioProcessor.onaudioprocess=e=>{
       if(!liveCaptionsEnabled)return;
       const inputData=e.inputBuffer.getChannelData(0);
@@ -837,8 +610,8 @@ function startLiveCaptions(){
       samples.set(inputData);
       sendAudioToBackend(samples);
     };
-    audioSource.connect(audioProcessor);
-    audioProcessor.connect(audioContext.destination);
+    sourceNode.connect(audioProcessor);
+    audioProcessor.connect(audioCtx.destination);
   }
   // Apply position class
   liveCaptionsOverlay.classList.remove('top', 'center', 'bottom');
@@ -850,10 +623,6 @@ function stopLiveCaptions(){
     audioProcessor.disconnect();
     audioProcessor=null;
   }
-  if(audioSource){
-    audioSource.disconnect();
-    audioSource=null;
-  }
   clearLiveCaptions();
 }
 
@@ -863,7 +632,7 @@ function sendAudioToBackend(samples){
     window.chrome.webview.postMessage(JSON.stringify({
       type:'live-captions-audio',
       samples:data,
-      sampleRate:audioContext.sampleRate
+      sampleRate:audioCtx.sampleRate
     }));
   }
 }
