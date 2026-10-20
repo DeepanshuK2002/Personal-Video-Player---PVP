@@ -40,11 +40,11 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 
 .dnd{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);font-size:18px;z-index:20}
 .dnd.show{display:flex}
-.brandmark{display:flex;align-items:center;justify-content:center;opacity:.85;margin-right:2px;position:relative;width:28px;height:28px}
-.brandmark .logo-icon{width:22px;height:22px;fill:rgb(116, 192, 252);filter:drop-shadow(0 1px 2px rgba(0,0,0,.8));transition:opacity 0.2s}
+.brandmark{display:flex;align-items:center;justify-content:center;opacity:.85;margin-right:2px;position:relative;width:24px;height:24px}
+.brandmark .logo-icon{width:18px;height:18px;fill:rgb(116, 192, 252);filter:drop-shadow(0 1px 2px rgba(0,0,0,.8));transition:opacity 0.2s}
 .brandmark:hover .logo-icon{opacity:0}
 .brandmark:hover .settings-icon{opacity:1}
-.brandmark .settings-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;opacity:0;transition:opacity 0.2s;stroke:#fff;fill:none;pointer-events:none}
+.brandmark .settings-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:17px;height:17px;opacity:0;transition:opacity 0.2s;stroke:#fff;fill:none;pointer-events:none}
 .spdind{position:fixed;top:44px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:21;white-space:nowrap}
 .spdind.show{opacity:1}
 .volind{position:fixed;top:44px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:20}
@@ -58,7 +58,7 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 
 /* Settings menu - click to toggle */
 .brandmark-wrap{position:relative}
-#settingsmenu{display:none;position:absolute;bottom:44px;left:0;background:#222;padding:8px;border-radius:8px;min-width:240px;max-width:300px;max-height:calc(100vh - 96px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#555 transparent;z-index:20;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+#settingsmenu{display:none;position:absolute;bottom:44px;left:0;background:#222;padding:8px;border-radius:8px;min-width:240px;max-width:300px;max-height:calc(100vh - 130px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#555 transparent;z-index:20;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
 #settingsmenu.show{display:block}
 #settingsmenu::-webkit-scrollbar{width:8px}
 #settingsmenu::-webkit-scrollbar-thumb{background:#555;border-radius:4px}
@@ -79,7 +79,11 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .settings-section .speed-options button{width:auto;padding:4px 10px;font-size:12px;background:#333;border-radius:3px}
 .settings-section .speed-options button.active{background:rgb(116,192,252);color:#000}
 .settings-section .speed-options button:hover{background:#444}
-#subtitle-menu,#audio-menu{max-height:200px;overflow-y:auto}
+.shortcut-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0;font-size:12.5px;color:#ccc}
+.shortcut-row span:first-child{white-space:nowrap}
+.shortcut-row span:last-child{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.shortcut-row kbd{background:#333;border:1px solid #4a4a4a;border-bottom-width:2px;border-radius:4px;padding:1px 6px;font-size:10.5px;color:#fff;font-family:inherit;white-space:nowrap}
+#subtitle-menu,#subtitle-menu-set,#audio-menu{max-height:200px;overflow-y:auto}
 .subtitle-sync{display:none;padding:8px;background:#1a1a1a;border-radius:4px;margin-top:4px}
 .subtitle-sync.show{display:block}
 .subtitle-sync label{display:block;margin-bottom:4px;color:#aaa;font-size:12px}
@@ -357,6 +361,14 @@ button.upd-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-
           <div class="speed-options" id="speedmenu"></div>
         </div>
         <div class="settings-section">
+          <h4 class="section-head"><span>Subtitles</span><button class="palette-btn" id="pal-sub-set" title="Subtitle style"><svg viewBox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/></svg></button></h4>
+          <div id="subtitle-menu-set"></div>
+          <button class="external-track-btn" id="load-subtitle-btn-set">
+            <svg class="menu-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            Load subtitle file
+          </button>
+        </div>
+        <div class="settings-section">
           <h4>Audio Tracks</h4>
           <div id="audio-menu"></div>
           <button class="external-track-btn" id="load-audio-btn">
@@ -394,6 +406,18 @@ button.upd-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-
             <span id="live-captions-max-lines-value">3</span>
           </div>
         </div>
+        <div class="settings-section">
+          <h4>Keyboard &amp; Mouse</h4>
+          <div class="shortcut-row"><span>Play / Pause</span><span><kbd>Space</kbd> <kbd>Click video</kbd></span></div>
+          <div class="shortcut-row"><span>Fullscreen</span><span><kbd>F</kbd> <kbd>2&times; right-click</kbd></span></div>
+          <div class="shortcut-row"><span>Seek &minus;10s / +10s</span><span><kbd>&larr;</kbd> <kbd>&rarr;</kbd></span></div>
+          <div class="shortcut-row"><span>Volume up / down</span><span><kbd>&uarr;</kbd> <kbd>&darr;</kbd> <kbd>Wheel</kbd></span></div>
+          <div class="shortcut-row"><span>Mute</span><span><kbd>M</kbd></span></div>
+          <div class="shortcut-row"><span>Live captions</span><span><kbd>C</kbd></span></div>
+          <div class="shortcut-row"><span>Speed down / up</span><span><kbd>[</kbd> <kbd>]</kbd></span></div>
+          <div class="shortcut-row"><span>Maximize window</span><span><kbd>Double-click title</kbd></span></div>
+          <div class="shortcut-row"><span>Close menus</span><span><kbd>Esc</kbd></span></div>
+        </div>
       </div>
     </div>
     <button id="play"></button>
@@ -412,7 +436,7 @@ button.upd-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-
     <button id="fsbtn"></button>
   </div>
 </div>
-<div class="dnd" id="dnd">Drop video here</div>
+<div class="dnd" id="dnd">Drop video, folder or subtitle here</div>
 <div class="style-backdrop" id="stylebackdrop"></div>
 <div class="style-popup" id="stylepopup">
   <div class="style-head"><span>Subtitle Style</span><button id="styleclose" title="Close">&#10005;</button></div>
@@ -472,6 +496,7 @@ const spd=document.getElementById("spd");
 const ctl=document.getElementById("ctl");
 const speedmenu=document.getElementById("speedmenu");
 const subtitleMenu=document.getElementById("subtitle-menu");
+const subtitleMenuSet=document.getElementById("subtitle-menu-set");
 const audioMenu=document.getElementById("audio-menu");
 const loadSubtitleBtn=document.getElementById("load-subtitle-btn");
 const loadAudioBtn=document.getElementById("load-audio-btn");
@@ -542,6 +567,7 @@ document.addEventListener("fullscreenchange",()=>{fsbtn.innerHTML=document.fulls
 
 // ===== Custom titlebar window controls =====
 function postMsg(o){if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage(typeof o==="string"?o:JSON.stringify(o));}
+try{postMsg("fsap:"+typeof window.showDirectoryPicker+":"+window.isSecureContext+":"+location.protocol+":"+location.origin+":"+JSON.stringify(document.getElementById("open").getBoundingClientRect()));}catch(err){}
 document.getElementById("tb-min").onclick=e=>{e.stopPropagation();postMsg({type:"win-min"});};
 document.getElementById("tb-max").onclick=e=>{e.stopPropagation();postMsg({type:"win-max"});};
 document.getElementById("tb-close").onclick=e=>{e.stopPropagation();postMsg({type:"win-close"});};
@@ -584,9 +610,10 @@ function positionMenu(m,a){m.hidden=false;const r=a.getBoundingClientRect(),mr=m
  m.style.top="auto";
  m.style.bottom=(innerHeight-r.top+8)+"px";}
 document.getElementById("open").onclick=e=>{e.stopPropagation();const show=openmenu.hidden;closeAllMenus();
- if(show){positionMenu(openmenu,document.getElementById("open"));openmenu.hidden=false;}};
+ if(show){positionMenu(openmenu,document.getElementById("open"));openmenu.hidden=false;
+  try{postMsg("orect:"+JSON.stringify([document.getElementById("om-video").getBoundingClientRect(),document.getElementById("om-playlist").getBoundingClientRect()]));}catch(err){}}};
 document.getElementById("om-video").onclick=e=>{e.stopPropagation();openmenu.hidden=true;document.getElementById("f").click();};
-document.getElementById("om-playlist").onclick=e=>{e.stopPropagation();openmenu.hidden=true;document.getElementById("folder-input").click();};
+document.getElementById("om-playlist").onclick=e=>{e.stopPropagation();openmenu.hidden=true;pickFolderPlaylist();};
 ccbtn.onclick=e=>{e.stopPropagation();const show=ccmenu.hidden;closeAllMenus();
  if(show){renderSubtitleMenu();ccmenu.hidden=false;positionMenu(ccmenu,ccbtn);updateCcActive();}};
 document.getElementById("cc-local").onclick=e=>{e.stopPropagation();
@@ -617,6 +644,11 @@ function formatSRT(tracks){return tracks.map((t,i)=>`${i+1}\n${fmtTime(t.start)}
 function fmtTime(s){const h=Math.floor(s/3600).toString().padStart(2,'0');const m=Math.floor((s%3600)/60).toString().padStart(2,'0');const sec=Math.floor(s%60).toString().padStart(2,'0');const ms=Math.floor((s%1)*1000).toString().padStart(3,'0');return `${h}:${m}:${sec},${ms}`;}
 
 function renderSubtitleMenu(){
+  renderSubtitleMenuInto(subtitleMenu,'cc');
+  renderSubtitleMenuInto(subtitleMenuSet,'set');
+  updateCcActive();
+}
+function renderSubtitleMenuInto(subtitleMenu,where){
   subtitleMenu.innerHTML='';
   let hasTracks=false;
   // Subtitles detected in the loaded playlist folder (associated with current video)
@@ -626,7 +658,7 @@ function renderSubtitleMenu(){
       const item=document.createElement('div');
       item.className='track-item';
       item.innerHTML=`<span class="track-lang">Sub</span><span class="track-label">${escHtml(it.subFile.name)}</span><span class="track-default">Detected</span>`;
-      item.onclick=()=>{loadExternalSubtitle(it.subFile);};
+      item.onclick=()=>{loadExternalSubtitle(it.subFile);if(where==='set')settingsmenu.classList.remove("show");else ccmenu.hidden=true;};
       subtitleMenu.appendChild(item);
     }
   });
@@ -638,7 +670,7 @@ function renderSubtitleMenu(){
       const item=document.createElement('div');
       item.className='track-item'+(currentSubtitleTrack===track?' active':'');
       item.innerHTML=`<span class="track-lang">${track.language||'Und'}</span><span class="track-label">${track.label||'Track '+(i+1)}</span>${track.default?'<span class="track-default">Default</span>':''}`;
-      item.onclick=()=>{selectSubtitleTrack(i);ccmenu.hidden=true;};
+      item.onclick=()=>{selectSubtitleTrack(i);if(where==='set')settingsmenu.classList.remove("show");else ccmenu.hidden=true;};
       subtitleMenu.appendChild(item);
     }
   }
@@ -648,7 +680,7 @@ function renderSubtitleMenu(){
     const item=document.createElement('div');
     item.className='track-item'+(currentSubtitleTrack===sub?' active':'');
     item.innerHTML=`<span class="track-lang">${sub.lang||'Ext'}</span><span class="track-label">${escHtml(sub.name||'External '+ (idx+1))}</span><span class="track-default">External</span>`;
-    item.onclick=()=>{selectExternalSubtitle(sub);ccmenu.hidden=true;};
+    item.onclick=()=>{selectExternalSubtitle(sub);if(where==='set')settingsmenu.classList.remove("show");else ccmenu.hidden=true;};
     subtitleMenu.appendChild(item);
   });
   if(!hasTracks){
@@ -656,13 +688,12 @@ function renderSubtitleMenu(){
   }
   // Add sync controls if external subtitle selected
   if(currentSubtitleTrack&&externalSubtitles.includes(currentSubtitleTrack)){
-    addSubtitleSyncControls();
+    addSubtitleSyncControls(subtitleMenu);
   }
-  updateCcActive();
 }
 
-function addSubtitleSyncControls(){
-  const existing=document.querySelector('.subtitle-sync');
+function addSubtitleSyncControls(subtitleMenu){
+  const existing=subtitleMenu.querySelector('.subtitle-sync');
   if(existing)existing.remove();
   const syncDiv=document.createElement('div');
   syncDiv.className='subtitle-sync show';
@@ -674,13 +705,14 @@ function addSubtitleSyncControls(){
     </div>
   `;
   subtitleMenu.appendChild(syncDiv);
-  document.getElementById('sync-subtitle-btn').onclick=()=>{
-    subtitleOffset=parseFloat(document.getElementById('subtitle-offset').value)||0;
+  const offsetInput=syncDiv.querySelector('#subtitle-offset');
+  syncDiv.querySelector('#sync-subtitle-btn').onclick=()=>{
+    subtitleOffset=parseFloat(offsetInput.value)||0;
     applySubtitleSync();
   };
-  document.getElementById('reset-subtitle-btn').onclick=()=>{
+  syncDiv.querySelector('#reset-subtitle-btn').onclick=()=>{
     subtitleOffset=0;
-    document.getElementById('subtitle-offset').value=0;
+    offsetInput.value=0;
     applySubtitleSync();
   };
 }
@@ -741,6 +773,7 @@ function loadExternalSubtitle(file){
 }
 
 loadSubtitleBtn.onclick=()=>subtitleFileInput.click();
+document.getElementById("load-subtitle-btn-set").onclick=()=>subtitleFileInput.click();
 subtitleFileInput.onchange=e=>{
   Array.from(e.target.files).forEach(loadExternalSubtitle);
   e.target.value='';
@@ -1080,6 +1113,7 @@ function playStandalone(file){
   v.src=URL.createObjectURL(file);
   v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});
   setVideoName(file.name);
+  renderSubtitleMenu();
 }
 function playPl(i){
   if(!playlist[i])return;
@@ -1111,6 +1145,8 @@ function buildPlaylist(files){
   renderPlList();
   playPl(0);
   setVideoName(folder);
+  renderSubtitleMenu();
+  try{postMsg("pl:"+playlist.length+":"+playlist.map(x=>x.name).join(","));}catch(e){}
 }
 function renderPlList(){
   const pllist=document.getElementById('pllist');
@@ -1151,7 +1187,65 @@ document.getElementById("f").onchange=e=>{const f=e.target.files[0];if(f)playSta
 showCtl();
 ["dragenter","dragover"].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault();dnd.classList.add("show");}));
 ["dragleave","drop"].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault();dnd.classList.remove("show");}));
-document.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f&&isVideoFile(f)){playStandalone(f);}});
+function isSubtitleFile(f){return ['srt','vtt','ass','ssa'].includes((f.name.split('.').pop()||'').toLowerCase());}
+function readAllEntries(reader){return new Promise(res=>{const all=[];(function next(){reader.readEntries(es=>{if(!es.length){res(all);return;}all.push(...es);next();},()=>res(all));})();});}
+function entryFile(en,path){return new Promise((res,rej)=>{en.file(f=>{if(path){try{Object.defineProperty(f,'webkitRelativePath',{value:path});}catch(err){}}res(f);},rej);});}
+function walkEntry(en,path){
+  if(en.isFile)return entryFile(en,path);
+  if(!en.isDirectory)return Promise.resolve([]);
+  return readAllEntries(en.createReader()).then(ents=>Promise.all(ents.map(c=>walkEntry(c,path?path+'/'+c.name:c.name)))).then(a=>[].concat(...a));
+}
+function handleDropFiles(files,fromFolder){
+  const vids=files.filter(isVideoFile);
+  const subs=files.filter(isSubtitleFile);
+  if(!vids.length&&!subs.length)return;
+  if(vids.length>1||(fromFolder&&vids.length)){buildPlaylist(files);return;}
+  if(vids.length===1){
+    playStandalone(vids[0]);
+    const base=vids[0].name.replace(/\.[^.]+$/,'').toLowerCase();
+    const m=subs.find(s=>s.name.replace(/\.[^.]+$/,'').toLowerCase()===base);
+    if(m)loadExternalSubtitle(m);
+    return;
+  }
+  if(subs.length&&v.src){subs.forEach(loadExternalSubtitle);}
+}
+async function walkDirHandle(h,prefix){
+  const out=[];
+  for await(const e of h.values()){
+    const p=prefix?prefix+"/"+e.name:e.name;
+    if(e.kind==="directory"){out.push(...await walkDirHandle(e,p));}
+    else{const f=await e.getFile();try{Object.defineProperty(f,"webkitRelativePath",{value:p});}catch(err){}out.push(f);}
+  }
+  return out;
+}
+async function pickFolderPlaylist(){
+  if(window.showDirectoryPicker){
+    try{
+      const h=await window.showDirectoryPicker({mode:"read"});
+      const files=await walkDirHandle(h,h.name);
+      if(files.length)buildPlaylist(files);
+      return;
+    }catch(err){
+      if(err&&err.name==="AbortError")return;
+    }
+  }
+  document.getElementById("folder-input").click();
+}
+document.addEventListener("drop",e=>{
+  const dt=e.dataTransfer;if(!dt)return;
+  const entries=[];
+  if(dt.items&&dt.items.length){
+    for(let i=0;i<dt.items.length;i++){
+      const it=dt.items[i];
+      if(it.kind==='file'&&it.webkitGetAsEntry)entries.push(it.webkitGetAsEntry());
+    }
+  }
+  if(entries.some(en=>en&&en.isDirectory)){
+    Promise.all(entries.filter(Boolean).map(en=>walkEntry(en,en.isDirectory?en.name:''))).then(arr=>handleDropFiles([].concat(...arr),true)).catch(()=>{});
+    return;
+  }
+  handleDropFiles(Array.from(dt.files||[]),false);
+});
 document.addEventListener("wheel",e=>{e.preventDefault();applyVolume(Math.max(0,Math.min(2,+vol.value+(e.deltaY<0?0.05:-0.05))));showCtl();});
 // ===== Update system (GitHub releases) =====
 const REPO='DeepanshuK2002/Personal-Video-Player---PVP';
@@ -1291,6 +1385,24 @@ enum UserEvent {
     Js(String),
 }
 
+#[cfg(windows)]
+#[link(name = "user32")]
+extern "system" {
+    fn GetSystemMetrics(i: i32) -> i32;
+    fn GetDpiForWindow(hwnd: isize) -> u32;
+    fn SystemParametersInfoW(action: u32, param: u32, pv: *mut RECT, win_ini: u32) -> i32;
+}
+
+#[cfg(windows)]
+#[repr(C)]
+#[derive(Default)]
+struct RECT {
+    left: i32,
+    top: i32,
+    right: i32,
+    bottom: i32,
+}
+
 fn parse_ver(s: &str) -> (u64, u64, u64) {
     let t = s.trim().trim_start_matches('v');
     let mut it = t.split('.');
@@ -1313,12 +1425,35 @@ fn main() {
     let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
     let port = listener.local_addr().unwrap().port();
     let cv = current_video.clone();
+    let html_slot: Arc<Mutex<Option<String>>> = Arc::new(Mutex::new(None));
+    let hs = html_slot.clone();
     std::thread::spawn(move || {
         use std::io::{Read, Write};
         for mut stream in listener.incoming().flatten() {
             let mut buf = [0u8; 8192];
             let n = stream.read(&mut buf).unwrap_or(0);
             let req = String::from_utf8_lossy(&buf[..n]).to_string();
+            let uri = req.split_whitespace().nth(1).unwrap_or("/").to_string();
+            if uri == "/" || uri.starts_with("/?") {
+                let page = hs.lock().ok().and_then(|g| g.clone()).unwrap_or_default();
+                if page.is_empty() {
+                    let _ = stream.write_all(b"HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n");
+                } else {
+                    let resp = format!(
+                        "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+                        page.len()
+                    );
+                    let _ = stream.write_all(resp.as_bytes());
+                    let _ = stream.write_all(page.as_bytes());
+                }
+                let _ = stream.flush();
+                continue;
+            }
+            if !uri.starts_with("/video") {
+                let _ = stream.write_all(b"HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n");
+                let _ = stream.flush();
+                continue;
+            }
             let path = cv.lock().ok().and_then(|g| g.clone());
             if let Some(p) = path {
                 if let Ok(data) = std::fs::read(&p) {
@@ -1385,6 +1520,40 @@ fn main() {
         .with_window_icon(icon)
         .build(&event_loop)
         .unwrap());
+    // Fit the initial window inside the screen (high-DPI / small screens).
+    // NOTE: window.scale_factor() reports 1.0 before the window is first
+    // shown, and GetDpiForSystem() is unreliable here, so query the real
+    // per-window DPI via GetDpiForWindow and size in physical pixels.
+    unsafe {
+        use raw_window_handle::HasRawWindowHandle as _;
+        let sw = GetSystemMetrics(0) as f64;
+        let sh = GetSystemMetrics(1) as f64;
+        let hwnd = match window.raw_window_handle() {
+            Ok(raw_window_handle::RawWindowHandle::Win32(h)) => h.hwnd.get(),
+            _ => 0,
+        };
+        let d = GetDpiForWindow(hwnd);
+        let sc = if d > 0 { d as f64 / 96.0 } else { 1.0 };
+        let w = 960f64.min(sw * 0.94 / sc).max(600f64);
+        let h = 540f64.min(sh * 0.90 / sc).max(360f64);
+        let pw = (w * sc) as u32;
+        let ph = (h * sc) as u32;
+        let _ = window.set_inner_size(tao::dpi::PhysicalSize::new(pw, ph));
+        let _ = window.set_outer_position(tao::dpi::PhysicalPosition::new(
+            (sw as i32 - pw as i32) / 2,
+            (sh as i32 - ph as i32) / 2,
+        ));
+        let isz = window.inner_size();
+        let _ = std::fs::write(
+            "C:\\Users\\Public\\pvp_sizing_pre.txt",
+            format!(
+                "sw={sw} sh={sh} hwnd={hwnd} dpi={d} sc={sc} pw={pw} ph={ph} sf={} inner={}x{}",
+                window.scale_factor(),
+                isz.width,
+                isz.height
+            ),
+        );
+    }
     let mut html = HTML.to_string();
     html = html.replace(
         "const BAKED_VERSION='0.0.0';",
@@ -1398,6 +1567,7 @@ fn main() {
         let file_url = format!("http://127.0.0.1:{}/video", port);
         html = html.replace("const v=document.getElementById(\"v\");", &format!("const v=document.getElementById(\"v\");v.src=\"{}\";setVideoName(\"{}\");v.addEventListener('loadeddata',()=>{{if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage('loaded');}});v.addEventListener('error',()=>{{if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage('error:'+((v.error&&v.error.message)||'unknown'));}});v.muted=true;v.play().then(()=>{{v.muted=false;}}).catch(()=>{{}});", file_url, path.replace("\\", "\\\\")));
     }
+    *html_slot.lock().unwrap() = Some(html);
     let w = window.clone();
     let w2 = window.clone();
     let _cv = current_video.clone();
@@ -1422,10 +1592,26 @@ fn main() {
     let px = proxy_ipc.clone();
 
     let webview = WebViewBuilder::new_with_web_context(&mut web_context)
-        .with_html(html)
+        .with_url(format!("http://127.0.0.1:{}/", port))
         .with_devtools(true)
+        .with_permission_handler(|kind| match kind {
+            wry::PermissionKind::FileSystemAccess => wry::PermissionResponse::Allow,
+            _ => wry::PermissionResponse::Default,
+        })
         .with_ipc_handler(move |req| {
             let body = req.body();
+            if body.starts_with("fsap:") {
+                let _ = std::fs::write("C:\\Users\\Public\\pvp_fsap.txt", body);
+                return;
+            }
+            if body.starts_with("orect") {
+                let _ = std::fs::write("C:\\Users\\Public\\pvp_orect.txt", body);
+                return;
+            }
+            if body.starts_with("pl:") {
+                let _ = std::fs::write("C:\\Users\\Public\\pvp_pl.txt", body);
+                return;
+            }
             if body == "loaded" || body.starts_with("error:") || body == "ping" {
                 let _ = std::fs::write("C:\\Users\\Public\\pvp_video_status.txt", body);
             }
@@ -1596,8 +1782,46 @@ fn main() {
         .build(&*window)
         .unwrap();
     
+    let wfit = window.clone();
+    let mut fitted = false;
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
+        if !fitted {
+            if let Event::MainEventsCleared = event {
+                fitted = true;
+                unsafe {
+                    use raw_window_handle::HasRawWindowHandle as _;
+                    let hwnd = match wfit.raw_window_handle() {
+                        Ok(raw_window_handle::RawWindowHandle::Win32(h)) => h.hwnd.get(),
+                        _ => 0,
+                    };
+                    let d = GetDpiForWindow(hwnd);
+                    let sc = if d > 0 { d as f64 / 96.0 } else { wfit.scale_factor() };
+                    let mut rc = RECT::default();
+                    SystemParametersInfoW(0x0030, 0, &mut rc as *mut RECT, 0);
+                    let sw = (rc.right - rc.left) as f64;
+                    let sh = (rc.bottom - rc.top) as f64;
+                    let w = 960f64.min(sw * 0.94 / sc).max(600f64);
+                    let h = 540f64.min(sh * 0.90 / sc).max(360f64);
+                    let pw = (w * sc) as u32;
+                    let ph = (h * sc) as u32;
+                    let _ = wfit.set_inner_size(tao::dpi::PhysicalSize::new(pw, ph));
+                    let _ = wfit.set_outer_position(tao::dpi::PhysicalPosition::new(
+                        rc.left + (sw as i32 - pw as i32) / 2,
+                        rc.top + (sh as i32 - ph as i32) / 2,
+                    ));
+                    let os = wfit.outer_size();
+                    let isz = wfit.inner_size();
+                    let _ = std::fs::write(
+                        "C:\\Users\\Public\\pvp_sizing.txt",
+                        format!(
+                            "d={d} hwnd={hwnd} sc={sc} pw={pw} ph={ph} work={}x{}+{}+{} outer={}x{} inner={}x{}",
+                            sw, sh, rc.left, rc.top, os.width, os.height, isz.width, isz.height
+                        ),
+                    );
+                }
+            }
+        }
         match event {
             Event::UserEvent(UserEvent::Js(code)) => {
                 let _ = webview.evaluate_script(&code);
