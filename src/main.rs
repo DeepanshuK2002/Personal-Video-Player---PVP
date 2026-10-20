@@ -24,7 +24,7 @@ body:not(.fs) #v{top:32px}
 .row{display:flex;align-items:center;gap:10px}
 button,label{background:transparent;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;padding:4px}
 button svg, label svg{width:20px;height:20px;fill:#fff}
-#fsbtn svg{fill:none}
+#fsbtn svg{width:17px;height:17px;fill:none}
 #tl{flex:1;height:6px;background:rgba(128,128,128,0.35);border-radius:3px;cursor:pointer;position:relative}
 #fill{height:100%;background:rgb(116,192,252);border-radius:3px;width:0}
 .volwrap{position:relative;display:flex;align-items:center;gap:4px}
@@ -47,6 +47,8 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 .brandmark .settings-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:17px;height:17px;opacity:0;transition:opacity 0.2s;stroke:#fff;fill:none;pointer-events:none}
 .spdind{position:fixed;top:44px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:21;white-space:nowrap}
 .spdind.show{opacity:1}
+.pl-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#fff;padding:14px 22px;border-radius:10px;font-size:15px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:30;white-space:nowrap}
+.pl-toast.show{opacity:1}
 .volind{position:fixed;top:44px;right:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:8px;font-size:22px;font-weight:600;opacity:0;transition:opacity .4s;pointer-events:none;z-index:20}
 
 /* CC button */
@@ -243,11 +245,20 @@ button svg, label svg{width:20px;height:20px;fill:#fff}
 #st-done:hover{filter:brightness(1.1)}
 
 /* Custom titlebar */
-#titlebar{position:fixed;top:0;left:0;right:0;height:32px;display:flex;align-items:center;justify-content:space-between;background:#171717;border-bottom:1px solid #0d0d0d;-webkit-app-region:drag;z-index:60;user-select:none}
+#titlebar{position:fixed;top:0;left:0;right:0;height:32px;display:flex;align-items:center;background:#171717;border-bottom:1px solid #0d0d0d;-webkit-app-region:drag;z-index:60;user-select:none}
 body.fs #titlebar{display:none}
 body:not(.fs) #v{top:32px}
 body:not(.fs) .dnd{top:32px}
-#tb-title{font-size:11px;font-weight:600;letter-spacing:.8px;color:#8ab4d8;padding-left:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
+#tb-brand{font-size:11px;font-weight:600;letter-spacing:.8px;color:#8ab4d8;padding-left:12px;white-space:nowrap;flex-shrink:0}
+#tb-divider{width:1px;height:14px;background:#555;margin:0 8px;flex-shrink:0}
+#tb-title{font-size:11px;color:#ccc;white-space:nowrap;overflow:hidden;flex:1;min-width:0}
+#tb-title.error,.tb-err{color:#e81123}
+.tb-pl{opacity:.7}
+.tb-playic{width:9px;height:9px;fill:currentColor;opacity:.45;margin:0 5px;flex-shrink:0}
+#tb-title .tb-inner{display:inline-block;white-space:nowrap;padding-right:32px}
+#tb-title .tb-marquee{display:inline-flex;white-space:nowrap;animation:tbmq linear infinite}
+#tb-title .tb-marquee:hover{animation:none}
+@keyframes tbmq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 #tb-btns{display:flex;height:100%;-webkit-app-region:no-drag;flex-shrink:0}
 #tb-btns button{width:44px;height:100%;background:transparent;border:none;color:#bbb;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
 #tb-btns button:hover{background:#2c2c2c;color:#fff}
@@ -280,10 +291,18 @@ body:not(.fs) .dnd{top:32px}
 .pl-menu::-webkit-scrollbar-thumb{background:#555;border-radius:4px}
 .pl-menu::-webkit-scrollbar-track{background:transparent}
 .pl-head{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 8px;border-bottom:1px solid #333;margin-bottom:6px}
+.pl-head-btns{display:flex;gap:2px}
+.pl-sort-wrap{position:relative;display:flex}
+.pl-sort-menu{position:absolute;top:calc(100% + 6px);right:0;background:#222;border:1px solid #383838;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.6);z-index:60;min-width:170px;padding:5px}
+.pl-sort-menu .om-item{padding:7px 10px;font-size:12.5px}
+.pl-sort-menu .om-item.active{background:rgba(116,192,252,.15);color:rgb(116,192,252)}
+.pl-sort-sep{height:1px;background:rgba(255,255,255,.12);margin:5px 8px}
 .pl-head span{font-size:11px;text-transform:uppercase;color:#888;letter-spacing:.5px}
 .pl-head button{background:transparent;border:none;padding:3px;border-radius:4px;display:flex;cursor:pointer;color:#ccc}
 .pl-head button:hover{background:#333}
 .pl-head button.on{color:rgb(116,192,252);background:rgba(116,192,252,.15)}
+#sort-btn{font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:#888;padding:4px 8px;border-radius:4px}
+#sort-btn:hover{background:#333;color:#ccc}
 .pl-head button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pl-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:5px;font-size:12.5px;color:#ddd;cursor:pointer;user-select:none;border:2px solid transparent}
 .pl-item:hover{background:#2c2c2c}
@@ -331,7 +350,9 @@ button.upd-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-
 
 </style></head><body>
 <div id="titlebar">
-  <span id="tb-title">PVP+</span>
+  <span id="tb-brand">PVP+</span>
+  <span id="tb-divider" style="display:none"></span>
+  <span id="tb-title"></span>
   <div id="tb-btns">
     <button id="tb-playlist" title="Playlist" hidden><svg viewBox="0 0 24 24"><path d="M12 12H3"/><path d="M16 6H3"/><path d="M12 18H3"/><path d="m16 12 5 3-5 3v-6Z"/></svg></button>
     <button id="tb-update" title="Update available" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg></button>
@@ -430,6 +451,7 @@ button.upd-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-
       <input type="range" class="vol" id="vol" min="0" max="2" step="0.01" value="1">
 <div class="volind" id="volind">100%</div>
 <div class="spdind" id="spdind">1x</div>
+<div class="pl-toast" id="pl-toast"></div>
     </div>
     <button class="ccbtn" id="ccbtn" title="Subtitles"></button>
     <button id="open" title="Open"></button>
@@ -470,7 +492,7 @@ button.upd-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-
   <div class="cc-row" id="cc-live"><svg viewBox="0 0 24 24"><path d="M12 6v12"/><path d="m17 8-10 8"/><path d="m7 8 10 8"/></svg><span>Live subtitle</span><span class="cc-live-state" id="cc-live-state">OFF</span></div>
 </div>
 <div class="pl-menu" id="plmenu" hidden>
-  <div class="pl-head"><span>Playlist</span><button id="autoplay-btn" title="Autoplay next"><svg viewBox="0 0 24 24"><path d="M16 12H3"/><path d="M16 6H3"/><path d="M10 18H3"/><path d="m16 12 5 3-5 3v-6Z"/></svg></button></div>
+  <div class="pl-head"><span>Playlist</span><div class="pl-head-btns"><span class="pl-sort-wrap"><button id="sort-btn" title="Sort playlist">Sort By</button><div class="pl-sort-menu" id="sort-menu" hidden><div class="om-item" id="sort-time"><span>By time</span></div><div class="om-item" id="sort-name"><span>By name</span></div><div class="om-item" id="sort-dur"><span>By duration</span></div><div class="pl-sort-sep"></div><div class="om-item" id="sort-asc"><span>Ascending</span></div><div class="om-item" id="sort-desc"><span>Descending</span></div></div></span><button id="autoplay-btn" title="Autoplay next"><svg viewBox="0 0 24 24"><path d="M16 12H3"/><path d="M16 6H3"/><path d="M10 18H3"/><path d="m16 12 5 3-5 3v-6Z"/></svg></button></div></div>
   <div id="pllist"></div>
 </div>
 <div class="upd-backdrop" id="updbackdrop"></div>
@@ -535,7 +557,30 @@ function fmt(s){if(!isFinite(s))return "00:00:00";s=Math.max(0,Math.floor(s));co
 function upd(){if(v.duration){fill.style.width=(v.currentTime/v.duration*100)+"%";cur.textContent=fmt(v.currentTime);end.textContent=showRemaining?"-"+fmt(v.duration-v.currentTime):fmt(v.duration);}renderSubOverlay();}
 function toggle(){v.paused?v.play():v.pause();}
 function showCtl(){ctl.classList.remove("hide");clearTimeout(timer);if(!v.paused)timer=setTimeout(()=>ctl.classList.add("hide"),3000);}
-function setVideoName(n){if(n){const b=n.split(/[\\\\/]/).pop();document.title="PVP | "+(b||n);const t=document.getElementById("tb-title");if(t)t.textContent=(b||"PVP+");}}
+let tbPlName='',tbVidName='',tbErr='';
+function renderTitlebar(){
+  const t=document.getElementById('tb-title'),d=document.getElementById('tb-divider');
+  if(!t||!d)return;
+  let html='';
+  if(tbErr){html='<span class="tb-txt tb-err">'+escHtml(tbErr)+'</span>';}
+  else{
+    const segs=[];
+    if(tbPlName)segs.push('<span class="tb-txt tb-pl">'+escHtml(tbPlName)+'</span><svg class="tb-playic" viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20"/></svg>');
+    if(tbVidName)segs.push('<span class="tb-txt">'+escHtml(tbVidName)+'</span>');
+    html=segs.join('');
+  }
+  if(!html){t.innerHTML='';d.style.display='none';return;}
+  d.style.display='';
+  t.innerHTML='<span class="tb-inner">'+html+'</span>';
+  const inner=t.firstChild;
+  if(inner.scrollWidth>t.clientWidth+2){
+    const secs=Math.max(6,Math.round(inner.scrollWidth/45));
+    t.innerHTML='<span class="tb-marquee" style="animation-duration:'+secs+'s"><span class="tb-inner">'+html+'</span><span class="tb-inner" aria-hidden="true">'+html+'</span></span>';
+  }
+}
+function setVideoName(n){if(n){const b=n.split(/[\\\\/]/).pop();document.title="PVP | "+(b||n);tbVidName=b||n;tbErr='';renderTitlebar();}}
+function setPlaylistName(n){tbPlName=n||'';tbErr='';renderTitlebar();}
+function setTitleError(msg){tbErr=msg;renderTitlebar();}
 play.innerHTML=PLAY;document.getElementById("open").innerHTML=FOLDER;document.getElementById("volbtn").innerHTML=VOLUME;fsbtn.innerHTML=FS;ccbtn.innerHTML=CC;
 play.onclick=toggle;v.onclick=toggle;v.onplay=()=>{play.innerHTML=PAUSE;ensureAudio();if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume();};v.onpause=()=>play.innerHTML=PLAY;v.ontimeupdate=upd;
 tl.onclick=e=>{const r=tl.getBoundingClientRect();if(v.duration)v.currentTime=(e.clientX-r.left)/r.width*v.duration;};
@@ -602,7 +647,7 @@ document.addEventListener("mouseup",()=>{
 document.addEventListener("click",e=>{if(suppressNextClick){suppressNextClick=false;e.stopPropagation();e.preventDefault();}},true);
 
 // ===== Floating menus =====
-function closeAllMenus(){openmenu.hidden=true;ccmenu.hidden=true;plmenu.hidden=true;}
+function closeAllMenus(){openmenu.hidden=true;ccmenu.hidden=true;plmenu.hidden=true;const sm=document.getElementById('sort-menu');if(sm)sm.hidden=true;}
 function positionMenu(m,a){m.hidden=false;const r=a.getBoundingClientRect(),mr=m.getBoundingClientRect();
  let left=r.left+r.width/2-mr.width/2;
  left=Math.max(6,Math.min(left,innerWidth-mr.width-6));
@@ -1106,10 +1151,44 @@ let autoplay=localStorage.getItem('pvp-autoplay')!=='0';
 const autoplayBtn=document.getElementById('autoplay-btn');
 function syncAutoplay(){autoplayBtn.classList.toggle('on',autoplay);}
 autoplayBtn.onclick=e=>{e.stopPropagation();autoplay=!autoplay;try{localStorage.setItem('pvp-autoplay',autoplay?'1':'0');}catch(err){}syncAutoplay();};
+let plSortBy=localStorage.getItem('pvp-sortby')||'name';
+let plSortDir=localStorage.getItem('pvp-sortdir')||'asc';
+let plOrig=[];
+const sortBtn=document.getElementById('sort-btn');
+const sortMenu=document.getElementById('sort-menu');
+function syncSortBtn(){
+  document.getElementById('sort-time').classList.toggle('active',plSortBy==='time');
+  document.getElementById('sort-name').classList.toggle('active',plSortBy==='name');
+  document.getElementById('sort-dur').classList.toggle('active',plSortBy==='dur');
+  document.getElementById('sort-asc').classList.toggle('active',plSortDir==='asc');
+  document.getElementById('sort-desc').classList.toggle('active',plSortDir==='desc');
+}
+let plToastTimer=null;
+function showPlToast(msg){const el=document.getElementById('pl-toast');el.textContent=msg;el.classList.add('show');setTitleError(msg);clearTimeout(plToastTimer);plToastTimer=setTimeout(()=>{el.classList.remove('show');tbErr='';renderTitlebar();},2500);}
+function getPlDur(it){return new Promise(res=>{if(it.dur!=null){res(it.dur);return;}const el=document.createElement('video');el.preload='metadata';el.onloadedmetadata=()=>{it.dur=isFinite(el.duration)?el.duration:0;el.removeAttribute('src');el.load();res(it.dur);};el.onerror=()=>{it.dur=-1;res(-1);};el.src=it.url;});}
+async function applyPlSort(){
+  const cur=playlist[plIdx];
+  const dir=plSortDir==='asc'?1:-1;
+  const nameCmp=(a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'});
+  if(plSortBy==='name')playlist.sort((a,b)=>nameCmp(a,b)*dir);
+  else if(plSortBy==='time')playlist.sort((a,b)=>{const ta=(a.file&&a.file.lastModified)||0,tb=(b.file&&b.file.lastModified)||0;return (ta-tb)*dir||nameCmp(a,b);});
+  else if(plSortBy==='dur'){await Promise.all(playlist.map(getPlDur));playlist.sort((a,b)=>{const d=x=>(x.dur==null||x.dur<0)?Infinity:x.dur;return (d(a)-d(b))*dir||nameCmp(a,b);});}
+  plIdx=cur?playlist.indexOf(cur):-1;
+  renderPlList();syncSortBtn();
+}
+sortBtn.onclick=e=>{e.stopPropagation();sortMenu.hidden=!sortMenu.hidden;};
+function closeSortMenu(){sortMenu.hidden=true;}
+document.getElementById('sort-time').onclick=e=>{e.stopPropagation();plSortBy='time';try{localStorage.setItem('pvp-sortby',plSortBy);}catch(err){}closeSortMenu();applyPlSort();};
+document.getElementById('sort-name').onclick=e=>{e.stopPropagation();plSortBy='name';try{localStorage.setItem('pvp-sortby',plSortBy);}catch(err){}closeSortMenu();applyPlSort();};
+document.getElementById('sort-dur').onclick=e=>{e.stopPropagation();plSortBy='dur';try{localStorage.setItem('pvp-sortby',plSortBy);}catch(err){}closeSortMenu();applyPlSort();};
+document.getElementById('sort-asc').onclick=e=>{e.stopPropagation();plSortDir='asc';try{localStorage.setItem('pvp-sortdir',plSortDir);}catch(err){}closeSortMenu();applyPlSort();};
+document.getElementById('sort-desc').onclick=e=>{e.stopPropagation();plSortDir='desc';try{localStorage.setItem('pvp-sortdir',plSortDir);}catch(err){}closeSortMenu();applyPlSort();};
+document.addEventListener('mousedown',e=>{if(!sortMenu.hidden&&e.target.closest&&!e.target.closest('.pl-sort-wrap'))closeSortMenu();});
 function isVideoFile(f){const ext=(f.name.split('.').pop()||'').toLowerCase();return (f.type&&f.type.startsWith('video/'))||VIDEO_EXT.includes(ext);}
 function playStandalone(file){
   playlist.length=0;plIdx=-1;
   tbPlaylist.hidden=true;plmenu.hidden=true;
+  setPlaylistName('');
   v.src=URL.createObjectURL(file);
   v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});
   setVideoName(file.name);
@@ -1131,7 +1210,7 @@ function playPl(i){
 }
 function buildPlaylist(files){
   const vids=Array.from(files).filter(isVideoFile).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}));
-  if(!vids.length)return;
+  if(!vids.length){showPlToast('No video found in folder — check again');return;}
   const subs=Array.from(files).filter(f=>SUB_EXT.includes((f.name.split('.').pop()||'').toLowerCase()));
   playlist.length=0;
   vids.forEach(f=>{
@@ -1144,7 +1223,8 @@ function buildPlaylist(files){
   tbPlaylist.hidden=false;
   renderPlList();
   playPl(0);
-  setVideoName(folder);
+  applyPlSort();
+  setPlaylistName(folder);
   renderSubtitleMenu();
   try{postMsg("pl:"+playlist.length+":"+playlist.map(x=>x.name).join(","));}catch(e){}
 }
@@ -1246,7 +1326,7 @@ document.addEventListener("drop",e=>{
   }
   handleDropFiles(Array.from(dt.files||[]),false);
 });
-document.addEventListener("wheel",e=>{e.preventDefault();applyVolume(Math.max(0,Math.min(2,+vol.value+(e.deltaY<0?0.05:-0.05))));showCtl();});
+document.addEventListener("wheel",e=>{const t=e.target;if(t&&t.closest&&(t.closest("#settingsmenu")||t.closest("#plmenu")))return;e.preventDefault();applyVolume(Math.max(0,Math.min(2,+vol.value+(e.deltaY<0?0.05:-0.05))));showCtl();});
 // ===== Update system (GitHub releases) =====
 const REPO='DeepanshuK2002/Personal-Video-Player---PVP';
 const BAKED_VERSION='0.0.0';
@@ -1376,7 +1456,7 @@ document.getElementById('upd-later').onclick=()=>{closeUpdatePopup();};
 document.getElementById('upd-install').onclick=()=>{startInstall();};
 updBackdrop.onclick=()=>{closeUpdatePopup();};
 
-showCtl();applyVolume(1);applySpeed(1);hudReady=true;renderSubtitleMenu();renderAudioMenu();syncAutoplay();updateCcActive();setTimeout(checkUpdate,1200);
+showCtl();applyVolume(1);applySpeed(1);hudReady=true;renderSubtitleMenu();renderAudioMenu();syncAutoplay();syncSortBtn();renderTitlebar();updateCcActive();setTimeout(checkUpdate,1200);
 let rc=0;document.addEventListener("contextmenu",e=>{e.preventDefault();const n=Date.now();if(n-rc<400){if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");setFs(!isFs);rc=0;}else{rc=n;setTimeout(()=>rc=0,400);}});
 const p=new URLSearchParams(location.search);if(p.get("src")){try{let s=p.get("src");if(/^[a-zA-Z]:[\\\\/]/.test(s))s="file:///"+s.replace(/\\\\/g,"/").replace(/ /g,"%20");v.src=s;v.play();setVideoName(p.get("src"));}catch(e){}}
 </script></body></html>"####;
