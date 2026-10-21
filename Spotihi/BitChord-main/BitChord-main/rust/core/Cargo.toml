@@ -1,0 +1,18 @@
+[package]
+name = "spotihi-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true, features = ["v4", "serde", "js"] }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, optional = true }
+
+[features]
+default = ["tokio"]
+tokio = ["dep:tokio"]

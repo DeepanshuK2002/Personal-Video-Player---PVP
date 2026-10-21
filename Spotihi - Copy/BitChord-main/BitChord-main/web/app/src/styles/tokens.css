@@ -1,0 +1,255 @@
+/*
+ * Design tokens for SpotiHi, derived from the Figma "Spotify Redesign" design.
+ *
+ * Dark theme by default (matching the Figma design), with Spotify green accent.
+ * Font: Satoshi (Fontshare).
+ */
+
+/* Satoshi font from Fontshare */
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
+
+:root {
+  /* ---- Type ------------------------------------------------------------ */
+  --font-family: 'Satoshi', 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* font: <weight> <size>/<line-height> */
+  --header-emphasized: 700 34px / 40px var(--font-family);
+  --large-title: 700 26px / 32px var(--font-family);
+  --large-title-emphasized: 900 26px / 32px var(--font-family);
+  --title-1-emphasized: 700 22px / 26px var(--font-family);
+  --title-2: 500 18px / 24px var(--font-family);
+  --title-2-emphasized: 700 18px / 24px var(--font-family);
+  --title-3: 500 16px / 22px var(--font-family);
+  --title-3-emphasized: 700 16px / 22px var(--font-family);
+  --body: 400 14px / 19px var(--font-family);
+  --body-emphasized: 500 14px / 19px var(--font-family);
+  --body-tall: 400 14px / 20px var(--font-family);
+  --headline: 700 14px / 19px var(--font-family);
+  --body-reduced: 400 13px / 18px var(--font-family);
+  --callout: 400 12px / 16px var(--font-family);
+  --callout-medium: 500 12px / 16px var(--font-family);
+  --callout-emphasized: 600 12px / 16px var(--font-family);
+  --subhead-emphasized: 600 11px / 14px var(--font-family);
+  --caption-2: 500 10px / 13px var(--font-family);
+  --footnote: 400 11px / 14px var(--font-family);
+
+  /* ---- Layout ------------------------------------------------------------ */
+  --web-navigation-width: 260px;
+  --body-gutter: 25px;
+  --player-pill-height: 56px;
+  --player-bottom-offset: 20px;
+  --side-panel-width: 300px;
+  --mobile-top-bar-height: 52px;
+  --mini-player-height: 52px;
+
+  /* ---- Radii ------------------------------------------------------------- */
+  --radius-artwork-small: 6px;
+  --radius-artwork-medium: 8px;
+  --radius-artwork-large: 12px;
+  --radius-nav-item: 8px;
+  --radius-track-row: 6px;
+  --radius-pill: 1000px;
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --ease-out-panel: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --duration-panel: 0.3s;
+  --global-transition: opacity 0.1s ease-in;
+  --duration-arrow: 0.25s;
+
+  /* ---- z-index ----------------------------------------------------------- */
+  --z-default: 1;
+  --z-bubbles: 50;
+  --z-gpu: 1001;
+  --z-web-chrome: 9901;
+  --z-contextual-menus: 9951;
+  --z-modal: 10001;
+
+  /* ---- Colour: dark (default, matching Figma design) --------------------- */
+  color-scheme: dark;
+
+  --pageBG: #060606;
+  --pageBG-rgb: 6, 6, 6;
+
+  --systemPrimary: #e0e0e0eb;
+  --systemSecondary: #898989;
+  --systemTertiary: #89898966;
+  --systemQuaternary: #ffffff1a;
+  --systemQuinary: #ffffff0d;
+
+  --systemPrimary-onDark: #e0e0e0eb;
+  --systemSecondary-onDark: #898989;
+  --systemTertiary-onDark: #89898966;
+
+  --keyColor: #1ed760;
+  --keyColor-rgb: 30, 215, 96;
+  --keyColor-rollover: #1fdf64;
+  --keyColor-pressed: #169c46;
+  --keyColorBG: #1ed760;
+  --selectionColor: #1ed760;
+  --keyColor-focus-color: rgba(30, 215, 96, 0.6);
+
+  --systemRed: #ff453a;
+  --systemGreen: #1ed760;
+  --systemBlue: #0a84ff;
+  --systemGray: #98989d;
+  --systemGray2: #636366;
+  --systemGray3: #48484a;
+  --systemGray4: #3a3a3c;
+  --systemGray5: #2c2c2e;
+  --systemGray6: #1c1c1e;
+
+  --labelDivider: #ffffff1a;
+  --vibrantDivider: #ffffff1a;
+
+  --glassMaterialBackground: #111111cc;
+  --glassMaterialShadowColor: #00000033;
+  --glassMaterialInnerStroke: #ffffff;
+  --glassMaterialInnerStrokeAlpha: 0.1;
+  --glassMaterialBackdropFilter: saturate(180%) blur(16px);
+
+  --systemStandardThinMaterialSover: #11111180;
+  --systemStandardThickMaterialSover: #111111b3;
+  --systemHeaderMaterialSover: #060606cc;
+
+  --navSidebarSelectedState: #ffffff0d;
+  --tracklistHoverColor: #ffffff0f;
+  --shelfBG: #ffffff0d;
+  --opaqueShelfBG: #111111;
+  --footerBg: #0a0a0a;
+  --lockupHoverBGColor: #ffffff0f;
+  --genericJoeColor: #111111;
+  --modalScrimColor: #00000073;
+  --searchBarBorderColor: #ffffff26;
+  --segmentedControlBG: #ffffff1a;
+  --segmentedControlSelectedBG: #323232;
+  --button-pill-color: #000000;
+  --button-pill-background-color: #1ed760;
+  --radiosityShadowColor: #0000004d;
+  --dialogShadowColor: #0000008c;
+
+  --containerInnerStroke: #ffffff;
+  --containerInnerStrokeAlpha: 0.1;
+
+  --skeleton-fill: #ffffff12;
+  --skeleton-shimmer: #ffffff14;
+
+  /* Artwork's 0.5px inner stroke */
+  --containerInnerStroke: #ffffff;
+  --containerInnerStrokeAlpha: 0.1;
+
+  /* Skeleton fill and shimmer highlight. */
+  --skeleton-fill: #ffffff12;
+  --skeleton-shimmer: #ffffff14;
+
+  --nowPlayingBackdropBG: #060606;
+}
+
+/* Light mode override (optional, for users who prefer light) */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --pageBG: #f0f0f0;
+    --pageBG-rgb: 240, 240, 240;
+
+    --systemPrimary: #1a1a1aeb;
+    --systemSecondary: #6e6e6e;
+    --systemTertiary: #6e6e6e66;
+    --systemQuaternary: #0000001a;
+    --systemQuinary: #0000000d;
+
+    --keyColor: #1ed760;
+    --keyColor-rgb: 30, 215, 96;
+    --keyColor-rollover: #169c46;
+    --keyColor-pressed: #128a3d;
+    --keyColorBG: #1ed760;
+    --selectionColor: #1ed760;
+
+    --labelDivider: #0000001a;
+    --vibrantDivider: #0000001a;
+
+    --glassMaterialBackground: #ffffffcc;
+    --glassMaterialShadowColor: #0000001a;
+    --glassMaterialInnerStroke: #000000;
+    --glassMaterialInnerStrokeAlpha: 0.1;
+
+    --systemStandardThinMaterialSover: #ffffff80;
+    --systemStandardThickMaterialSover: #ffffffb3;
+    --systemHeaderMaterialSover: #f0f0f0cc;
+
+    --navSidebarSelectedState: #0000000d;
+    --tracklistHoverColor: #0000000f;
+    --shelfBG: #0000000d;
+    --opaqueShelfBG: #e0e0e0;
+    --footerBg: #e8e8e8;
+    --lockupHoverBGColor: #0000000f;
+    --genericJoeColor: #e0e0e0;
+    --searchBarBorderColor: #00000026;
+    --segmentedControlBG: #0000001a;
+    --segmentedControlSelectedBG: #ffffff;
+    --button-pill-color: #ffffff;
+    --button-pill-background-color: #1ed760;
+
+    --containerInnerStroke: #000000;
+    --containerInnerStrokeAlpha: 0.1;
+
+    --skeleton-fill: #0000000f;
+    --skeleton-shimmer: #ffffff99;
+  }
+}
+
+@media (min-width: 1000px) {
+  :root {
+    --body-gutter: 40px;
+  }
+}
+
+@media (min-width: 484px) and (max-width: 767.31px) {
+  :root {
+    --web-navigation-width: 33.8842975207vw;
+  }
+}
+
+/*
+ * Artwork tint on album and playlist pages (lib/usePageTint.ts): the page's
+ * labels recoloured for the artwork's own background.
+ */
+[data-tint='dark'] {
+  --systemPrimary: #e0e0e0eb;
+  --systemSecondary: color-mix(in srgb, #e0e0e0 64%, var(--page-tint));
+  --systemTertiary: color-mix(in srgb, #e0e0e0 40%, var(--page-tint));
+  --labelDivider: #ffffff1f;
+  --tracklistHoverColor: #ffffff14;
+  --systemQuinary: #ffffff12;
+  --systemQuaternary: #ffffff24;
+  --button-pill-color: #000000;
+  --button-pill-background-color: #1ed760;
+  --genericJoeColor: color-mix(in srgb, #e0e0e0 10%, var(--page-tint));
+}
+
+[data-tint='light'] {
+  --systemPrimary: #1a1a1aeb;
+  --systemSecondary: color-mix(in srgb, #1a1a1a 60%, var(--page-tint));
+  --systemTertiary: color-mix(in srgb, #1a1a1a 40%, var(--page-tint));
+  --labelDivider: #0000001f;
+  --tracklistHoverColor: #00000012;
+  --systemQuinary: #0000000f;
+  --systemQuaternary: #00000024;
+  --button-pill-color: #ffffff;
+  --button-pill-background-color: #1ed760;
+  --genericJoeColor: color-mix(in srgb, #1a1a1a 8%, var(--page-tint));
+  color: var(--systemPrimary);
+}
+
+/*
+ * The full-screen player always stands on a dark mesh, so it takes the
+ * on-dark colours whatever the page's appearance.
+ */
+[data-full-screen] {
+  color-scheme: dark;
+  --systemPrimary: var(--systemPrimary-onDark);
+  --systemSecondary: var(--systemSecondary-onDark);
+  --systemTertiary: var(--systemTertiary-onDark);
+  --systemQuaternary: #ffffff2e;
+  --systemQuinary: #ffffff1a;
+}

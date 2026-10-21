@@ -1,0 +1,20 @@
+[package]
+name = "personal-video-player"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tao = "0.37"
+wry = "0.57"
+winreg = "0.52"
+http = "1"
+resvg = "0.44"
+usvg = "0.44"
+tiny-skia = "0.11"
+
+[build-dependencies]
+resvg = "0.44"
+usvg = "0.44"
+tiny-skia = "0.11"
+image = "0.25"
+winres = "0.1"

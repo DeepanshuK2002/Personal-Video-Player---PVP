@@ -1,0 +1,29 @@
+# Rust
+target/
+Cargo.lock
+
+# WebView2
+*.WebView2/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.exe
+*.pdb
+*.dll
+*.lib
+*.exp
+
+# Installer
+*.msi
+
+# Logs
+*.log

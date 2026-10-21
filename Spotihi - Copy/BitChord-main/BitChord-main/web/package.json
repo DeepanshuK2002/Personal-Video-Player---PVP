@@ -1,0 +1,19 @@
+{
+  "name": "spotihi-web",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.11.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @spotihi/app dev",
+    "dev:ext": "pnpm --filter @spotihi/extension dev",
+    "dev:ext:firefox": "pnpm --filter @spotihi/extension dev:firefox",
+    "build": "pnpm -r build",
+    "build:site": "pnpm --filter @spotihi/extension package && pnpm --filter @spotihi/app build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "fixtures": "node scripts/capture-fixtures.mjs"
+  }
+}
