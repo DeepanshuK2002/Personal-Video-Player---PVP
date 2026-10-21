@@ -2,7 +2,7 @@ pub mod livecaptions;
 
 use std::sync::{Arc, OnceLock};
 
-pub use livecaptions::{current_language, LiveCaptionsProvider};
+pub use livecaptions::{current_language, speech_models_installed, start_speech_op, LiveCaptionsProvider};
 
 pub type Emit = Arc<dyn Fn(CaptionEvent) + Send + Sync>;
 
@@ -11,7 +11,6 @@ pub enum CapState {
     Unsupported,
     Setup,
     Ready,
-    Closed,
     Error,
 }
 
@@ -21,7 +20,6 @@ impl CapState {
             CapState::Unsupported => "unsupported",
             CapState::Setup => "setup",
             CapState::Ready => "ready",
-            CapState::Closed => "closed",
             CapState::Error => "error",
         }
     }
@@ -37,7 +35,6 @@ pub struct Capability {
 pub enum CaptionEvent {
     State(CapState, String),
     Update { text: String, is_final: bool },
-    Clear,
 }
 
 pub trait CaptionProvider: Send {
@@ -101,6 +98,5 @@ pub fn event_to_js(ev: &CaptionEvent) -> String {
             json_str(text),
             if *is_final { "true" } else { "false" }
         ),
-        CaptionEvent::Clear => "pvpCaptionClear()".to_string(),
     }
 }

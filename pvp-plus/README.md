@@ -37,7 +37,7 @@ PVP is a single `.exe` built entirely in Rust using [Tao](https://github.com/tau
 - **Progress Bar** - Click to seek, shows current/total time
 - **File Association** - Open videos directly from command line or file explorer
 - **stdin Support** - Pipe video data directly: `cat video.mp4 | pvp`
-- **Live Captions** - *(Coming Soon)*
+- **Live Captions** - Real-time speech-to-text subtitles powered by Windows Live Captions (auto-launch, hidden window, language switch, position/max-lines controls, dedicated style editor). See [docs/live-captions.md](docs/live-captions.md)
 
 ## Keyboard Shortcuts
 
