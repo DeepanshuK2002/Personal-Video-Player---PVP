@@ -423,8 +423,9 @@ body:not(.fs) .dnd{top:32px}
 .pl-empty{color:#777;font-size:12.5px;text-align:center;padding:14px}
 
 /* Version row in settings */
-#ver-row{display:flex;align-items:center;justify-content:space-between;padding:3px 4px 8px;gap:6px}
+#ver-row{display:flex;align-items:center;justify-content:space-between;padding:3px 4px 2px;gap:6px}
 #ver-text{font-size:11.5px;color:#8ab4d8;letter-spacing:.4px;font-weight:600}
+#about-row{font-size:10.5px;color:#7f93a8;letter-spacing:.3px;padding:0 4px 8px}
 button.upd-icon{background:transparent;border:none;padding:3px;border-radius:4px;display:flex;cursor:pointer;color:rgb(116,192,252)}
 button.upd-icon:hover{background:rgba(116,192,252,.18)}
 button.upd-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -503,7 +504,8 @@ button.donate-icon svg{width:15px;height:15px;fill:currentColor}
         <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <div id="settingsmenu">
-        <div id="ver-row"><span id="ver-text">PVP+ v0.4.0</span><button class="upd-icon" id="ver-upd" title="Update available" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg></button><button class="donate-icon" id="ver-donate" title="Donate (UPI)"><svg viewBox="0 0 576 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M163.9 136.9c-29.4-29.8-29.4-78.2 0-108s77-29.8 106.4 0l17.7 18 17.7-18c29.4-29.8 77-29.8 106.4 0s29.4 78.2 0 108L310.5 240.1c-6.2 6.3-14.3 9.4-22.5 9.4s-16.3-3.1-22.5-9.4L163.9 136.9zM568.2 336.3c13.1 17.8 9.3 42.8-8.5 55.9L433.1 485.5c-23.4 17.2-51.6 26.5-80.7 26.5L192 512 32 512c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l36.8 0 44.9-36c22.7-18.2 50.9-28 80-28l78.3 0 16 0 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l120.6 0 119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384c0 0 0 0 0 0l-.9 0c.3 0 .6 0 .9 0z"/></svg></button></div>
+        <div id="ver-row"><span id="ver-text">PVP+ v0.5.0</span><button class="upd-icon" id="ver-upd" title="Update available" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg></button><button class="donate-icon" id="ver-donate" title="Donate (UPI)"><svg viewBox="0 0 576 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M163.9 136.9c-29.4-29.8-29.4-78.2 0-108s77-29.8 106.4 0l17.7 18 17.7-18c29.4-29.8 77-29.8 106.4 0s29.4 78.2 0 108L310.5 240.1c-6.2 6.3-14.3 9.4-22.5 9.4s-16.3-3.1-22.5-9.4L163.9 136.9zM568.2 336.3c13.1 17.8 9.3 42.8-8.5 55.9L433.1 485.5c-23.4 17.2-51.6 26.5-80.7 26.5L192 512 32 512c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l36.8 0 44.9-36c22.7-18.2 50.9-28 80-28l78.3 0 16 0 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l120.6 0 119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384c0 0 0 0 0 0l-.9 0c.3 0 .6 0 .9 0z"/></svg></button></div>
+        <div id="about-row">Lightweight Rust video player &middot; ~3.6 MB &middot; MIT License</div>
         <div class="settings-section">
           <h4>Playback Speed</h4>
           <div class="speed-options" id="speedmenu"></div>
@@ -642,7 +644,7 @@ button.donate-icon svg{width:15px;height:15px;fill:currentColor}
       Add subtitle file
     </button>
   </div>
-  <div class="cc-row" id="cc-live"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m18.065 8.496-12.125 7"/><path d="m5.94 8.504 12.125 7"/></svg><span>Live subtitle</span><span class="cc-live-state" id="cc-live-state">OFF</span><button class="palette-btn" id="pal-cap" title="Live caption style"><svg viewBox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/></svg></button></div>
+  <div class="cc-row" id="cc-live"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m18.065 8.496-12.125 7"/><path d="m5.94 8.504 12.125 7"/></svg><span>Live subtitle</span><span class="cc-live-state" id="cc-live-state">OFF</span><button class="palette-btn" id="pal-cap-cc" title="Live caption style"><svg viewBox="0 0 24 24"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/></svg></button></div>
 </div>
 <div class="pl-menu" id="plmenu" hidden>
   <div class="pl-head"><span>Playlist</span><div class="pl-head-btns"><span class="pl-sort-wrap"><button id="sort-btn" title="Sort playlist">Sort By</button><div class="pl-sort-menu" id="sort-menu" hidden><div class="om-item" id="sort-time"><span>By time</span></div><div class="om-item" id="sort-name"><span>By name</span></div><div class="om-item" id="sort-dur"><span>By duration</span></div><div class="pl-sort-sep"></div><div class="om-item" id="sort-asc"><span>Ascending</span></div><div class="om-item" id="sort-desc"><span>Descending</span></div></div></span><button id="autoplay-btn" title="Autoplay next"><svg viewBox="0 0 24 24"><path d="M16 12H3"/><path d="M16 6H3"/><path d="M10 18H3"/><path d="m16 12 5 3-5 3v-6Z"/></svg></button></div></div>
@@ -1519,7 +1521,7 @@ bindStyleCtl('st-boxshadow','boxShadow',v=>parseInt(v),'st-boxshadow-v','');
 bindStyleCtl('st-boxshcolor','boxShadowColor',v=>v);
 bindStyleCtl('st-outline','outline',v=>parseInt(v),'st-outline-v','');
 bindStyleCtl('st-olcolor','outlineColor',v=>v);
-document.querySelectorAll('.palette-btn').forEach(b=>b.onclick=e=>{e.stopPropagation();openStylePopup(b.id==='pal-cap'?'cap':'sub');});
+document.querySelectorAll('.palette-btn').forEach(b=>b.onclick=e=>{e.stopPropagation();openStylePopup(b.id.startsWith('pal-cap')?'cap':'sub');});
 stylebackdrop.onclick=closeStylePopup;
 document.getElementById('styleclose').onclick=closeStylePopup;
 document.getElementById('st-done').onclick=closeStylePopup;

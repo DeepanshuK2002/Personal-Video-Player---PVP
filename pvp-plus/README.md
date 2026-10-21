@@ -30,14 +30,31 @@ PVP is a single `.exe` built entirely in Rust using [Tao](https://github.com/tau
 - **Custom Titlebar** - Native-feel window controls with PVP+ branding
 - **Folder Playlists** - Open a folder and play all videos in sequence with sort (time/name/duration, asc/desc)
 - **Drag & Drop** - Drop videos, folders, or subtitle files
-- **Subtitle Support** - SRT/VTT with style editor (font, size, color, background)
+- **Subtitle Support** - SRT/VTT with style editor (font, size, color, background, shadow, box shadow, outline)
+- **Live Captions** - Real-time speech-to-text subtitles powered by Windows Live Captions — 11 language models with IN USE/Download states, position (bottom/top/center/60%) and max-lines controls, dedicated style editor, never auto-starts. See [docs/live-captions.md](docs/live-captions.md)
+- **Style Editors** - Separate presets for live captions and local subtitles: font, size, colors, background, text shadow, box shadow (0 to disable) and outline stroke
+- **CC Menu** - Subtitle/live-caption quick menu with ON/OFF state and a palette icon straight into each style editor
+- **Timeline Hover Preview** - Thumbnail + timestamp preview while scrubbing; renders above captions
 - **Playback Speed Control** - 0.5x to 2x speed options
 - **Volume Boost** - Up to 200% volume
 - **Fullscreen Support** - Native fullscreen toggle
 - **Progress Bar** - Click to seek, shows current/total time
 - **File Association** - Open videos directly from command line or file explorer
 - **stdin Support** - Pipe video data directly: `cat video.mp4 | pvp`
-- **Live Captions** - Real-time speech-to-text subtitles powered by Windows Live Captions (auto-launch, hidden window, language switch, position/max-lines controls, dedicated style editor). See [docs/live-captions.md](docs/live-captions.md)
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/live-captions.png" alt="Live captions flowing over a video" width="76%">
+</p>
+
+| Settings & About | Live Caption language models |
+|---|---|
+| <img src="docs/screenshots/settings.png" alt="Settings with version and About row" width="100%"> | <img src="docs/screenshots/live-captions-settings.png" alt="Language dropdown with IN USE and Download states" width="100%"> |
+| **CC menu** | **Live Caption style editor** |
+| <img src="docs/screenshots/cc-menu.png" alt="CC menu with Live subtitle ON and palette icons" width="100%"> | <img src="docs/screenshots/style-popup.png" alt="Style editor with shadow, box shadow and outline rows" width="100%"> |
+| **Timeline hover preview** | |
+| <img src="docs/screenshots/hover-preview.png" alt="Hover preview above the caption box" width="100%"> | |
 
 ## Keyboard Shortcuts
 
@@ -57,13 +74,13 @@ PVP is a single `.exe` built entirely in Rust using [Tao](https://github.com/tau
 ## Installation
 
 ### Download (Recommended)
-Download the latest release from the [Releases](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases) page.
+Download the latest release from the [Releases](https://github.com/DeepanshuK2002/21-10-2026-Personal-Private-/releases) page.
 
 ### Build from Source
 ```bash
 # Prerequisites: Rust 1.70+, WebView2 Runtime
-git clone https://github.com/DeepanshuK2002/Personal-Video-Player---PVP.git
-cd Personal-Video-Player---PVP
+git clone https://github.com/DeepanshuK2002/21-10-2026-Personal-Private-.git
+cd 21-10-2026-Personal-Private-/pvp-plus
 cargo build --release
 ```
 

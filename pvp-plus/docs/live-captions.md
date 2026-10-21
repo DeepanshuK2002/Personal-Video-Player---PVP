@@ -13,9 +13,9 @@ Real-time speech-to-text subtitles inside PVP+, powered by the **Windows Live Ca
 
 - **Toggle**: Settings → Live Captions → *Live subtitles* button, the `Live subtitle` row in the CC menu, or press `C`
 - **Language**: Settings → Live Captions → *Language* — pick the language the speaker in the video uses. Live Captions restarts itself automatically with the new language
-- **Position**: Bottom / Top / Center
-- **Max Lines**: caps the caption box to that many lines (long text is clamped with an ellipsis)
-- **Style**: the palette icon in the Live Captions section opens a style editor **for the live captions only** (font, size, colors, background, shadow) — local subtitles keep their own palette in the Subtitles section
+- **Position**: Bottom / Top / Center / 60% Center
+- **Max Lines**: caps the caption box to that many lines — lines are clipped whole (no half-cut line at the top)
+- **Style**: the palette icon in the Live Captions section (or on the `Live subtitle` row of the CC menu) opens a style editor **for the live captions only** (font, size, colors, background, text shadow, box shadow with 0 to disable, outline stroke) — local subtitles keep their own palette in the Subtitles section
 - **Info**: the `(i)` icon next to the palette explains how everything works
 - Captions never start on their own — turn them on with the toggle, the CC menu row, or `C`
 
