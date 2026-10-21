@@ -1,0 +1,15 @@
+# Runtime dependencies for the Enma sidecar (services/enma-api).
+#
+# The `enma` package itself is installed SEPARATELY with --no-deps by
+# `npm run enma:setup`: Enma 2.4.4 pins pydantic==2.8.2, whose pydantic-core
+# has no prebuilt wheels for recent Python (3.13), while Enma runs fine on
+# current pydantic 2.x — verified here with pydantic 2.14. Everything below is
+# exactly what the sidecar and Enma actually import at runtime.
+
+pydantic>=2.9,<3
+requests>=2.32,<3
+beautifulsoup4>=4.12
+expiringdict==1.2.2
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-dotenv>=1.0

@@ -1,2 +1,0 @@
-npm notice run @ilovecomix/web@0.1.0 npx
-npm notice run wrangler tail ilovecomix --format json

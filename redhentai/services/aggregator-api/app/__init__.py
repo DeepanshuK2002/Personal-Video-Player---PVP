@@ -1,0 +1,1 @@
+"""RedHentai Aggregator API - Hentai Manga/Manhwa Aggregator Service."""
