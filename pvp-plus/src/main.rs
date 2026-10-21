@@ -490,6 +490,7 @@ button.donate-icon svg{width:15px;height:15px;fill:currentColor}
 <video id="v"></video>
 <div class="live-captions-overlay hidden" id="live-captions-overlay"></div>
 <div id="suboverlay"></div>
+<div id="tl-preview" hidden><video id="tl-prev-v" muted playsinline></video><span id="tl-prev-t"></span></div>
 <input type="file" id="f" accept="video/*" style="display:none">
 <input type="file" id="folder-input" webkitdirectory multiple style="display:none">
 <input type="file" id="subtitle-file" accept=".srt,.vtt,.ass,.ssa" style="display:none" multiple>
@@ -582,7 +583,7 @@ button.donate-icon svg{width:15px;height:15px;fill:currentColor}
     </div>
     <button id="play"></button>
     <span class="time" id="cur">00:00:00</span>
-    <div id="tl"><div id="fill"></div><div id="tl-preview" hidden><video id="tl-prev-v" muted playsinline></video><span id="tl-prev-t"></span></div></div>
+    <div id="tl"><div id="fill"></div></div>
     <span class="time" id="end">00:00:00</span>
     <span id="spd"></span>
     <div class="volwrap">
@@ -750,9 +751,10 @@ tl.addEventListener('mousemove',e=>{
   const t=f*v.duration;
   tlPrev.hidden=false;
   tlPrevT.textContent=fmt(t);
-  let x=(e.clientX-r.left)-tlPrev.offsetWidth/2;
-  x=Math.max(4,Math.min(r.width-tlPrev.offsetWidth-4,x));
+  let x=e.clientX-tlPrev.offsetWidth/2;
+  x=Math.max(4,Math.min(window.innerWidth-tlPrev.offsetWidth-4,x));
   tlPrev.style.left=x+'px';
+  tlPrev.style.bottom=(window.innerHeight-r.top+8)+'px';
   if(isFinite(t)&&Math.abs((tlPrevV.currentTime||0)-t)>0.25&&Date.now()-tlPrevLastSeek>120){
     tlPrevLastSeek=Date.now();
     try{tlPrevV.currentTime=t;}catch(err){}
