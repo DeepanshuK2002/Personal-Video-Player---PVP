@@ -179,7 +179,7 @@ the Rust binary as a string — no asset folder, no runtime downloads.
 
 ```text
 ┌────────────┐   Tao (window)   ┌──────────────────┐   HTTP Range   ┌──────────┐
-│  Windows   │◀────────────────▶│  Rust core       │◀──────────────▶│ WebView2 │
+│  Windows   │◀──────────────▶│  Rust core        │◀─────────────▶│ WebView2 │
 │  desktop   │                  │  server + IPC    │                │ UI/video │
 └────────────┘                  └──────────────────┘                └──────────┘
 ```
