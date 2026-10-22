@@ -4,7 +4,7 @@ use std::sync::{Arc, Mutex};
 use tao::event::{Event, WindowEvent};
 use tao::event_loop::{ControlFlow, EventLoop};
 use tao::window::WindowBuilder;
-use std::io::{self, Read, Write, IsTerminal};
+use std::io::{self, Read, IsTerminal};
 use wry::WebViewBuilder;
 #[cfg(windows)]
 use wry::WebViewBuilderExtWindows;
@@ -17,7 +17,7 @@ use captions::{
 };
 
 const HTML: &str = r####"<!DOCTYPE html>
-<html><head><meta charset="utf-8"><style>
+<html><head><meta charset="utf-8"><title>PVP+</title><style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#fff;font-family:system-ui,sans-serif;height:100vh;overflow:hidden;position:relative}
 #v{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
@@ -423,8 +423,8 @@ body:not(.fs) .dnd{top:32px}
 .pl-empty{color:#777;font-size:12.5px;text-align:center;padding:14px}
 
 /* Version row in settings */
-#ver-row{display:flex;align-items:center;justify-content:space-between;padding:3px 4px 2px;gap:6px}
-#ver-text{font-size:11.5px;color:#8ab4d8;letter-spacing:.4px;font-weight:600}
+#ver-row{display:flex;align-items:center;padding:3px 4px 2px;gap:6px}
+#ver-text{font-size:11.5px;color:#8ab4d8;letter-spacing:.4px;font-weight:600;flex:1}
 #about-row{font-size:10.5px;color:#7f93a8;letter-spacing:.3px;padding:0 4px 8px}
 button.upd-icon{background:transparent;border:none;padding:3px;border-radius:4px;display:flex;cursor:pointer;color:rgb(116,192,252)}
 button.upd-icon:hover{background:rgba(116,192,252,.18)}
@@ -505,7 +505,7 @@ button.donate-icon svg{width:15px;height:15px;fill:currentColor}
       </div>
       <div id="settingsmenu">
         <div id="ver-row"><span id="ver-text">PVP+ v0.6.0</span><button class="upd-icon" id="ver-upd" title="Update available" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg></button><button class="donate-icon" id="ver-donate" title="Donate (UPI)"><svg viewBox="0 0 576 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M163.9 136.9c-29.4-29.8-29.4-78.2 0-108s77-29.8 106.4 0l17.7 18 17.7-18c29.4-29.8 77-29.8 106.4 0s29.4 78.2 0 108L310.5 240.1c-6.2 6.3-14.3 9.4-22.5 9.4s-16.3-3.1-22.5-9.4L163.9 136.9zM568.2 336.3c13.1 17.8 9.3 42.8-8.5 55.9L433.1 485.5c-23.4 17.2-51.6 26.5-80.7 26.5L192 512 32 512c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l36.8 0 44.9-36c22.7-18.2 50.9-28 80-28l78.3 0 16 0 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l120.6 0 119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384c0 0 0 0 0 0l-.9 0c.3 0 .6 0 .9 0z"/></svg></button></div>
-        <div id="about-row">Lightweight Rust video player &middot; ~3.6 MB &middot; MIT License</div>
+        <div id="about-row">Lightweight Rust video player &middot; ~3.8 MB &middot; MIT License</div>
         <div class="settings-section">
           <h4>Playback Speed</h4>
           <div class="speed-options" id="speedmenu"></div>
@@ -1832,18 +1832,15 @@ function closeUpdatePopup(){
   if(downloading||installing)return;
   updPopup.classList.remove('show');updBackdrop.classList.remove('show');
 }
-function updB64(u8){
-  let s='';const CH=0x8000;
-  for(let i=0;i<u8.length;i+=CH){s+=String.fromCharCode.apply(null,u8.subarray(i,i+CH));}
-  return btoa(s);
-}
 function updReport(total,loaded){
   const f=document.getElementById('upd-bar-fill');
   const ib=document.getElementById('upd-install');
   if(total>0){const p=Math.min(100,Math.floor(loaded/total*100));f.style.width=p+'%';ib.textContent='Downloading… '+p+'%';}
   else{f.style.width='50%';ib.textContent='Downloading…';}
 }
-async function startInstall(){
+// Rust downloads the release asset with curl (the WebView fetch is blocked by
+// CORS: GitHub's download host sends no Access-Control-Allow-Origin header).
+function startInstall(){
   if(!updateInfo||downloading||installing)return;
   downloading=true;
   const ib=document.getElementById('upd-install'),lb=document.getElementById('upd-later'),cb=document.getElementById('updclose'),status=document.getElementById('updstatus');
@@ -1851,34 +1848,20 @@ async function startInstall(){
   ib.textContent='Downloading…';
   document.getElementById('updbar').hidden=false;
   status.textContent='';
-  try{
-    const resp=await fetch(updateInfo.url,{cache:'no-store'});
-    if(!resp.ok)throw new Error('HTTP '+resp.status);
-    const total=parseInt(resp.headers.get('content-length')||'',10)||updateInfo.size||0;
-    const reader=resp.body.getReader();
-    let pending=new Uint8Array(0),loaded=0,idx=0;
-    const BINSZ=256*1024;
-    while(true){
-      const rd=await reader.read();
-      if(rd.done)break;
-      const np=new Uint8Array(pending.length+rd.value.length);
-      np.set(pending);np.set(rd.value,pending.length);pending=np;
-      while(pending.length>=BINSZ){
-        postMsg({type:'update-chunk',i:idx++,data:updB64(pending.subarray(0,BINSZ))});
-        loaded+=BINSZ;pending=pending.slice(BINSZ);updReport(total,loaded);
-      }
-    }
-    if(pending.length){postMsg({type:'update-chunk',i:idx++,data:updB64(pending)});loaded+=pending.length;}
-    updReport(total,loaded);
-    downloading=false;
-    status.textContent='Verifying…';
-    postMsg({type:'update-final',bytes:loaded,tag:updateInfo.tag});
-  }catch(err){
-    downloading=false;
-    status.textContent='Download failed: '+((err&&err.message)||'network error');
-    ib.disabled=lb.disabled=cb.disabled=false;
-    ib.textContent='Retry';
-  }
+  postMsg({type:'update-begin',url:updateInfo.url,size:updateInfo.size||0,tag:updateInfo.tag});
+}
+function pvpDlProgress(p){
+  if(!downloading)return;
+  const f=document.getElementById('upd-bar-fill'),ib=document.getElementById('upd-install');
+  if(p<0){f.style.width='50%';ib.textContent='Downloading…';return;}
+  const pct=Math.min(100,Math.floor(p));f.style.width=pct+'%';ib.textContent='Downloading… '+pct+'%';
+}
+function pvpDlError(msg){
+  downloading=false;
+  document.getElementById('updstatus').textContent='Download failed: '+(msg||'network error');
+  const ib=document.getElementById('upd-install'),lb=document.getElementById('upd-later'),cb=document.getElementById('updclose');
+  ib.disabled=lb.disabled=cb.disabled=false;
+  ib.textContent='Retry';
 }
 // Called from Rust after the downloaded file is verified
 function pvpInstallReady(ok){
@@ -2810,9 +2793,7 @@ fn main() {
     let captions_ipc = captions.clone();
     let captions_loop = captions.clone();
 
-    // State for the downloaded update file (written chunk by chunk from JS)
-    let update_file: Arc<Mutex<Option<std::fs::File>>> = Arc::new(Mutex::new(None));
-    let uf = update_file.clone();
+    // Proxy used to push JS callbacks (update progress, captions, …)
     let px = proxy_ipc.clone();
 
     let webview = WebViewBuilder::new_with_web_context(&mut web_context)
@@ -2914,50 +2895,91 @@ fn main() {
                                     let _ = w2.set_inner_size(tao::dpi::PhysicalSize::new(w as u32, h as u32));
                                 }
                             }
-                            "update-chunk" => {
-                                use base64::Engine as _;
-                                if let Some(data) = msg.get("data").and_then(|v| v.as_str()) {
-                                    if let Ok(bytes) = base64::engine::general_purpose::STANDARD.decode(data) {
-                                        let mut guard = uf.lock().unwrap();
-                                        if guard.is_none() {
-                                            let p = std::env::temp_dir().join("pvp-update.exe");
-                                            let _ = std::fs::remove_file(&p);
-                                            match std::fs::File::create(&p) {
-                                                Ok(f) => *guard = Some(f),
-                                                Err(_) => {}
-                                            }
-                                        }
-                                        if let Some(f) = guard.as_mut() {
-                                            let _ = f.write_all(&bytes);
-                                        }
-                                    }
-                                }
-                            }
-                            "update-final" => {
-                                let bytes = msg.get("bytes").and_then(|v| v.as_u64()).unwrap_or(0);
+                            // Rust downloads the release asset itself: the
+                            // WebView fetch is blocked by CORS (GitHub's
+                            // download host sends no Access-Control-Allow-
+                            // Origin). curl.exe ships with Windows 10 1803+.
+                            "update-begin" => {
+                                let url = msg.get("url").and_then(|v| v.as_str()).unwrap_or("").to_string();
+                                let expect = msg.get("size").and_then(|v| v.as_u64()).unwrap_or(0);
                                 let tag = msg.get("tag").and_then(|v| v.as_str()).unwrap_or("").to_string();
-                                let mut guard = uf.lock().unwrap();
-                                let mut size_ok = false;
-                                if let Some(f) = guard.as_mut() {
-                                    let _ = f.flush();
-                                    if let Ok(md) = f.metadata() {
-                                        size_ok = bytes > 0 && md.len() == bytes;
+                                let px = px.clone();
+                                std::thread::spawn(move || {
+                                    let out = std::env::temp_dir().join("pvp-update.exe");
+                                    let _ = std::fs::remove_file(&out);
+                                    let out_s = out.to_string_lossy().to_string();
+                                    use std::os::windows::process::CommandExt;
+                                    let spawned = std::process::Command::new("curl.exe")
+                                        .args(["-L", "--fail", "-sS", "-o", &out_s, "--", &url])
+                                        .creation_flags(0x0800_0000) // CREATE_NO_WINDOW
+                                        .stdout(std::process::Stdio::null())
+                                        .stderr(std::process::Stdio::piped())
+                                        .spawn();
+                                    let mut child = match spawned {
+                                        Ok(c) => c,
+                                        Err(e) => {
+                                            let _ = px.send_event(UserEvent::Js(format!(
+                                                "pvpDlError(\"curl not available ({e})\")"
+                                            )));
+                                            return;
+                                        }
+                                    };
+                                    // Poll the output file for progress until curl exits.
+                                    while child.try_wait().ok().flatten().is_none() {
+                                        if expect > 0 {
+                                            if let Ok(md) = std::fs::metadata(&out) {
+                                                let pct = (md.len() as f64 / expect as f64 * 100.0).min(99.0);
+                                                let _ = px.send_event(UserEvent::Js(format!(
+                                                    "pvpDlProgress({pct:.0})"
+                                                )));
+                                            }
+                                        } else {
+                                            let _ = px.send_event(UserEvent::Js("pvpDlProgress(-1)".into()));
+                                        }
+                                        std::thread::sleep(std::time::Duration::from_millis(400));
                                     }
-                                }
-                                *guard = None;
-                                let newer = parse_ver(&tag) > parse_ver(env!("CARGO_PKG_VERSION"));
-                                let ok = size_ok && newer;
-                                if !ok {
-                                    let _ = std::fs::remove_file(std::env::temp_dir().join("pvp-update.exe"));
-                                }
-                                let _ = px.send_event(UserEvent::Js(format!(
-                                    "pvpInstallReady({})",
-                                    if ok { "true" } else { "false" }
-                                )));
+                                    let mut err_tail = String::new();
+                                    if let Some(mut e) = child.stderr.take() {
+                                        use std::io::Read as _;
+                                        let _ = e.read_to_string(&mut err_tail);
+                                    }
+                                    let code = child.wait().map(|s| s.code().unwrap_or(-1)).unwrap_or(-1);
+                                    let len = std::fs::metadata(&out).map(|m| m.len()).unwrap_or(0);
+                                    let size_ok = len > 0 && (expect == 0 || len == expect);
+                                    let newer = parse_ver(&tag) > parse_ver(env!("CARGO_PKG_VERSION"));
+                                    let ok = code == 0 && size_ok && newer;
+                                    if ok {
+                                        let _ = px.send_event(UserEvent::Js("pvpInstallReady(true)".into()));
+                                    } else {
+                                        let _ = std::fs::remove_file(&out);
+                                        let reason = if code != 0 {
+                                            let t = err_tail
+                                                .lines()
+                                                .rev()
+                                                .find(|l| !l.trim().is_empty())
+                                                .unwrap_or("")
+                                                .trim()
+                                                .to_string();
+                                            if t.is_empty() {
+                                                format!("curl exit {code}")
+                                            } else if t.chars().count() > 160 {
+                                                t.chars().rev().take(160).collect::<String>().chars().rev().collect()
+                                            } else {
+                                                t
+                                            }
+                                        } else if !size_ok {
+                                            "file size mismatch".to_string()
+                                        } else {
+                                            "not newer than this build".to_string()
+                                        };
+                                        let esc = reason.replace('\\', "\\\\").replace('"', "\\\"");
+                                        let _ = px.send_event(UserEvent::Js(format!(
+                                            "pvpDlError(\"{esc}\")"
+                                        )));
+                                    }
+                                });
                             }
                             "update-cancel" => {
-                                let mut guard = uf.lock().unwrap();
-                                *guard = None;
                                 let _ = std::fs::remove_file(std::env::temp_dir().join("pvp-update.exe"));
                             }
                             "update-run" => {

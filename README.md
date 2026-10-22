@@ -16,7 +16,7 @@ no telemetry, no account, no ads — just press play.
 [![Windows](https://img.shields.io/badge/windows-10%20%2F%2011-0078d4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/license-MIT-74c0fc?style=for-the-badge)](LICENSE)
 
-**[⬇ Download v0.6.0](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest)** · **[Live Captions Guide](docs/live-captions.md)** · **[Screenshots](#screenshots)**
+**[⬇ Download v0.6.1](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest)** · **[Live Captions Guide](docs/live-captions.md)** · **[Screenshots](#screenshots)**
 
 </div>
 
@@ -37,7 +37,7 @@ no telemetry, no account, no ads — just press play.
 | **Live captions** | **Built in** | — | — | — |
 | **Startup** | Instant | Fast | Fast | Slow |
 
-> One file, **3,987,456 bytes**. Copy it anywhere, run it, done. The entire UI —
+> One file, **3,994,624 bytes**. Copy it anywhere, run it, done. The entire UI —
 > HTML, CSS, JS, icons and all — is compiled *into* the binary. Nothing to install,
 > nothing to configure, nothing left behind.
 
@@ -129,6 +129,11 @@ Toggle it any time with `C`, from the CC menu, or Settings → Live Captions.
    or grab `personal-video-player.zip`, which bundles the exe with this README and the licence.
 2. Double-click it. That's the install.
 3. Drop a video onto the window, press `C` for live captions.
+
+> **Optional setup:** want double-click-any-video to open PVP, plus a Start
+> Menu entry and an Apps-and-features uninstall listing? Run `PVP-Setup` from
+> [Releases](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest).
+> It shows a short confirmation when it's done.
 
 ```bash
 # Open a file
