@@ -10,7 +10,6 @@ A single Rust binary. No Electron. No Chromium bundle. No installer wizard,
 no telemetry, no account, no ads — just press play.
 
 [![Release](https://img.shields.io/github/v/release/DeepanshuK2002/Personal-Video-Player---PVP?style=for-the-badge&label=latest&color=74c0fc)](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases)
-[![Download](https://img.shields.io/github/downloads/DeepanshuK2002/Personal-Video-Player---PVP/total?style=for-the-badge&label=downloads&color=74c0fc)](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases)
 [![Size](https://img.shields.io/badge/binary-3.7%20MB-0d1117?style=for-the-badge&label=size&color=2ea043)](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases)
 [![Rust](https://img.shields.io/badge/rust-2021-orange?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Windows](https://img.shields.io/badge/windows-10%20%2F%2011-0078d4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
