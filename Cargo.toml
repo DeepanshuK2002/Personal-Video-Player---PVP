@@ -1,0 +1,33 @@
+[package]
+name = "personal-video-player"
+version = "0.5.0"
+edition = "2021"
+
+[dependencies]
+tao = "0.37"
+wry = "0.57"
+winreg = "0.52"
+http = "1"
+resvg = "0.44"
+usvg = "0.44"
+tiny-skia = "0.11"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+base64 = "0.21"
+bytemuck = "1.14"
+raw-window-handle = "0.6"
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_System_Com",
+    "Win32_System_Ole",
+    "Win32_System_Variant",
+    "Win32_UI_Accessibility",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[build-dependencies]
+resvg = "0.44"
+usvg = "0.44"
+tiny-skia = "0.11"
+image = "0.25"
+winres = "0.1"
