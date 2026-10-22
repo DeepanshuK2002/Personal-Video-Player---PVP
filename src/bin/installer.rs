@@ -15,7 +15,9 @@ const PLAYER_BYTES: &[u8] = include_bytes!(concat!(
 ));
 
 const EXTS: &[&str] = &[
-    "mp4", "mkv", "avi", "mov", "wmv", "flv", "webm", "m4v", "mpeg", "mpg", "3gp",
+    "mp4", "m4v", "mkv", "avi", "mov", "wmv", "flv", "webm", "mpeg", "mpg", "3gp", "3g2",
+    "ts", "m2ts", "mts", "m2v", "mpe", "vob", "ogv", "ogg", "divx", "xvid", "asf", "wtv",
+    "rm", "rmvb", "f4v", "mxf", "tod", "rec",
 ];
 
 fn is_admin() -> bool {

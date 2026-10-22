@@ -4,18 +4,19 @@
 
 # Personal Video Player — PVP+
 
-**The 3.7 MB video player with live captions.**
+**The 3.8 MB video player with live captions.**
 
 A single Rust binary. No Electron. No Chromium bundle. No installer wizard,
 no telemetry, no account, no ads — just press play.
 
 [![Release](https://img.shields.io/github/v/release/DeepanshuK2002/Personal-Video-Player---PVP?style=for-the-badge&label=latest&color=74c0fc)](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases)
-[![Size](https://img.shields.io/badge/binary-3.7%20MB-0d1117?style=for-the-badge&label=size&color=2ea043)](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases)
+[![Download](https://img.shields.io/github/downloads/DeepanshuK2002/Personal-Video-Player---PVP/total?style=for-the-badge&label=downloads&color=74c0fc)](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases)
+[![Size](https://img.shields.io/badge/binary-3.8%20MB-0d1117?style=for-the-badge&label=size&color=2ea043)](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases)
 [![Rust](https://img.shields.io/badge/rust-2021-orange?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Windows](https://img.shields.io/badge/windows-10%20%2F%2011-0078d4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/license-MIT-74c0fc?style=for-the-badge)](LICENSE)
 
-**[⬇ Download v0.5.0](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest)** · **[Live Captions Guide](docs/live-captions.md)** · **[Screenshots](#screenshots)**
+**[⬇ Download v0.6.0](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest)** · **[Live Captions Guide](docs/live-captions.md)** · **[Screenshots](#screenshots)**
 
 </div>
 
@@ -29,14 +30,14 @@ no telemetry, no account, no ads — just press play.
 
 | | **PVP+** | VLC | mpv / MPC | Electron players |
 |---|---|---|---|---|
-| **Download size** | **3.7 MB** | 40 – 60 MB | 20 – 100 MB | 80 – 200+ MB |
+| **Download size** | **3.8 MB** | 40 – 60 MB | 20 – 100 MB | 80 – 200+ MB |
 | **Engine** | Rust + system WebView2 | Native + bundled Qt | Native | Bundled Chromium |
 | **Install step** | None — one file | Full installer | Varies | Full installer |
 | **Background services** | 0 | 0 | 0 | Often several |
 | **Live captions** | **Built in** | — | — | — |
 | **Startup** | Instant | Fast | Fast | Slow |
 
-> One file, **3,873,280 bytes**. Copy it anywhere, run it, done. The entire UI —
+> One file, **3,987,456 bytes**. Copy it anywhere, run it, done. The entire UI —
 > HTML, CSS, JS, icons and all — is compiled *into* the binary. Nothing to install,
 > nothing to configure, nothing left behind.
 
@@ -87,6 +88,7 @@ Toggle it any time with `C`, from the CC menu, or Settings → Live Captions.
 - Timeline hover preview (thumbnail + timestamp) that stays above captions
 - Native fullscreen, auto-hiding controls
 - Formats: MP4, MKV, AVI, MOV, WebM, OGG, WMV, M4V … (system codecs)
+- Plays MPEG-TS / `.ts` / DVR rips too — remuxed on the fly via ffmpeg
 
 </td><td width="50%">
 
@@ -122,7 +124,7 @@ Toggle it any time with `C`, from the CC menu, or Settings → Live Captions.
 
 ## Quick start
 
-1. Download **`personal-video-player.exe`** (3.7 MB) from
+1. Download **`personal-video-player.exe`** (3.8 MB) from
    **[Releases](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest)** —
    or grab `personal-video-player.zip`, which bundles the exe with this README and the licence.
 2. Double-click it. That's the install.
@@ -178,7 +180,7 @@ the Rust binary as a string — no asset folder, no runtime downloads.
 
 ```text
 ┌────────────┐   Tao (window)   ┌──────────────────┐   HTTP Range   ┌──────────┐
-│  Windows   │◀───────────────▶│  Rust core       │◀─────────────▶│ WebView2 │
+│  Windows   │◀────────────────▶│  Rust core       │◀──────────────▶│ WebView2 │
 │  desktop   │                  │  server + IPC    │                │ UI/video │
 └────────────┘                  └──────────────────┘                └──────────┘
 ```
@@ -236,6 +238,6 @@ doubles the binary size should justify itself.
 ---
 
 <div align="center">
-  <sub><b>PVP+</b> — 3.7 MB, live captions, zero bloat.<br>
+  <sub><b>PVP+</b> — 3.8 MB, live captions, zero bloat.<br>
   Built with Rust · <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases">Get the latest release</a></sub>
 </div>

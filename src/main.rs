@@ -492,7 +492,7 @@ button.donate-icon svg{width:15px;height:15px;fill:currentColor}
 <div class="live-captions-overlay hidden" id="live-captions-overlay"></div>
 <div id="suboverlay"></div>
 <div id="tl-preview" hidden><video id="tl-prev-v" muted playsinline></video><span id="tl-prev-t"></span></div>
-<input type="file" id="f" accept="video/*" style="display:none">
+<input type="file" id="f" style="display:none">
 <input type="file" id="folder-input" webkitdirectory multiple style="display:none">
 <input type="file" id="subtitle-file" accept=".srt,.vtt,.ass,.ssa" style="display:none" multiple>
 <input type="file" id="audio-file" accept="audio/*" style="display:none" multiple>
@@ -504,7 +504,7 @@ button.donate-icon svg{width:15px;height:15px;fill:currentColor}
         <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <div id="settingsmenu">
-        <div id="ver-row"><span id="ver-text">PVP+ v0.5.0</span><button class="upd-icon" id="ver-upd" title="Update available" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg></button><button class="donate-icon" id="ver-donate" title="Donate (UPI)"><svg viewBox="0 0 576 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M163.9 136.9c-29.4-29.8-29.4-78.2 0-108s77-29.8 106.4 0l17.7 18 17.7-18c29.4-29.8 77-29.8 106.4 0s29.4 78.2 0 108L310.5 240.1c-6.2 6.3-14.3 9.4-22.5 9.4s-16.3-3.1-22.5-9.4L163.9 136.9zM568.2 336.3c13.1 17.8 9.3 42.8-8.5 55.9L433.1 485.5c-23.4 17.2-51.6 26.5-80.7 26.5L192 512 32 512c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l36.8 0 44.9-36c22.7-18.2 50.9-28 80-28l78.3 0 16 0 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l120.6 0 119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384c0 0 0 0 0 0l-.9 0c.3 0 .6 0 .9 0z"/></svg></button></div>
+        <div id="ver-row"><span id="ver-text">PVP+ v0.6.0</span><button class="upd-icon" id="ver-upd" title="Update available" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg></button><button class="donate-icon" id="ver-donate" title="Donate (UPI)"><svg viewBox="0 0 576 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M163.9 136.9c-29.4-29.8-29.4-78.2 0-108s77-29.8 106.4 0l17.7 18 17.7-18c29.4-29.8 77-29.8 106.4 0s29.4 78.2 0 108L310.5 240.1c-6.2 6.3-14.3 9.4-22.5 9.4s-16.3-3.1-22.5-9.4L163.9 136.9zM568.2 336.3c13.1 17.8 9.3 42.8-8.5 55.9L433.1 485.5c-23.4 17.2-51.6 26.5-80.7 26.5L192 512 32 512c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l36.8 0 44.9-36c22.7-18.2 50.9-28 80-28l78.3 0 16 0 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l120.6 0 119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384c0 0 0 0 0 0l-.9 0c.3 0 .6 0 .9 0z"/></svg></button></div>
         <div id="about-row">Lightweight Rust video player &middot; ~3.6 MB &middot; MIT License</div>
         <div class="settings-section">
           <h4>Playback Speed</h4>
@@ -1541,8 +1541,9 @@ document.getElementById('lc-info')?.addEventListener('click',e=>{
 });
 
 // ===== Playlist (folder) support =====
-const VIDEO_EXT=['mp4','mkv','webm','mov','avi','m4v','ts','flv','wmv','ogv','mpg','mpeg','3gp','m2ts'];
+const VIDEO_EXT=['mp4','m4v','mkv','webm','mov','qt','avi','divx','xvid','wmv','asf','wtv','flv','f4v','3gp','3g2','3gpp','ts','m2ts','mts','m2t','mpg','mpeg','mpe','m2v','m2p','vob','vro','ogv','ogg','ogx','rm','rmvb','mxf','mp4v','tod','rec','dvr-ms'];
 const SUB_EXT=['srt','vtt'];
+const NON_MEDIA_EXT=['srt','vtt','ass','ssa','sub','idx','txt','nfo','md','json','xml','ini','db','log','jpg','jpeg','png','gif','webp','bmp','ico','svg','pdf','zip','rar','7z','iso','exe','dll','lnk','part','tmp','crdownload','mp3','m4a','flac','wav','wma','aac','opus','ape','ac3','eac3','amr','mka','alac'];
 const playlist=[];
 let plIdx=-1,dragFrom=-1;
 let autoplay=localStorage.getItem('pvp-autoplay')!=='0';
@@ -1582,12 +1583,13 @@ document.getElementById('sort-dur').onclick=e=>{e.stopPropagation();plSortBy='du
 document.getElementById('sort-asc').onclick=e=>{e.stopPropagation();plSortDir='asc';try{localStorage.setItem('pvp-sortdir',plSortDir);}catch(err){}closeSortMenu();applyPlSort();};
 document.getElementById('sort-desc').onclick=e=>{e.stopPropagation();plSortDir='desc';try{localStorage.setItem('pvp-sortdir',plSortDir);}catch(err){}closeSortMenu();applyPlSort();};
 document.addEventListener('mousedown',e=>{if(!sortMenu.hidden&&e.target.closest&&!e.target.closest('.pl-sort-wrap'))closeSortMenu();});
-function isVideoFile(f){const ext=(f.name.split('.').pop()||'').toLowerCase();return (f.type&&f.type.startsWith('video/'))||VIDEO_EXT.includes(ext);}
+function isVideoFile(f){const ext=(f.name.split('.').pop()||'').toLowerCase();if(VIDEO_EXT.includes(ext))return true;if(f.type&&f.type.startsWith('video/'))return true;if(f.type&&/^(audio|image|text)\//.test(f.type))return false;if(NON_MEDIA_EXT.includes(ext))return false;return true;}
 function playStandalone(file){
   playlist.length=0;plIdx=-1;
   tbPlaylist.hidden=true;plmenu.hidden=true;
   setPlaylistName('');
   v.src=URL.createObjectURL(file);
+  standaloneFile=file;standaloneUrl=v.src;
   v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});
   setVideoName(file.name);
   renderSubtitleMenu();
@@ -1659,6 +1661,64 @@ document.getElementById('folder-input').onchange=e=>{
 v.addEventListener('ended',()=>{
   if(playlist.length&&autoplay&&plIdx+1<playlist.length){playPl(plIdx+1);}
 });
+v.addEventListener('error',()=>{
+  const E={1:'Playback aborted',2:'Network error while reading the file',3:'Decode error - unsupported codec or a broken file',4:'Format not supported by this player'};
+  const msg=E[(v.error&&v.error.code)]||'Playback failed';
+  onVideoError(msg);
+});
+// ===== Container conversion (TS/AVI/WMV need an ffmpeg remux) =====
+let standaloneFile=null,standaloneUrl='',cnvBusy=false,cnvTriedFor='';
+function jget(u){return fetch(u).then(r=>r.ok?r.json():null).catch(()=>null);}
+async function prepPlay(file,label){
+  if(cnvBusy)return;cnvBusy=true;
+  try{
+    showPlToast('Preparing "'+label+'" for playback…');
+    if(file){
+      const r=await fetch('/upload?name='+encodeURIComponent(file.name),{method:'POST',body:file});
+      if(!r.ok)throw new Error('upload');
+    }
+    const c=await fetch('/convert',{method:'POST'});
+    if(!c.ok)throw new Error('convert');
+    for(let i=0;i<1200;i++){
+      const s=await jget('/status');
+      if(!s)throw new Error('status');
+      if(s.state==='ready'){
+        v.src='/video?t='+Date.now();
+        v.muted=true;v.play().then(()=>v.muted=false).catch(()=>{});
+        showPlToast('Converted - playing');
+        return;
+      }
+      if(s.state==='error'){const m='Cannot convert this file: '+String(s.msg||'unknown error').slice(0,160);showPlToast(m);setTitleError(m);return;}
+      if(s.state==='no-ffmpeg'){const m='This container (TS/AVI/WMV) needs ffmpeg installed: winget install ffmpeg';showPlToast(m);setTitleError(m);return;}
+      if(s.state==='converting')showPlToast('Converting container… '+s.pct+'%');
+      await new Promise(r=>setTimeout(r,500));
+    }
+    showPlToast('Conversion is taking too long - still working in the background');
+  }catch(e){
+    showPlToast('Could not prepare this file for playback');
+    setTitleError('Playback failed');
+  }finally{cnvBusy=false;}
+}
+async function onVideoError(defMsg){
+  try{
+    const code=v.error?v.error.code:0;
+    if(code!==3&&code!==4){showPlToast(defMsg);setTitleError(defMsg);return;}
+    if(cnvTriedFor===v.src||cnvBusy)return;
+    cnvTriedFor=v.src;
+    const local=String(v.src||'').indexOf('/video')>=0||/^https?:\/\/(127\.0\.0\.1|localhost)/.test(v.src||'');
+    if(local){
+      const info=await jget('/info');
+      if(!info||!info.needConvert){showPlToast(defMsg);setTitleError(defMsg);return;}
+      if(!info.ffmpeg){const m='This file uses a container WebView2 cannot play (MPEG-TS, AVI, WMV…). Install ffmpeg and PVP+ converts it automatically.';showPlToast(m);setTitleError(m);return;}
+      await prepPlay(null,info.name||'video');
+      return;
+    }
+    const it=playlist[plIdx];
+    const file=(it&&it.url===v.src&&it.file)||(standaloneUrl===v.src&&standaloneFile);
+    if(!file){showPlToast(defMsg);setTitleError(defMsg);return;}
+    await prepPlay(file,file.name);
+  }catch(e){showPlToast(defMsg);setTitleError(defMsg);}
+}
 
 document.getElementById("f").onchange=e=>{const f=e.target.files[0];if(f)playStandalone(f);e.target.value='';};
 ["mousemove","mousedown","wheel"].forEach(ev=>document.addEventListener(ev,showCtl));document.addEventListener("keydown",e=>{showCtl();if(e.code==="Space"){e.preventDefault();toggle();}else if(e.code==="KeyF"){e.preventDefault();if(window.chrome&&window.chrome.webview)window.chrome.webview.postMessage("fullscreen");setFs(!isFs);}else if(e.code==="ArrowUp"){e.preventDefault();applyVolume(Math.min(2,+vol.value+0.1));}else if(e.code==="ArrowDown"){e.preventDefault();applyVolume(Math.max(0,+vol.value-0.1));}else if(e.code==="ArrowLeft"){e.preventDefault();if(v.duration)v.currentTime=Math.max(0,v.currentTime-10);upd();}else if(e.code==="ArrowRight"){e.preventDefault();if(v.duration)v.currentTime=Math.min(v.duration,v.currentTime+10);upd();}else if(e.code==="KeyM"){e.preventDefault();setMute(!isMuted);}else if(e.code==="KeyC"){e.preventDefault();toggleLiveCaptions();}else if(e.code==="BracketLeft"){e.preventDefault();let i=SPEEDS.indexOf(speed);if(i>0)applySpeed(SPEEDS[i-1]);}else if(e.code==="BracketRight"){e.preventDefault();let i=SPEEDS.indexOf(speed);if(i<SPEEDS.length-1)applySpeed(SPEEDS[i+1]);}});
@@ -1904,6 +1964,724 @@ fn parse_ver(s: &str) -> (u64, u64, u64) {
     (next(), next(), next())
 }
 
+// Containers lie all the time (a TS stream renamed to .mp4 is common), so sniff
+// the real container from the first bytes before falling back to the extension.
+fn sniff_container(p: &std::path::Path) -> Option<&'static str> {
+    use std::io::Read;
+    let mut head = [0u8; 1024];
+    let n = std::fs::File::open(p)
+        .and_then(|mut f| f.read(&mut head))
+        .unwrap_or(0);
+    if n >= 12 && &head[4..8] == b"ftyp" {
+        // isom / mp4 / m4v / 3gp / hevc-in-mp4
+        return Some(if &head[8..11] == b"3gp" {
+            "video/3gpp"
+        } else {
+            "video/mp4"
+        });
+    }
+    if n >= 64 && head[0] == 0x47 && head[188] == 0x47 && head[376] == 0x47 {
+        return Some("video/mp2t"); // MPEG-TS (.ts / .m2ts / mislabelled .mp4)
+    }
+    if n >= 4 && &head[0..4] == &[0x1A, 0x45, 0xDF, 0xA3] {
+        // EBML — distinguish WebM from Matroska by DocType
+        return Some(if head.windows(4).any(|w| w == b"webm") {
+            "video/webm"
+        } else {
+            "video/x-matroska"
+        });
+    }
+    if n >= 12 && &head[0..4] == b"RIFF" && &head[8..12] == b"AVI " {
+        return Some("video/x-msvideo");
+    }
+    if n >= 4 && &head[0..4] == b"OggS" {
+        return Some("video/ogg");
+    }
+    if n >= 4 && &head[0..3] == b"FLV" {
+        return Some("video/x-flv");
+    }
+    if n >= 16 && &head[0..4] == b"\x00\x00\x01\xba" {
+        return Some("video/mpeg"); // MPEG-PS (VCD/DVD .mpg/.vob)
+    }
+    None
+}
+
+fn video_mime(p: &std::path::Path) -> &'static str {
+    if let Some(m) = sniff_container(p) {
+        return m;
+    }
+    match p
+        .extension()
+        .and_then(|e| e.to_str())
+        .map(|s| s.to_ascii_lowercase())
+        .as_deref()
+    {
+        Some("mp4") | Some("m4v") | Some("mp4v") | Some("f4v") => "video/mp4",
+        Some("webm") => "video/webm",
+        Some("ogv") | Some("ogg") | Some("ogx") => "video/ogg",
+        Some("mkv") | Some("mk3d") => "video/x-matroska",
+        Some("avi") | Some("divx") | Some("xvid") => "video/x-msvideo",
+        Some("mov") | Some("qt") => "video/quicktime",
+        Some("ts") | Some("m2ts") | Some("mts") | Some("m2t") | Some("tp") => "video/mp2t",
+        Some("wmv") | Some("asf") | Some("wtv") => "video/x-ms-wmv",
+        Some("flv") | Some("f4p") | Some("f4c") => "video/x-flv",
+        Some("3gp") | Some("3g2") | Some("3gpp") => "video/3gpp",
+        Some("mpg") | Some("mpeg") | Some("mpe") | Some("mp2") | Some("vob") => "video/mpeg",
+        Some("rm") | Some("rmvb") => "application/vnd.rn-realmedia",
+        Some("mxf") => "application/mxf",
+        _ => "application/octet-stream",
+    }
+}
+
+// ===== Container conversion =====
+// WebView2/Chromium only demuxes a handful of containers (MP4/WebM/MKV/Ogg).
+// Anything else (MPEG-TS, AVI, WMV/ASF, FLV, MPEG-PS...) is remuxed with the
+// system ffmpeg (optional; if missing we just say so) into a temp MP4 and
+// played from there. Stream copy — no re-encode, no quality loss.
+const CHROMIUM_OK_MIME: [&str; 6] = [
+    "video/mp4",
+    "video/3gpp",
+    "video/webm",
+    "video/x-matroska",
+    "video/ogg",
+    "video/quicktime",
+];
+
+fn needs_convert(p: &std::path::Path) -> bool {
+    match sniff_container(p) {
+        Some(m) => !CHROMIUM_OK_MIME.contains(&m),
+        None => false,
+    }
+}
+
+fn ffmpeg_path() -> Option<std::path::PathBuf> {
+    use std::sync::OnceLock;
+    static FF: OnceLock<Option<std::path::PathBuf>> = OnceLock::new();
+    FF.get_or_init(|| {
+        let mut cands: Vec<std::path::PathBuf> = Vec::new();
+        if let Some(paths) = std::env::var_os("PATH") {
+            for d in std::env::split_paths(&paths) {
+                cands.push(d.join("ffmpeg.exe"));
+            }
+        }
+        if let Some(p) = std::env::var_os("ProgramFiles") {
+            cands.push(std::path::PathBuf::from(p).join("ffmpeg").join("bin").join("ffmpeg.exe"));
+        }
+        if let Some(p) = std::env::var_os("ProgramFiles(x86)") {
+            cands.push(std::path::PathBuf::from(p).join("ffmpeg").join("bin").join("ffmpeg.exe"));
+        }
+        if let Some(p) = std::env::var_os("USERPROFILE") {
+            cands.push(
+                std::path::PathBuf::from(p).join("scoop").join("shims").join("ffmpeg.exe"),
+            );
+        }
+        cands.push(std::path::PathBuf::from(
+            r"C:\ProgramData\chocolatey\bin\ffmpeg.exe",
+        ));
+        cands.push(std::path::PathBuf::from(r"C:\ffmpeg\bin\ffmpeg.exe"));
+        cands.into_iter().find(|c| c.is_file())
+    })
+    .clone()
+}
+
+struct ConvState {
+    state: String,
+    pct: u32,
+    msg: String,
+}
+
+fn remux_out_for(src: &std::path::Path) -> std::path::PathBuf {
+    let dir = std::env::temp_dir().join("pvp-remux");
+    let _ = std::fs::create_dir_all(&dir);
+    let stem = src
+        .file_stem()
+        .map(|s| s.to_string_lossy().to_string())
+        .unwrap_or_else(|| "video".to_string());
+    let mut base = String::new();
+    for ch in stem.chars() {
+        if ch.is_ascii_alphanumeric() || matches!(ch, '-' | '_') {
+            base.push(ch);
+        } else {
+            base.push('_');
+        }
+    }
+    while base.len() > 64 {
+        base.pop();
+    }
+    if base.trim_matches('_').is_empty() {
+        base = "video".into();
+    }
+    let mut h: u64 = 1469598103934665603;
+    for b in src.to_string_lossy().bytes() {
+        h ^= b as u64;
+        h = h.wrapping_mul(1099511628211);
+    }
+    if let Ok(md) = std::fs::metadata(src) {
+        h ^= md.len();
+        h = h.wrapping_mul(1099511628211);
+        if let Ok(t) = md.modified() {
+            if let Ok(d) = t.duration_since(std::time::UNIX_EPOCH) {
+                h ^= d.as_secs();
+                h = h.wrapping_mul(1099511628211);
+            }
+        }
+    }
+    dir.join(format!("{}-{:x}.mp4", base, h))
+}
+
+fn run_ffmpeg(
+    ff: &std::path::Path,
+    args: &[String],
+    conv: &Arc<Mutex<ConvState>>,
+    src_size: u64,
+) -> (i32, String) {
+    use std::io::{BufRead, BufReader};
+    use std::process::{Command, Stdio};
+    let mut cmd = Command::new(ff);
+    cmd.args(args)
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    let mut child = match cmd.spawn() {
+        Ok(c) => c,
+        Err(e) => return (-1, format!("ffmpeg could not start ({e})")),
+    };
+    let errh = child.stderr.take().map(|e| {
+        std::thread::spawn(move || {
+            let mut s = String::new();
+            for line in BufReader::new(e).lines().map_while(Result::ok) {
+                s.push_str(&line);
+                s.push('\n');
+                if s.len() > 3000 {
+                    let cut = s.find('\n').map(|i| i + 1).unwrap_or(0);
+                    s.drain(..cut);
+                }
+            }
+            s
+        })
+    });
+    if let Some(out) = child.stdout.take() {
+        for line in BufReader::new(out).lines().map_while(Result::ok) {
+            if let Some(v) = line.strip_prefix("total_size=") {
+                if let Ok(n) = v.trim().parse::<u64>() {
+                    if src_size > 0 {
+                        let pct = (n.saturating_mul(100) / src_size).min(99) as u32;
+                        if let Ok(mut c) = conv.lock() {
+                            c.pct = pct;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    let code = match child.wait() {
+        Ok(s) => s.code().unwrap_or(-1),
+        Err(e) => {
+            let tail = errh.and_then(|h| h.join().ok()).unwrap_or_default();
+            return (-1, format!("wait failed: {e}\n{tail}"));
+        }
+    };
+    let err = errh.and_then(|h| h.join().ok()).unwrap_or_default();
+    (code, err)
+}
+
+fn convert_file(
+    ff: &std::path::Path,
+    src: &std::path::Path,
+    out: &std::path::Path,
+    conv: &Arc<Mutex<ConvState>>,
+) -> Result<(), String> {
+    let src_size = std::fs::metadata(src).map(|m| m.len()).unwrap_or(0);
+    let s = src.to_string_lossy().to_string();
+    let o = out.to_string_lossy().to_string();
+    let base = vec![
+        "-y".to_string(),
+        "-hide_banner".to_string(),
+        "-loglevel".to_string(),
+        "error".to_string(),
+        "-nostdin".to_string(),
+        "-i".to_string(),
+        s.clone(),
+        "-map".to_string(),
+        "0:v?".to_string(),
+        "-map".to_string(),
+        "0:a?".to_string(),
+        "-c".to_string(),
+        "copy".to_string(),
+    ];
+    let tail = vec![
+        "-progress".to_string(),
+        "pipe:1".to_string(),
+        "-nostats".to_string(),
+        "-f".to_string(),
+        "mp4".to_string(),
+        o.clone(),
+    ];
+    let mut with_bsf = base.clone();
+    with_bsf.push("-bsf:a".to_string());
+    with_bsf.push("aac_adtstoasc".to_string());
+    with_bsf.extend(tail.clone());
+    let mut without_bsf = base.clone();
+    without_bsf.extend(tail);
+    let mut last = String::new();
+    for args in [with_bsf, without_bsf] {
+        let _ = std::fs::remove_file(out);
+        let (code, err) = run_ffmpeg(ff, &args, conv, src_size);
+        if code == 0 {
+            if std::fs::metadata(out).map(|m| m.len() > 0).unwrap_or(false) {
+                return Ok(());
+            }
+            last = "ffmpeg produced an empty file".into();
+        } else {
+            last = if err.trim().is_empty() {
+                format!("ffmpeg exited with code {code}")
+            } else {
+                err.trim().to_string()
+            };
+        }
+    }
+    Err(last)
+}
+
+fn start_convert(cv: &Arc<Mutex<Option<std::path::PathBuf>>>, conv: &Arc<Mutex<ConvState>>) {
+    let src = match cv.lock().ok().and_then(|g| g.clone()) {
+        Some(p) => p,
+        None => {
+            if let Ok(mut c) = conv.lock() {
+                c.state = "error".into();
+                c.msg = "No file loaded".into();
+            }
+            return;
+        }
+    };
+    if !needs_convert(&src) {
+        if let Ok(mut c) = conv.lock() {
+            c.state = "ready".into();
+            c.pct = 100;
+            c.msg.clear();
+        }
+        return;
+    }
+    let ff = match ffmpeg_path() {
+        Some(f) => f,
+        None => {
+            if let Ok(mut c) = conv.lock() {
+                c.state = "no-ffmpeg".into();
+                c.pct = 0;
+                c.msg = "ffmpeg not found".into();
+            }
+            return;
+        }
+    };
+    {
+        let Ok(mut c) = conv.lock() else { return };
+        if c.state == "converting" {
+            return;
+        }
+        c.state = "converting".into();
+        c.pct = 0;
+        c.msg.clear();
+    }
+    let out = remux_out_for(&src);
+    let cv2 = cv.clone();
+    let conv2 = conv.clone();
+    std::thread::spawn(move || {
+        // reuse a previous conversion of the same source when available
+        if let Ok(md) = std::fs::metadata(&out) {
+            if md.len() > 0 {
+                if let Ok(mut c) = conv2.lock() {
+                    c.state = "ready".into();
+                    c.pct = 100;
+                }
+                if let Ok(mut g) = cv2.lock() {
+                    *g = Some(out);
+                }
+                return;
+            }
+        }
+        match convert_file(&ff, &src, &out, &conv2) {
+            Ok(()) => {
+                if let Ok(mut c) = conv2.lock() {
+                    c.state = "ready".into();
+                    c.pct = 100;
+                }
+                if let Ok(mut g) = cv2.lock() {
+                    *g = Some(out);
+                }
+            }
+            Err(m) => {
+                if let Ok(mut c) = conv2.lock() {
+                    c.state = "error".into();
+                    c.msg = m;
+                }
+            }
+        }
+    });
+}
+
+fn percent_decode(s: &str) -> String {
+    fn hx(c: u8) -> Option<u8> {
+        match c {
+            b'0'..=b'9' => Some(c - b'0'),
+            b'a'..=b'f' => Some(c - b'a' + 10),
+            b'A'..=b'F' => Some(c - b'A' + 10),
+            _ => None,
+        }
+    }
+    let b = s.as_bytes();
+    let mut out: Vec<u8> = Vec::with_capacity(b.len());
+    let mut i = 0;
+    while i < b.len() {
+        if b[i] == b'%' && i + 2 < b.len() {
+            if let (Some(h), Some(l)) = (hx(b[i + 1]), hx(b[i + 2])) {
+                out.push(h * 16 + l);
+                i += 3;
+                continue;
+            }
+        }
+        out.push(b[i]);
+        i += 1;
+    }
+    String::from_utf8_lossy(&out).to_string()
+}
+
+fn sanitize_name(n: &str) -> String {
+    let mut s: String = n
+        .chars()
+        .map(|c| {
+            if c.is_ascii_alphanumeric() || matches!(c, '.' | '-' | '_' | ' ' | '(' | ')' | '+') {
+                c
+            } else {
+                '_'
+            }
+        })
+        .collect();
+    while s.len() > 120 {
+        s.pop();
+    }
+    while s.starts_with('.') {
+        s.remove(0);
+    }
+    if s.is_empty() {
+        s = "upload.bin".into();
+    }
+    s
+}
+
+fn http_json(stream: &mut std::net::TcpStream, body: &str) {
+    use std::io::Write;
+    let h = format!(
+        "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+        body.len()
+    );
+    let _ = stream.write_all(h.as_bytes());
+    let _ = stream.write_all(body.as_bytes());
+    let _ = stream.flush();
+}
+
+fn http_text(stream: &mut std::net::TcpStream, status: &str, ctype: &str, body: &str) {
+    use std::io::Write;
+    let h = format!(
+        "HTTP/1.1 {}\r\nContent-Type: {}\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+        status,
+        ctype,
+        body.len()
+    );
+    let _ = stream.write_all(h.as_bytes());
+    let _ = stream.write_all(body.as_bytes());
+    let _ = stream.flush();
+}
+
+// Serve the UI page and stream the video with HTTP Range support.
+// One thread per connection, chunks straight off disk: a 20 GB file is
+// never read into memory and seeking stays instant.
+fn serve_conn(
+    mut stream: std::net::TcpStream,
+    cv: Arc<Mutex<Option<std::path::PathBuf>>>,
+    hs: Arc<Mutex<Option<String>>>,
+    conv: Arc<Mutex<ConvState>>,
+) {
+    use std::io::{Read, Seek, SeekFrom, Write};
+    let _ = stream.set_read_timeout(Some(std::time::Duration::from_secs(15)));
+    let mut rbuf = [0u8; 16384];
+    let n = match stream.read(&mut rbuf) {
+        Ok(n) => n,
+        Err(_) => return,
+    };
+    if n == 0 {
+        return;
+    }
+    let req = String::from_utf8_lossy(&rbuf[..n]).to_string();
+    let mut tok = req.split_whitespace();
+    let method = tok.next().unwrap_or("GET").to_string();
+    let uri = tok.next().unwrap_or("/").to_string();
+    let not_found = b"HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
+
+    if uri == "/" || uri.starts_with("/?") {
+        let page = hs.lock().ok().and_then(|g| g.clone()).unwrap_or_default();
+        if page.is_empty() {
+            let _ = stream.write_all(not_found);
+        } else {
+            let head = format!(
+                "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+                page.len()
+            );
+            let _ = stream.write_all(head.as_bytes());
+            if method != "HEAD" {
+                let _ = stream.write_all(page.as_bytes());
+            }
+        }
+        let _ = stream.flush();
+        return;
+    }
+    let path_only = uri.split('?').next().unwrap_or("/").to_string();
+    match path_only.as_str() {
+        "/info" => {
+            let (need, name) = match cv.lock().ok().and_then(|g| g.clone()) {
+                Some(p) => (
+                    needs_convert(&p),
+                    p.file_name()
+                        .map(|s| s.to_string_lossy().to_string())
+                        .unwrap_or_default(),
+                ),
+                None => (false, String::new()),
+            };
+            let body = serde_json::json!({
+                "needConvert": need,
+                "name": name,
+                "ffmpeg": ffmpeg_path().is_some(),
+            })
+            .to_string();
+            http_json(&mut stream, &body);
+            return;
+        }
+        "/status" => {
+            let body = conv
+                .lock()
+                .map(|c| {
+                    serde_json::json!({"state": c.state, "pct": c.pct, "msg": c.msg}).to_string()
+                })
+                .unwrap_or_else(|_| "{\"state\":\"idle\",\"pct\":0,\"msg\":\"\"}".to_string());
+            http_json(&mut stream, &body);
+            return;
+        }
+        "/convert" => {
+            if method == "POST" {
+                start_convert(&cv, &conv);
+                http_json(&mut stream, "{\"ok\":true}");
+            } else {
+                http_json(&mut stream, "{\"ok\":false}");
+            }
+            return;
+        }
+        "/upload" => {
+            if method != "POST" {
+                http_text(&mut stream, "405 Method Not Allowed", "text/plain", "POST only");
+                return;
+            }
+            let hdr_end = rbuf[..n]
+                .windows(4)
+                .position(|w| w == b"\r\n\r\n")
+                .map(|i| i + 4);
+            let Some(hdr_end) = hdr_end else {
+                http_text(&mut stream, "400 Bad Request", "text/plain", "bad request");
+                return;
+            };
+            let head_txt = String::from_utf8_lossy(&rbuf[..hdr_end]).to_string();
+            let clen: u64 = head_txt
+                .lines()
+                .find(|l| l.to_ascii_lowercase().starts_with("content-length:"))
+                .and_then(|l| l.splitn(2, ':').nth(1))
+                .and_then(|v| v.trim().parse().ok())
+                .unwrap_or(0);
+            if clen == 0 {
+                http_text(
+                    &mut stream,
+                    "411 Length Required",
+                    "text/plain",
+                    "Content-Length required",
+                );
+                return;
+            }
+            let mut name = "upload.bin".to_string();
+            if let Some(q) = uri.split('?').nth(1) {
+                for kv in q.split('&') {
+                    if let Some(v) = kv.strip_prefix("name=") {
+                        let d = percent_decode(v);
+                        if !d.is_empty() {
+                            name = sanitize_name(&d);
+                        }
+                    }
+                }
+            }
+            let dir = std::env::temp_dir().join("pvp-uploads");
+            let _ = std::fs::create_dir_all(&dir);
+            let target = dir.join(&name);
+            let mut f = match std::fs::File::create(&target) {
+                Ok(f) => f,
+                Err(e) => {
+                    http_text(
+                        &mut stream,
+                        "500 Internal Server Error",
+                        "text/plain",
+                        &format!("cannot write temp copy: {e}"),
+                    );
+                    return;
+                }
+            };
+            use std::io::Write;
+            let mut written: u64 = 0;
+            let mut failed = false;
+            if n > hdr_end {
+                if f.write_all(&rbuf[hdr_end..n]).is_err() {
+                    failed = true;
+                }
+                written += (n - hdr_end) as u64;
+            }
+            let mut chunk = [0u8; 64 * 1024];
+            while !failed && written < clen {
+                match stream.read(&mut chunk) {
+                    Ok(0) => break,
+                    Ok(k) => {
+                        let take = std::cmp::min(k as u64, clen - written) as usize;
+                        if f.write_all(&chunk[..take]).is_err() {
+                            failed = true;
+                            break;
+                        }
+                        written += take as u64;
+                    }
+                    Err(_) => {
+                        failed = true;
+                        break;
+                    }
+                }
+            }
+            drop(f);
+            if failed || written < clen {
+                let _ = std::fs::remove_file(&target);
+                http_text(
+                    &mut stream,
+                    "500 Internal Server Error",
+                    "text/plain",
+                    "upload interrupted",
+                );
+                return;
+            }
+            if let Ok(mut g) = cv.lock() {
+                *g = Some(target);
+            }
+            if let Ok(mut c) = conv.lock() {
+                c.state = "idle".into();
+                c.pct = 0;
+                c.msg.clear();
+            }
+            http_json(
+                &mut stream,
+                &serde_json::json!({"ok": true, "name": name}).to_string(),
+            );
+            return;
+        }
+        "/video" => {}
+        _ => {
+            let _ = stream.write_all(not_found);
+            let _ = stream.flush();
+            return;
+        }
+    }
+    let path = cv.lock().ok().and_then(|g| g.clone());
+    let Some(p) = path else {
+        let _ = stream.write_all(not_found);
+        let _ = stream.flush();
+        return;
+    };
+    // Chromium cannot demux this container: refuse here so the page can
+    // trigger the conversion flow instead of a silent media error.
+    if needs_convert(&p) {
+        http_text(
+            &mut stream,
+            "415 Unsupported Media Type",
+            "text/plain",
+            "container not supported by the WebView2 engine",
+        );
+        return;
+    }
+    let mut file = match std::fs::File::open(&p) {
+        Ok(f) => f,
+        Err(_) => {
+            let _ = stream.write_all(not_found);
+            let _ = stream.flush();
+            return;
+        }
+    };
+    let total = file.metadata().map(|m| m.len()).unwrap_or(0);
+    let mime = video_mime(&p);
+
+    let range = req
+        .lines()
+        .find(|l| l.to_ascii_lowercase().starts_with("range:"))
+        .and_then(|line| {
+            let spec = line.splitn(2, ':').nth(1)?.trim();
+            let spec = spec.strip_prefix("bytes=")?;
+            let mut seg = spec.split('-');
+            let start: u64 = seg.next()?.trim().parse().ok()?;
+            let end = match seg.next() {
+                Some(x) if !x.trim().is_empty() => x.trim().parse::<u64>().ok()?,
+                _ => total.saturating_sub(1),
+            };
+            let end = end.min(total.saturating_sub(1));
+            if start <= end {
+                Some((start, end))
+            } else {
+                None
+            }
+        });
+    let (start, end, status, cr) = match range {
+        Some((s, e)) => (
+            s,
+            e,
+            "206 Partial Content",
+            Some(format!("bytes {}-{}/{}", s, e, total)),
+        ),
+        None => (0, total.saturating_sub(1), "200 OK", None),
+    };
+    let len = if total == 0 { 0 } else { end - start + 1 };
+
+    let mut head = format!(
+        "HTTP/1.1 {}\r\nContent-Type: {}\r\nAccept-Ranges: bytes\r\nAccess-Control-Allow-Origin: *\r\nContent-Length: {}\r\nConnection: close\r\n",
+        status, mime, len
+    );
+    if let Some(cr) = cr {
+        head.push_str(&format!("Content-Range: {}\r\n", cr));
+    }
+    head.push_str("\r\n");
+    if stream.write_all(head.as_bytes()).is_err() {
+        return;
+    }
+    if method == "HEAD" || len == 0 {
+        let _ = stream.flush();
+        return;
+    }
+    if file.seek(SeekFrom::Start(start)).is_err() {
+        return;
+    }
+    let mut remaining = len;
+    let mut chunk = vec![0u8; 64 * 1024];
+    while remaining > 0 {
+        let want = std::cmp::min(remaining, chunk.len() as u64) as usize;
+        match file.read(&mut chunk[..want]) {
+            Ok(0) => break,
+            Ok(n) => {
+                if stream.write_all(&chunk[..n]).is_err() {
+                    break;
+                }
+                remaining -= n as u64;
+            }
+            Err(_) => break,
+        }
+    }
+    let _ = stream.flush();
+}
+
 fn main() {
     // Any panic (e.g. on the WebView IPC thread) would otherwise be silent
     // and leave the app half-dead — always leave a trace in the diag log.
@@ -1921,75 +2699,18 @@ fn main() {
     let cv = current_video.clone();
     let html_slot: Arc<Mutex<Option<String>>> = Arc::new(Mutex::new(None));
     let hs = html_slot.clone();
+    let conv: Arc<Mutex<ConvState>> = Arc::new(Mutex::new(ConvState {
+        state: "idle".into(),
+        pct: 0,
+        msg: String::new(),
+    }));
+    let conv_srv = conv.clone();
     std::thread::spawn(move || {
-        use std::io::{Read, Write};
-        for mut stream in listener.incoming().flatten() {
-            let mut buf = [0u8; 8192];
-            let n = stream.read(&mut buf).unwrap_or(0);
-            let req = String::from_utf8_lossy(&buf[..n]).to_string();
-            let uri = req.split_whitespace().nth(1).unwrap_or("/").to_string();
-            if uri == "/" || uri.starts_with("/?") {
-                let page = hs.lock().ok().and_then(|g| g.clone()).unwrap_or_default();
-                if page.is_empty() {
-                    let _ = stream.write_all(b"HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n");
-                } else {
-                    let resp = format!(
-                        "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
-                        page.len()
-                    );
-                    let _ = stream.write_all(resp.as_bytes());
-                    let _ = stream.write_all(page.as_bytes());
-                }
-                let _ = stream.flush();
-                continue;
-            }
-            if !uri.starts_with("/video") {
-                let _ = stream.write_all(b"HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n");
-                let _ = stream.flush();
-                continue;
-            }
-            let path = cv.lock().ok().and_then(|g| g.clone());
-            if let Some(p) = path {
-                if let Ok(data) = std::fs::read(&p) {
-                    let total = data.len();
-                    let mime = match p.extension().and_then(|e| e.to_str()).map(|s| s.to_lowercase()).as_deref() {
-                        Some("mp4") | Some("m4v") => "video/mp4",
-                        Some("webm") => "video/webm",
-                        Some("ogg") | Some("ogv") => "video/ogg",
-                        Some("mkv") => "video/x-matroska",
-                        Some("avi") => "video/x-msvideo",
-Some("mov") => "video/quicktime",
-Some("ts") | Some("m2ts") => "video/mp2t",
-_ => "application/octet-stream",
-                    };
-                    // Parse Range header.
-                    let range = req.lines().find(|l| l.to_lowercase().starts_with("range:")).map(|l| l.to_string());
-                    let (status, body, cr) = if let Some(rh) = range {
-                        let spec = rh.split(':').nth(1).unwrap_or("").trim();
-                        let spec = spec.strip_prefix("bytes=").unwrap_or(spec);
-                        let mut parts = spec.split('-');
-                        let start: usize = parts.next().unwrap_or("0").trim().parse().unwrap_or(0);
-                        let end: usize = parts.next().map(|s| s.trim()).filter(|s| !s.is_empty()).and_then(|s| s.parse().ok()).unwrap_or(total.saturating_sub(1)).min(total.saturating_sub(1));
-                        if start <= end && start < total {
-                            (206, data[start..=end].to_vec(), Some(format!("bytes {}-{}/{}", start, end, total)))
-                        } else {
-                            (200, data.clone(), None)
-                        }
-                    } else {
-                        (200, data.clone(), None)
-                    };
-                    let mut resp = format!("HTTP/1.1 {} {}\r\nContent-Type: {}\r\nAccept-Ranges: bytes\r\nAccess-Control-Allow-Origin: *\r\nContent-Length: {}\r\nConnection: close\r\n", status, if status==206 {"Partial Content"} else {"OK"}, mime, body.len());
-                    if let Some(cr) = cr { resp.push_str(&format!("Content-Range: {}\r\n", cr)); }
-                    resp.push_str("\r\n");
-                    let _ = stream.write_all(resp.as_bytes());
-                    let _ = stream.write_all(&body);
-                } else {
-                    let _ = stream.write_all(b"HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n");
-                }
-            } else {
-                let _ = stream.write_all(b"HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n");
-            }
-            let _ = stream.flush();
+        for stream in listener.incoming().flatten() {
+            let cv = cv.clone();
+            let hs = hs.clone();
+            let conv = conv_srv.clone();
+            std::thread::spawn(move || serve_conn(stream, cv, hs, conv));
         }
     });
     // Render the logo SVG into a window icon at runtime.
