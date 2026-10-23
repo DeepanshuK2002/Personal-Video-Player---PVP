@@ -120,9 +120,9 @@ Toggle it any time with `C`, from the CC menu, or Settings → Live Captions.
 |---|
 | <img src="docs/screenshots/hover-preview.png" alt="Hover preview above the caption box" width="100%"> |
 
-| English playback |
-|---|
-| <img src="docs/screenshots/english-playback.png" alt="PVP+ playing the Sintel trailer with titlebar file name and controls visible" width="100%"> |
+| English playback | Local subtitles |
+|---|---|
+| <img src="docs/screenshots/english-playback.png" alt="PVP+ playing the Sintel trailer with titlebar file name and controls visible" width="100%"> | <img src="docs/screenshots/local-subtitles.png" alt="Orange local subtitle lines over a dark movie scene" width="100%"> |
 
 ---
 

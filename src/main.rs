@@ -2119,12 +2119,14 @@ fn run_ffmpeg(
     src_size: u64,
 ) -> (i32, String) {
     use std::io::{BufRead, BufReader};
+    use std::os::windows::process::CommandExt;
     use std::process::{Command, Stdio};
     let mut cmd = Command::new(ff);
     cmd.args(args)
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
-        .stderr(Stdio::piped());
+        .stderr(Stdio::piped())
+        .creation_flags(0x0800_0000); // CREATE_NO_WINDOW — no console flash while converting
     let mut child = match cmd.spawn() {
         Ok(c) => c,
         Err(e) => return (-1, format!("ffmpeg could not start ({e})")),
