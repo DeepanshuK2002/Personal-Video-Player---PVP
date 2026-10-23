@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PVP+ — Personal Video Player</title>
+<meta name="description" content="PVP+ is a minimal 3.8 MB video player for Windows 10/11 with live captions, timeline previews and TS/DVR playback. One Rust binary, no Electron.">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<style>
+  :root{--bg:#0d1117;--fg:#e6edf3;--mut:#8b949e;--acc:#74c0fc;--line:#21262d}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px}
+  main{text-align:center;max-width:640px}
+  .logo{width:84px;height:84px;display:block;margin:0 auto 20px;filter:drop-shadow(0 0 24px rgba(116,192,252,.35))}
+  h1{font-size:44px;font-weight:800;letter-spacing:-1px}
+  h1 span{color:var(--acc)}
+  .tag{color:var(--mut);font-size:15px;margin-top:4px}
+  .desc{margin:22px auto 0;max-width:460px;color:#c9d1d9}
+  .cta{margin:30px 0 10px}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--acc);color:#0d1117;font-size:17px;font-weight:700;text-decoration:none;padding:13px 30px;border-radius:10px;transition:transform .12s ease,box-shadow .12s ease}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(116,192,252,.35)}
+  .btn svg{width:18px;height:18px;stroke:#0d1117;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .sub{font-size:13.5px;color:var(--mut)}
+  .sub a{color:var(--acc);text-decoration:none}
+  .sub a:hover{text-decoration:underline}
+  .shot{margin-top:34px;border:1px solid var(--line);border-radius:12px;width:100%;display:block}
+  ul{list-style:none;margin-top:34px;display:grid;gap:10px;text-align:left;border-top:1px solid var(--line);padding-top:26px}
+  li{font-size:14.5px;color:var(--mut);padding-left:20px;position:relative}
+  li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--acc)}
+  li b{color:var(--fg);font-weight:600}
+  footer{margin-top:34px;font-size:13px;color:var(--mut)}
+  footer a{color:var(--mut);text-decoration:none}
+  footer a:hover{color:var(--acc)}
+</style>
+</head>
+<body>
+<main>
+  <img class="logo" src="assets/logo.svg" alt="PVP+ logo" width="84" height="84">
+  <h1>PVP<span>+</span></h1>
+  <p class="tag">Personal Video Player — for Windows 10 / 11</p>
+  <p class="desc">A 3.8 MB Rust binary. Live captions, timeline previews, TS / DVR playback. No Electron, nothing to install.</p>
+  <div class="cta">
+    <a class="btn" href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest/download/personal-video-player.exe">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
+      Download .exe
+    </a>
+  </div>
+  <p class="sub">v0.6.1 · 3.8 MB · portable — or <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest/download/PVP-Setup.exe">run the installer</a> · <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases">all releases</a></p>
+  <img class="shot" src="docs/screenshots/live-captions.png" alt="PVP+ playing a video with live captions" width="820" height="461" loading="lazy">
+  <ul>
+    <li><b>Live captions</b> — real-time speech-to-text styled right in the player</li>
+    <li><b>Timeline preview</b> — hover scrubbing with frame thumbnails</li>
+    <li><b>TS / DVR playback</b> — recordings remux and play on the fly</li>
+    <li><b>One file</b> — copy it anywhere, double-click, done</li>
+  </ul>
+  <footer>
+    <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP">GitHub</a> ·
+    <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/blob/main/docs/live-captions.md">Live Captions Guide</a> ·
+    <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/blob/main/README.md">README</a>
+  </footer>
+</main>
+</body>
+</html>
