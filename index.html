@@ -11,9 +11,10 @@
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
   .hero{position:relative;min-height:96vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:72px 20px 100px;overflow:hidden;isolation:isolate}
+  .hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:radial-gradient(ellipse at center,black 25%,transparent 70%);mask-image:radial-gradient(ellipse at center,black 25%,transparent 70%)}
   .hero-in{position:relative;z-index:2;max-width:640px;text-shadow:0 2px 26px rgba(4,8,14,.85),0 1px 3px rgba(4,8,14,.7)}
   .hero-in::before{content:"";position:absolute;inset:-70px -140px;background:radial-gradient(ellipse at center,rgba(13,17,23,.58) 0%,rgba(13,17,23,.34) 55%,transparent 78%);z-index:-1}
-  .logo{width:84px;height:84px;display:block;margin:0 auto 20px;filter:drop-shadow(0 0 24px rgba(116,192,252,.45))}
+  .logo{width:84px;height:84px;display:block;margin:0 auto 20px}
   h1{font-size:44px;font-weight:800;letter-spacing:-1px}
   h1 span{color:var(--acc)}
   .tag{color:#9fb4c7;font-size:15px;margin-top:4px}
