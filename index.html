@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,10 +7,22 @@
 <meta name="description" content="PVP+ is a minimal 3.8 MB video player for Windows 10/11 with live captions, timeline previews and TS/DVR playback. One Rust binary, no Electron.">
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
 <style>
-  :root{--bg:#0d1117;--fg:#e6edf3;--mut:#8b949e;--acc:#74c0fc;--line:#21262d}
+  :root,[data-theme="dark"]{--bg:#0d1117;--fg:#e6edf3;--mut:#8b949e;--acc:#74c0fc;--line:#21262d}
+  [data-theme="light"]{--bg:#f6f8fa;--fg:#1f2328;--mut:#57606a;--acc:#0969da;--line:#d0d7de}
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
   .hero{position:relative;min-height:96vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:72px 20px 100px;overflow:hidden;isolation:isolate}
+  .topbar{position:absolute;top:16px;left:20px;right:20px;display:flex;align-items:center;justify-content:space-between;z-index:3}
+  .app-logo-sm{width:28px;height:28px;display:block}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .theme-btn{background:transparent;border:1px solid var(--line);color:var(--fg);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+  .theme-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .gh-link{display:flex;align-items:center;color:var(--fg);text-decoration:none}
+  .gh-logo{display:block}
+  .icon-sun{display:none}
+  .icon-moon{display:block}
+  [data-theme="light"] .icon-sun{display:block}
+  [data-theme="light"] .icon-moon{display:none}
   .hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:radial-gradient(ellipse at center,black 25%,transparent 70%);mask-image:radial-gradient(ellipse at center,black 25%,transparent 70%);animation:gridMove 18s linear infinite}
   .hero-in{position:relative;z-index:2;max-width:640px;text-shadow:0 2px 26px rgba(4,8,14,.85),0 1px 3px rgba(4,8,14,.7)}
   .hero-in::before{content:"";position:absolute;inset:-70px -140px;background:radial-gradient(ellipse at center,rgba(13,17,23,.58) 0%,rgba(13,17,23,.34) 55%,transparent 78%);z-index:-1}
@@ -35,11 +47,30 @@
   footer{margin-top:34px;font-size:13px;color:var(--mut)}
   footer a{color:var(--mut);text-decoration:none}
   footer a:hover{color:var(--acc)}
+[data-theme="light"] .tag,[data-theme="light"] .sub{color:var(--mut)}
+  [data-theme="light"] .desc{color:var(--fg)}
+  [data-theme="light"] .hero-in{text-shadow:0 2px 26px rgba(255,255,255,.85),0 1px 3px rgba(255,255,255,.7)}
+  [data-theme="light"] .hero-in::before{background:radial-gradient(ellipse at center,rgba(255,255,255,.58) 0%,rgba(255,255,255,.34) 55%,transparent 78%)}
+  [data-theme="light"] .hero::before{background-image:linear-gradient(rgba(0,0,0,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.06) 1px,transparent 1px)}
+  [data-theme="light"] .btn{background:var(--acc);color:#fff}
+  [data-theme="light"] .shot{border-color:var(--line)}
   @media (max-width:560px){h1{font-size:36px}.hero{min-height:88vh;padding:56px 18px 72px}}
 @keyframes gridMove{0%{background-position:0 0}100%{background-position:48px 48px}}
 </style>
 </head>
 <body>
+<div class="topbar">
+  <img class="app-logo-sm" src="assets/logo.svg" alt="PVP+ logo" width="28" height="28">
+  <div class="topbar-right">
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="Toggle color theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a class="gh-link" href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP" aria-label="GitHub repository">
+      <svg class="gh-logo" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+    </a>
+  </div>
+</div>
 <header class="hero">
   <div class="hero-in">
     <img class="logo" src="assets/logo.svg" alt="PVP+ logo" width="84" height="84">
@@ -69,5 +100,20 @@
     <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/blob/main/README.md">README</a>
   </footer>
 </main>
+<script>
+(function(){
+  var root=document.documentElement;
+  var stored=localStorage.getItem('theme');
+  var prefers=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+  root.setAttribute('data-theme',stored||prefers);
+  var btn=document.getElementById('themeToggle');
+  if(btn){btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme')||'dark';
+    var next=cur==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    localStorage.setItem('theme',next);
+  });}
+})();
+</script>
 </body>
 </html>
