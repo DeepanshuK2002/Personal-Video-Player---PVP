@@ -9,21 +9,27 @@
 <style>
   :root{--bg:#0d1117;--fg:#e6edf3;--mut:#8b949e;--acc:#74c0fc;--line:#21262d}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px}
-  main{text-align:center;max-width:640px}
-  .logo{width:84px;height:84px;display:block;margin:0 auto 20px;filter:drop-shadow(0 0 24px rgba(116,192,252,.35))}
+  body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+  .hero{position:relative;min-height:96vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:72px 20px 100px;overflow:hidden;isolation:isolate}
+  .hero-bg{position:absolute;inset:0;z-index:0;background:url(assets/hero-fuji.jpg) center center/cover no-repeat}
+  .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,17,23,.52) 0%,rgba(13,17,23,.40) 28%,rgba(13,17,23,.62) 64%,rgba(13,17,23,.92) 87%,var(--bg) 100%)}
+  #ascii{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none}
+  .hero-in{position:relative;z-index:2;max-width:640px;text-shadow:0 2px 26px rgba(4,8,14,.85),0 1px 3px rgba(4,8,14,.7)}
+  .hero-in::before{content:"";position:absolute;inset:-70px -140px;background:radial-gradient(ellipse at center,rgba(13,17,23,.58) 0%,rgba(13,17,23,.34) 55%,transparent 78%);z-index:-1}
+  .logo{width:84px;height:84px;display:block;margin:0 auto 20px;filter:drop-shadow(0 0 24px rgba(116,192,252,.45))}
   h1{font-size:44px;font-weight:800;letter-spacing:-1px}
   h1 span{color:var(--acc)}
-  .tag{color:var(--mut);font-size:15px;margin-top:4px}
-  .desc{margin:22px auto 0;max-width:460px;color:#c9d1d9}
+  .tag{color:#9fb4c7;font-size:15px;margin-top:4px}
+  .desc{margin:22px auto 0;max-width:460px;color:#d3dae1}
   .cta{margin:30px 0 10px}
-  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--acc);color:#0d1117;font-size:17px;font-weight:700;text-decoration:none;padding:13px 30px;border-radius:10px;transition:transform .12s ease,box-shadow .12s ease}
-  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(116,192,252,.35)}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--acc);color:#0d1117;font-size:17px;font-weight:700;text-decoration:none;padding:13px 30px;border-radius:10px;transition:transform .12s ease,box-shadow .12s ease;text-shadow:none}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(116,192,252,.4)}
   .btn svg{width:18px;height:18px;stroke:#0d1117;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-  .sub{font-size:13.5px;color:var(--mut)}
+  .sub{font-size:13.5px;color:#9fb4c7}
   .sub a{color:var(--acc);text-decoration:none}
   .sub a:hover{text-decoration:underline}
-  .shot{margin-top:34px;border:1px solid var(--line);border-radius:12px;width:100%;display:block}
+  main{max-width:640px;margin:0 auto;padding:16px 20px 56px;text-align:center}
+  .shot{margin-top:8px;border:1px solid var(--line);border-radius:12px;width:100%;display:block}
   ul{list-style:none;margin-top:34px;display:grid;gap:10px;text-align:left;border-top:1px solid var(--line);padding-top:26px}
   li{font-size:14.5px;color:var(--mut);padding-left:20px;position:relative}
   li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--acc)}
@@ -31,22 +37,29 @@
   footer{margin-top:34px;font-size:13px;color:var(--mut)}
   footer a{color:var(--mut);text-decoration:none}
   footer a:hover{color:var(--acc)}
+  @media (max-width:560px){h1{font-size:36px}.hero{min-height:88vh;padding:56px 18px 72px}}
 </style>
 </head>
 <body>
-<main>
-  <img class="logo" src="assets/logo.svg" alt="PVP+ logo" width="84" height="84">
-  <h1>PVP<span>+</span></h1>
-  <p class="tag">Personal Video Player — for Windows 10 / 11</p>
-  <p class="desc">A 3.8 MB Rust binary. Live captions, timeline previews, TS / DVR playback. No Electron, nothing to install.</p>
-  <div class="cta">
-    <a class="btn" href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest/download/personal-video-player.exe">
-      <svg viewBox="0 0 24 24"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
-      Download .exe
-    </a>
+<header class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <canvas id="ascii" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <img class="logo" src="assets/logo.svg" alt="PVP+ logo" width="84" height="84">
+    <h1>PVP<span>+</span></h1>
+    <p class="tag">Personal Video Player — for Windows 10 / 11</p>
+    <p class="desc">A 3.8 MB Rust binary. Live captions, timeline previews, TS / DVR playback. No Electron, nothing to install.</p>
+    <div class="cta">
+      <a class="btn" href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest/download/personal-video-player.exe">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
+        Download .exe
+      </a>
+    </div>
+    <p class="sub">v0.6.1 · 3.8 MB · portable — or <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest/download/PVP-Setup.exe">run the installer</a> · <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases">all releases</a></p>
   </div>
-  <p class="sub">v0.6.1 · 3.8 MB · portable — or <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest/download/PVP-Setup.exe">run the installer</a> · <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases">all releases</a></p>
-  <img class="shot" src="docs/screenshots/live-captions.png" alt="PVP+ playing a video with live captions" width="820" height="461" loading="lazy">
+</header>
+<main>
+  <img class="shot" src="docs/screenshots/english-playback.png" alt="PVP+ playing the Sintel trailer" width="820" height="513" loading="lazy">
   <ul>
     <li><b>Live captions</b> — real-time speech-to-text styled right in the player</li>
     <li><b>Timeline preview</b> — hover scrubbing with frame thumbnails</li>
@@ -59,5 +72,129 @@
     <a href="https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/blob/main/README.md">README</a>
   </footer>
 </main>
+<script>
+(function(){
+  var cv=document.getElementById('ascii');
+  if(!cv||!cv.getContext) return;
+  var ctx=cv.getContext('2d');
+  var img=new Image();
+  var RAMP=" .:-=+*#%@";
+  var off=null, bright=[], W=0, H=0, cols=0, rows=0;
+  var fontPx=17, cw=13, chh=22;
+  var dpr=Math.min(window.devicePixelRatio||1,1.5);
+  var raf=0, t0=0, lastT=0, visible=true, ready=false;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function bake(){
+    var rect=cv.parentElement.getBoundingClientRect();
+    W=Math.max(1,Math.round(rect.width));
+    H=Math.max(1,Math.round(rect.height));
+    cv.width=Math.round(W*dpr);
+    cv.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cols=Math.ceil(W/cw);
+    rows=Math.ceil(H/chh);
+
+    var samp=document.createElement('canvas');
+    samp.width=cols; samp.height=rows;
+    var sc=samp.getContext('2d',{willReadFrequently:true});
+    var ir=img.width/img.height, tr=cols/rows;
+    var sw=img.width, sh=img.height, sx=0, sy=0;
+    if(ir>tr){ sw=img.height*tr; sx=(img.width-sw)/2; }
+    else { sh=img.width/tr; sy=(img.height-sh)/2; }
+    sc.drawImage(img,sx,sy,sw,sh,0,0,cols,rows);
+    var data;
+    try { data=sc.getImageData(0,0,cols,rows).data; }
+    catch(e){ cv.style.display='none'; return false; }
+
+    off=document.createElement('canvas');
+    off.width=cv.width; off.height=cv.height;
+    var oc=off.getContext('2d');
+    oc.setTransform(dpr,0,0,dpr,0,0);
+    oc.font='700 '+fontPx+'px ui-monospace,Consolas,"Cascadia Mono",monospace';
+    oc.textBaseline='top';
+    oc.lineJoin='round';
+    oc.strokeStyle='rgba(4,8,14,.50)';
+    oc.lineWidth=1.8;
+
+    bright=[];
+    for(var y=0;y<rows;y++){
+      for(var x=0;x<cols;x++){
+        var i=(y*cols+x)*4, r=data[i], g=data[i+1], b=data[i+2];
+        var L=(0.2126*r+0.7152*g+0.0722*b)/255;
+        var ci=Math.min(RAMP.length-1,Math.floor(L*RAMP.length));
+        var ch=RAMP[ci];
+        if(ch===' ') continue;
+        var a=0.30+0.35*(((x*13+y*7)%9)/8);
+        var px=x*cw, py=y*chh;
+        oc.strokeText(ch,px,py);
+        oc.fillStyle='rgba('+r+','+g+','+b+','+a.toFixed(2)+')';
+        oc.fillText(ch,px,py);
+        bright.push([px,py,r,g,b,ch]);
+      }
+    }
+    return true;
+  }
+
+  function draw(now){
+    raf=0;
+    if(!ready) return;
+    if(now-lastT<40){ raf=requestAnimationFrame(draw); return; }
+    lastT=now;
+    var el=now-t0;
+    ctx.clearRect(0,0,W,H);
+    ctx.globalAlpha=reduce?1:(0.70+0.10*Math.sin(el/600));
+    ctx.drawImage(off,0,0,off.width,off.height,0,0,W,H);
+    ctx.globalAlpha=1;
+    if(!reduce&&bright.length){
+      ctx.font='700 '+fontPx+'px ui-monospace,Consolas,"Cascadia Mono",monospace';
+      ctx.textBaseline='top';
+      var yBand=((el/2600)%1)*(H+120)-60;
+      for(var i=0;i<bright.length;i++){
+        var c=bright[i];
+        var dy=c[1]-yBand;
+        if(dy>-52&&dy<52){
+          var a=(0.22+0.34*Math.cos(dy/52*1.5707)).toFixed(2);
+          ctx.fillStyle='rgba('+c[2]+','+c[3]+','+c[4]+','+a+')';
+          ctx.fillText(c[5],c[0],c[1]);
+        }
+      }
+      var n=Math.min(110,bright.length);
+      for(var j=0;j<n;j++){
+        var t2=bright[(Math.random()*bright.length)|0];
+        var tw=(0.40+0.45*Math.sin(el/380+j)).toFixed(2);
+        ctx.fillStyle='rgba('+t2[2]+','+t2[3]+','+t2[4]+','+tw+')';
+        ctx.fillText(t2[5],t2[0],t2[1]);
+      }
+    }
+    if(!reduce&&visible) raf=requestAnimationFrame(draw);
+  }
+
+  function rebuild(){
+    if(!bake()) return;
+    ready=true;
+    t0=performance.now();
+    cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(draw);
+  }
+
+  img.onload=rebuild;
+  img.onerror=function(){ cv.style.display='none'; };
+  img.src='assets/hero-fuji.jpg';
+
+  var rt;
+  window.addEventListener('resize',function(){
+    clearTimeout(rt);
+    rt=setTimeout(function(){ if(ready){ rebuild(); } },180);
+  });
+
+  if(window.IntersectionObserver){
+    new IntersectionObserver(function(es){
+      visible=es[0].isIntersecting;
+      if(visible&&!reduce&&!raf&&ready){ t0=performance.now()-2000; raf=requestAnimationFrame(draw); }
+    },{threshold:0}).observe(cv);
+  }
+})();
+</script>
 </body>
 </html>
