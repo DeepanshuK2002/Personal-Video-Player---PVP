@@ -16,7 +16,7 @@ no telemetry, no account, no ads — just press play.
 [![Windows](https://img.shields.io/badge/windows-10%20%2F%2011-0078d4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/license-MIT-74c0fc?style=for-the-badge)](LICENSE)
 
-**[⬇ Download v0.6.1](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest)** · **[Website](https://deepanshuk2002.github.io/Personal-Video-Player---PVP/)** · **[Live Captions Guide](docs/live-captions.md)** · **[Screenshots](#screenshots)**
+**[Download v0.6.1](https://github.com/DeepanshuK2002/Personal-Video-Player---PVP/releases/latest)** · **[Website](https://deepanshuk2002.github.io/Personal-Video-Player---PVP/)** · **[Live Captions Guide](docs/live-captions.md)** · **[Screenshots](#screenshots)**
 
 </div>
 
