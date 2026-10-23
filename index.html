@@ -15,9 +15,11 @@
   .topbar{position:absolute;top:16px;left:20px;right:20px;display:flex;align-items:center;justify-content:space-between;z-index:3}
   .app-logo-sm{width:28px;height:28px;display:block}
   .topbar-right{display:flex;align-items:center;gap:12px}
-  .theme-btn{background:transparent;border:1px solid var(--line);color:var(--fg);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+  .theme-btn{background:transparent;border:none;color:var(--fg);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:background .15s ease,transform .12s ease}
+  .theme-btn:hover{background:var(--line);transform:translateY(-1px)}
   .theme-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .gh-link{display:flex;align-items:center;color:var(--fg);text-decoration:none}
+  .gh-link{display:flex;align-items:center;color:var(--fg);text-decoration:none;transition:color .15s ease,transform .12s ease,opacity .15s ease}
+  .gh-link:hover{color:var(--acc);transform:translateY(-1px);opacity:.85}
   .gh-logo{display:block}
   .icon-sun{display:none}
   .icon-moon{display:block}
@@ -39,7 +41,7 @@
   .sub a{color:var(--acc);text-decoration:none}
   .sub a:hover{text-decoration:underline}
   main{max-width:1920px;margin:0 auto;padding:16px 20px 56px;text-align:center}
-  .shot{margin-top:8px;border:1px solid var(--line);border-radius:12px;width:auto;max-width:100%;display:block}
+  .shot{margin-top:8px;border:1px solid var(--line);border-radius:12px;width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
   ul{list-style:none;margin-top:34px;display:grid;gap:10px;text-align:left;border-top:1px solid var(--line);padding-top:26px}
   li{font-size:14.5px;color:var(--mut);padding-left:20px;position:relative}
   li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--acc)}
