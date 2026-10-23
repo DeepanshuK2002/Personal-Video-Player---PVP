@@ -21,6 +21,12 @@
   @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
   .logo-charity{cursor:pointer}
   .logo-charity:hover{filter:brightness(1.2)}
+  .donate-hover{position:absolute;top:38px;left:0;background:#1a1a1a;border:1px solid var(--line);border-radius:10px;padding:14px 16px;width:220px;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .25s ease;text-align:left;z-index:10}
+  .logo-wrap:hover .donate-hover,.donate-hover:hover{opacity:1;pointer-events:auto}
+  .donate-hover h4{font-size:13px;color:var(--fg);margin:0 0 6px}
+  .donate-hover p{font-size:12px;color:var(--mut);margin:0;line-height:1.5}
+  .donate-hover .donate-cta{display:inline-block;margin-top:8px;font-size:12px;color:var(--acc);text-decoration:none;font-weight:600}
+  .donate-hover .donate-cta:hover{text-decoration:underline}
   .donate-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center}
   .donate-modal.open{display:flex}
   .donate-card{background:#1a1a1a;border:1px solid var(--line);border-radius:14px;padding:28px;text-align:center;max-width:320px;width:90%;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.5)}
@@ -83,6 +89,11 @@
   <div class="logo-wrap" id="logoWrap">
   <img class="app-logo-sm" src="assets/logo.svg" alt="PVP+ logo" width="28" height="28">
   <svg class="logo-charity" viewBox="0 0 24 24" fill="#e74c3c" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+  <div class="donate-hover">
+    <h4>Support PVP+</h4>
+    <p>If you find this player useful, consider a small donation to help keep it free and open-source.</p>
+    <a href="#" class="donate-cta" id="openDonate">Click to donate →</a>
+  </div>
 </div>
   <div class="topbar-right">
     <button id="themeToggle" class="theme-btn" type="button" aria-label="Toggle color theme">
@@ -143,7 +154,7 @@
     <button class="close-btn" id="closeDonate" aria-label="Close">&times;</button>
     <h3>Donate to PVP+</h3>
     <p>Scan the QR code or use the UPI link below</p>
-    <img class="qr" src="assets/logo.svg" alt="UPI QR Code">
+    <img class="qr" src="assets/donate-qr.png" alt="UPI QR Code" width="200" height="200">
     <p style="font-size:12px;margin-top:8px">UPI ID: <strong>hoxdo@ptaxis</strong></p>
     <a href="upi://pay?pa=hoxdo@ptaxis&pn=Deepanshu%20Kashyap&cu=INR" class="upi-link">Pay via UPI</a>
   </div>
@@ -151,8 +162,10 @@
 <script>
 (function(){
   var modal=document.getElementById('donateModal');
+  var open=document.getElementById('openDonate');
   var close=document.getElementById('closeDonate');
   var charity=document.querySelector('.logo-charity');
+  if(open)open.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();modal.classList.add('open');});
   if(charity)charity.addEventListener('click',function(e){e.stopPropagation();modal.classList.add('open');});
   if(close)close.addEventListener('click',function(){modal.classList.remove('open');});
   if(modal)modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
