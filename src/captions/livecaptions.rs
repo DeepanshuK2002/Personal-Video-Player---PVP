@@ -6,8 +6,8 @@ use std::sync::Arc;
 use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 
-use windows::core::w;
-use windows::Win32::Foundation::HWND;
+use windows::core::{w, BOOL};
+use windows::Win32::Foundation::{HWND, LPARAM};
 use windows::Win32::System::Com::{
     CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_APARTMENTTHREADED,
 };
@@ -17,9 +17,10 @@ use windows::Win32::UI::Accessibility::{
 };
 use windows::Win32::Foundation::RECT;
 use windows::Win32::UI::WindowsAndMessaging::{
-    FindWindowW, GetSystemMetrics, GetWindowLongPtrW, GetWindowRect, IsWindow, SetWindowLongPtrW,
-    SetWindowPos, ShowWindow, GWL_EXSTYLE, HWND_BOTTOM, SM_CXSCREEN, SM_CYSCREEN, SW_MINIMIZE,
-    SW_RESTORE, SWP_NOACTIVATE, SWP_NOSIZE, SWP_NOZORDER, WS_EX_TOOLWINDOW,
+    EnumWindows, FindWindowW, GetSystemMetrics, GetWindowLongPtrW, GetWindowRect, GetWindowThreadProcessId,
+    IsWindow, SetWindowLongPtrW, SetWindowPos, ShowWindow, GWL_EXSTYLE, HWND_BOTTOM, SM_CXSCREEN,
+    SM_CYSCREEN, SW_MINIMIZE, SW_RESTORE, SWP_NOACTIVATE, SWP_NOSIZE, SWP_NOZORDER, WS_EX_LAYERED,
+    WS_EX_TOOLWINDOW,
 };
 
 use super::{looks_final, CaptionEvent, CaptionProvider, Capability, CapState, Emit};
@@ -31,6 +32,41 @@ const CREATE_NO_WINDOW: u32 = 0x08000000;
 const TICK: Duration = Duration::from_millis(120);
 const LAUNCH_TIMEOUT: Duration = Duration::from_secs(12);
 const READY_TIMEOUT: Duration = Duration::from_secs(30);
+
+#[link(name = "winmm")]
+extern "system" {
+    fn timeBeginPeriod(u_period: u32) -> u32;
+    fn timeEndPeriod(u_period: u32) -> u32;
+}
+
+#[link(name = "user32")]
+extern "system" {
+    fn SetLayeredWindowAttributes(
+        hwnd: *mut core::ffi::c_void,
+        cr_key: u32,
+        b_alpha: u8,
+        dw_flags: u32,
+    ) -> i32;
+}
+
+const LWA_ALPHA: u32 = 0x00000002;
+
+// Make the window compose fully transparent. Unlike DWMWA_CLOAK (which this
+// process is not allowed to set — DWM answers E_ACCESSDENIED for another
+// app's window), WS_EX_LAYERED + LWA_ALPHA is a plain user32 attribute that
+// cross-process callers may set, and Live Captions never clears it: once
+// applied, every later reposition of the window paints nothing, so there is
+// no timing race left to lose. The window itself stays created, shown and
+// rendering — no hide/minimize, so the warmup-stall hazard is untouched.
+fn make_transparent(hwnd: HWND) {
+    unsafe {
+        let ex = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+        if ex & (WS_EX_LAYERED.0 as isize) == 0 {
+            let _ = SetWindowLongPtrW(hwnd, GWL_EXSTYLE, ex | WS_EX_LAYERED.0 as isize);
+        }
+        SetLayeredWindowAttributes(hwnd.0, 0, 0, LWA_ALPHA);
+    }
+}
 
 // Live Captions ignores WM_CLOSE (it minimizes to the tray instead), so the
 // instance we spawned has to be terminated by PID or it outlives the player.
@@ -358,16 +394,18 @@ impl Drop for LiveCaptionsProvider {
 // caption UI has had a chance to render its first frame — minimizing too early
 // can freeze Live Captions' startup and leave it stuck on the warmup screen.
 //
-// The window is also parked far off-screen the moment it is found: Live
-// Captions otherwise flashes in its spawn position (a stray box in the corner)
-// until the deferred minimize fires, and a parked window can never float over
-// other applications either. Moving the window is position-only (no
-// hide/activate), so it does not risk the warmup stall.
+// The window is also made transparent and parked far off-screen the moment it
+// is found: Live Captions otherwise flashes in its spawn position (and again
+// when it re-docks itself) until the deferred minimize fires, and a parked
+// window can never float over other applications either. All of it is
+// attribute/position-only (no hide/activate), so it does not risk the warmup
+// stall.
 fn mark_toolwindow(hwnd: HWND) {
     unsafe {
         let ex = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
         let _ = SetWindowLongPtrW(hwnd, GWL_EXSTYLE, ex | WS_EX_TOOLWINDOW.0 as isize);
     }
+    make_transparent(hwnd);
     park_offscreen(hwnd);
 }
 
@@ -380,7 +418,14 @@ fn park_offscreen(hwnd: HWND) {
     unsafe {
         let mut rc = RECT::default();
         let got = GetWindowRect(hwnd, &mut rc);
-        if got.is_ok() && rc.left > -10000 {
+        // Only remember a real-looking main window (Live Captions also owns
+        // hidden 1x1 helper windows that must never become the restore
+        // target).
+        if got.is_ok()
+            && rc.left > -10000
+            && (rc.right - rc.left) >= 100
+            && (rc.bottom - rc.top) >= 20
+        {
             if let Ok(mut g) = PARKED_POS.lock() {
                 if g.is_none() {
                     *g = Some((rc.left, rc.top));
@@ -419,6 +464,100 @@ fn repark_if_visible(hwnd: HWND) {
     }
 }
 
+// The 120ms poll tick cannot keep up with Live Captions' own repositioning:
+// the spawn flash and the later self re-dock each stayed on screen for
+// 100-200ms (1-2 tick cycles) — the "subtitle splash" seen on enable. The
+// watchdog closes this from two sides: it (re)applies the transparent
+// layered attribute the moment any window of the spawned pid exists — before
+// Live Captions ever shows it, so nothing it draws is ever composited — and
+// re-parks the position every 4ms for tidiness (a re-dock that still slips
+// between ticks now paints nothing, so timing no longer matters). Only runs
+// for a window we spawned (pid gate); a foreign instance the user opened
+// keeps the original restore semantics.
+struct ParkGuard {
+    go: Arc<AtomicBool>,
+    handle: Option<JoinHandle<()>>,
+}
+
+impl Drop for ParkGuard {
+    fn drop(&mut self) {
+        self.go.store(false, Ordering::SeqCst);
+        if let Some(h) = self.handle.take() {
+            let _ = h.join();
+        }
+    }
+}
+
+// All top-level windows of the spawned Live Captions process. FindWindow
+// only ever returns the first class match, and Live Captions creates several
+// windows during startup — every one of them must get the treatment, or an
+// un-attended secondary window is exactly what flashed in the spawn corner.
+fn pid_windows(pid: u32) -> Vec<HWND> {
+    let mut out: Vec<HWND> = Vec::new();
+    extern "system" fn cb(h: HWND, lparam: LPARAM) -> BOOL {
+        unsafe {
+            let list = &mut *(lparam.0 as *mut Vec<HWND>);
+            list.push(h);
+        }
+        BOOL::from(true)
+    }
+    unsafe {
+        let _ = EnumWindows(Some(cb), LPARAM(&mut out as *mut _ as isize));
+    }
+    let mut own: Vec<HWND> = Vec::new();
+    for h in out {
+        let mut wpid = 0u32;
+        unsafe {
+            GetWindowThreadProcessId(h, Some(&mut wpid as *mut u32));
+        }
+        if wpid == pid {
+            own.push(h);
+        }
+    }
+    own
+}
+
+fn spawn_park_thread(pid: Arc<AtomicU32>) -> ParkGuard {
+    let go = Arc::new(AtomicBool::new(true));
+    let thread_go = go.clone();
+    let handle = std::thread::Builder::new()
+        .name("lc-park".into())
+        .spawn(move || {
+            // Sub-millisecond Sleep accuracy; paired on every exit path so the
+            // system timer resolution is not left raised after we stop.
+            unsafe { timeBeginPeriod(1); }
+            while thread_go.load(Ordering::Relaxed) {
+                let p = pid.load(Ordering::SeqCst);
+                if p != 0 {
+                    for h in pid_windows(p) {
+                        if h.0.is_null() || !unsafe { IsWindow(Some(h)) }.as_bool() {
+                            continue;
+                        }
+                        unsafe {
+                            let ex = GetWindowLongPtrW(h, GWL_EXSTYLE);
+                            if ex & (WS_EX_TOOLWINDOW.0 as isize) == 0 {
+                                let _ =
+                                    SetWindowLongPtrW(h, GWL_EXSTYLE, ex | WS_EX_TOOLWINDOW.0 as isize);
+                            }
+                        }
+                        make_transparent(h);
+                        let on_screen = unsafe {
+                            let mut rc = RECT::default();
+                            GetWindowRect(h, &mut rc).map(|_| rc.left > -10000).unwrap_or(false)
+                        };
+                        if on_screen {
+                            park_offscreen(h);
+                        }
+                    }
+                }
+                std::thread::sleep(Duration::from_millis(5));
+            }
+            unsafe { timeEndPeriod(1); }
+        })
+        .ok();
+    ParkGuard { go, handle }
+}
+
 // Put Live Captions back into its normal on-screen state: visible, at its
 // own position, without the toolwindow flag. Used when the player exits
 // while Live Captions is still on (it keeps running for other apps) and by
@@ -434,7 +573,11 @@ fn restore_lc_window() {
             return;
         }
         let ex = GetWindowLongPtrW(h, GWL_EXSTYLE);
-        let _ = SetWindowLongPtrW(h, GWL_EXSTYLE, ex & !(WS_EX_TOOLWINDOW.0 as isize));
+        let _ = SetWindowLongPtrW(
+            h,
+            GWL_EXSTYLE,
+            ex & !((WS_EX_TOOLWINDOW.0 | WS_EX_LAYERED.0) as isize),
+        );
         let _ = ShowWindow(h, SW_RESTORE);
         // Only re-position while the window is still parked off-screen; a
         // second (idempotent) call must never drag a window the user may
@@ -498,6 +641,16 @@ fn ensure_window(
                     }
                     None => crate::lc_dbg("LC window found"),
                 }
+                // Adopted an already-running window (leftover from a previous
+                // run, or one the user opened): arm the park watchdog for it
+                // too. Without the stored pid the watchdog gate stays 0 and
+                // Live Captions re-asserts its own opaque alpha and re-docks
+                // unopposed — the brief adopt flash on re-enable.
+                let mut wpid = 0u32;
+                unsafe { GetWindowThreadProcessId(h, Some(&mut wpid as *mut u32)); }
+                if wpid != 0 {
+                    pid.store(wpid, Ordering::SeqCst);
+                }
                 return Some(h);
             }
         }
@@ -528,8 +681,11 @@ fn ensure_window(
         if Instant::now() >= deadline {
             return None;
         }
+        // 1ms after the spawn: the window can be created hidden and shown by
+        // LC itself at any moment — poll tight enough that mark_toolwindow
+        // (cloak+park) lands within roughly one refresh interval of creation.
         std::thread::sleep(if spawned {
-            Duration::from_millis(5)
+            Duration::from_millis(1)
         } else {
             Duration::from_millis(150)
         });
@@ -586,6 +742,10 @@ fn poll_loop(
     pid: Arc<AtomicU32>,
 ) {
     crate::lc_dbg("poll thread start");
+    // Cloak/park watchdog for this generation; dropped on every exit path and
+    // explicitly before any window restore, so it can never re-hide a window
+    // we are handing back to Windows.
+    let park = spawn_park_thread(pid.clone());
     let _ = unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED) };
     let automation: IUIAutomation = match unsafe { CoCreateInstance(&CUIAutomation, None, CLSCTX_ALL) }
     {
@@ -800,6 +960,7 @@ fn poll_loop(
         std::thread::sleep(TICK);
     }
 
+    drop(park); // watchdog must stop before any restore/handoff
     if !launched.load(Ordering::SeqCst) {
         restore_lc_window();
     }
