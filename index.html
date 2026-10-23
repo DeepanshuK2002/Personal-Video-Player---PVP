@@ -35,8 +35,9 @@
   .donate-card img.qr{width:200px;height:200px;margin:12px auto;display:block;border-radius:8px;background:#fff;padding:6px}
   .donate-card h3{color:var(--fg);margin:0 0 4px;font-size:17px}
   .donate-card p{color:var(--mut);font-size:13px;margin:0 0 10px}
-  .upi-link{display:inline-block;margin-top:6px;padding:8px 18px;background:var(--acc);color:#fff;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600}
-  .upi-link:hover{opacity:.85}
+  .upi-copy{display:inline-block;margin-top:6px;padding:6px 14px;background:rgba(116,192,252,0.12);color:var(--acc);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;user-select:all;transition:background .15s ease}
+  .upi-copy:hover{background:rgba(116,192,252,0.22)}
+  .upi-copy .copied{display:none;font-size:11px;color:var(--mut);font-weight:400;margin-left:6px}
   .topbar-right{display:flex;align-items:center;gap:12px}
   .theme-btn{background:transparent;border:none;color:var(--fg);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:background .15s ease,transform .12s ease}
   .theme-btn:hover{background:var(--line);transform:translateY(-1px)}
@@ -155,8 +156,8 @@
     <h3>Donate to PVP+</h3>
     <p>Scan the QR code or use the UPI link below</p>
     <img class="qr" src="assets/donate-qr.png" alt="UPI QR Code" width="200" height="200">
-    <p style="font-size:12px;margin-top:8px">UPI ID: <strong>hoxdo@ptaxis</strong></p>
-    <a href="upi://pay?pa=hoxdo@ptaxis&pn=Deepanshu%20Kashyap&cu=INR" class="upi-link">Pay via UPI</a>
+    <p style="font-size:12px;margin-top:8px">UPI ID:</p>
+    <div class="upi-copy" id="upiCopy">hoxdo@ptaxis<span class="copied">&#10003; copied</span></div>
   </div>
 </div>
 <script>
@@ -165,7 +166,9 @@
   var open=document.getElementById('openDonate');
   var close=document.getElementById('closeDonate');
   var charity=document.querySelector('.logo-charity');
+  var upiCopy=document.getElementById('upiCopy');
   if(open)open.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();modal.classList.add('open');});
+  if(upiCopy)upiCopy.addEventListener('click',function(){navigator.clipboard.writeText('hoxdo@ptaxis').then(function(){upiCopy.querySelector('.copied').style.display='inline';setTimeout(function(){upiCopy.querySelector('.copied').style.display='none'},1500);});});
   if(charity)charity.addEventListener('click',function(e){e.stopPropagation();modal.classList.add('open');});
   if(close)close.addEventListener('click',function(){modal.classList.remove('open');});
   if(modal)modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open');});
